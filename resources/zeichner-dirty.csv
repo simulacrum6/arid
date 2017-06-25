@@ -1,0 +1,189 @@
+,rule_lhs,rule_rhs,lhs,rhs,judgment,confidence
+40,be new to,be new to@R@,Students be new to the school,the school be new to Students,Yes,1.0
+78,be puzzled by,perplex@R@,Autistic children be puzzled by faces,faces perplex Autistic children,Yes,1.0
+101,contain embedded,be embedded within@R@,COMMENT contain embedded spaces,spaces be embedded within COMMENT,Yes,1.0
+122,regulate,be regulated under@R@,The EPA regulate tap water,tap water be regulated under The EPA,Yes,1.0
+174,be sold to,take over@R@,your account be sold to a third party,a third party take over your account,Yes,1.0
+195,vote on,be introduced in@R@,The House vote on the report,the report be introduced in The House,Yes,1.0
+245,permit,be allowed in@R@,The Supreme Court permit the defendant,the defendant be allowed in The Supreme Court,Yes,1.0
+362,worship,be worshipped by@R@,David worship Allah,Allah be worshipped by David,Yes,1.0
+392,be all affected by,continue to affect@R@,our education be all affected by the quality and availability of transportation,the quality and availability of transportation continue to affect our education,Yes,1.0
+498,order,be ordered by@R@,Cheney order the leak,the leak be ordered by Cheney,Yes,1.0
+628,be comparable to,be comparable to@R@,Gothic 3 be comparable to Oblivion,Oblivion be comparable to Gothic 3,Yes,1.0
+711,shoot all over,be slick with@R@,Cum shoot all over his chest,his chest be slick with Cum,Yes,1.0
+722,be the creator of,be the creation of@R@,The artist be the creator of beautiful things,beautiful things be the creation of The artist,Yes,1.0
+774,blame for,be linked to@R@,harmful greenhouse gas emissions blame for global warming,global warming be linked to harmful greenhouse gas emissions,Yes,1.0
+785,cover,be covered by@R@,her hair cover her face,her face be covered by her hair,Yes,1.0
+798,be equivalent to,be equivalent to@R@,A 2.0 be equivalent to a C average,a C average be equivalent to A 2.0,Yes,1.0
+815,be hijacked by,try to take over@R@,The republic be hijacked by Forces,Forces try to take over The republic,Yes,1.0
+822,be safe with,be dedicated to protect@R@,your life be safe with God,God be dedicated to protect your life,Yes,1.0
+825,be attracted to,attract@R@,Many people be attracted to Florida,Florida attract Many people,Yes,1.0
+844,be the polar opposite of,be the opposite of@R@,Torture be the polar opposite of freedom,freedom be the opposite of Torture,Yes,1.0
+863,dismiss,be brought before@R@,the Trial Court dismiss his cause of action,his cause of action be brought before the Trial Court,Yes,1.0
+877,be home to,make their home in@R@,San Angelo be home to Angelo State University,Angelo State University make their home in San Angelo,Yes,1.0
+953,govern,be regulated by@R@,NEC govern equipment,equipment be regulated by NEC,Yes,1.0
+1000,own,be owned by@R@,Microsoft own the desktop,the desktop be owned by Microsoft,Yes,1.0
+1008,be all included in,inclusive of@R@,These clips be all included in the video,the video inclusive of These clips,Yes,1.0
+1057,take control of,be taken over by@R@,Georgia take control of the SEC East,the SEC East be taken over by Georgia,Yes,1.0
+1060,charge to,incur@R@,fee charge to a borrower,a borrower incur fee,Yes,1.0
+1079,be persecuted in,persecute@R@,Christians be persecuted in this country,this country persecute Christians,Yes,1.0
+1084,be home to,locate in@R@,San Angelo be home to Angelo State University,Angelo State University locate in San Angelo,Yes,1.0
+1098,qualify for,be available to@R@,donations qualify for tax deductions,tax deductions be available to donations,Yes,1.0
+1134,pass,be passed by@R@,Congress pass the Illegal Immigration Reform and Immigrant Responsibility Act,the Illegal Immigration Reform and Immigrant Responsibility Act be passed by Congress,Yes,1.0
+1146,contain,be present in@R@,The book contain checklists,checklists be present in The book,Yes,1.0
+1206,sign,be signed by@R@,Obama sign a stimulus package,a stimulus package be signed by Obama,Yes,1.0
+1316,be awarded to,be awarded with@R@,a certificate be awarded to the winner,the winner be awarded with a certificate,Yes,1.0
+1332,depend on,be best for@R@,Our business depend on your satisfaction,your satisfaction be best for Our business,Yes,1.0
+1337,be new to,be new to@R@,student be new to computers,computers be new to student,Yes,1.0
+1399,be the cause of,be due to@R@,the islands be the cause of many shipwrecks,many shipwrecks be due to the islands,Yes,1.0
+1416,abandon,be abandoned by@R@,the parties abandon the transaction,the transaction be abandoned by the parties,Yes,1.0
+1419,appreciate,mean a lot to@R@,Readers appreciate Holly,Holly mean a lot to Readers,Yes,1.0
+1451,appreciate,mean a lot to@R@,Customers appreciate the suggestion,the suggestion mean a lot to Customers,Yes,1.0
+1480,be open for,be served at@R@,The lounge be open for lunch and dinner,lunch and dinner be served at The lounge,Yes,1.0
+1541,provide food for,eat@R@,the algae provide food for the coral,the coral eat the algae,Yes,1.0
+1584,be advised for,be advised to take@R@,genetic counseling be advised for couples,couples be advised to take genetic counseling,Yes,1.0
+1658,answer,be answered by@R@,Students answer questions,questions be answered by Students,Yes,1.0
+1707,be connected to,connect to@R@,The kennel be connected to the house,the house connect to The kennel,Yes,1.0
+1722,produce,be produced by@R@,islet cells produce insulin,insulin be produced by islet cells,Yes,1.0
+1724,present within,contain all of@R@,the articles present within this page,this page contain all of the articles,Yes,1.0
+1728,be impacted by,affect all of@R@,the Greater Yellowstone Area be impacted by brucellosis,brucellosis affect all of the Greater Yellowstone Area,Yes,1.0
+1735,have a special meaning to,be moved by@R@,various things have a special meaning to him,him be moved by various things,Yes,1.0
+1808,be the author of,be written by@R@,God be the author of sin,sin be written by God,Yes,1.0
+1838,develop,be developed by@R@,This game develop eye-hand coordination,eye-hand coordination be developed by This game,Yes,1.0
+1847,spread,be spread by@R@,the winds spread fires,fires be spread by the winds,Yes,1.0
+1882,be connected to,be attached to@R@,the machine be connected to a local network,a local network be attached to the machine,Yes,1.0
+1921,demonize,be hated by@R@,the religious right demonize homosexuals,homosexuals be hated by the religious right,Yes,1.0
+2035,be engraved on,be engraved with@R@,His name be engraved on the village War Memorial,the village War Memorial be engraved with His name,Yes,1.0
+2203,be all affected by,affect each of@R@,our education be all affected by the quality and availability of transportation,the quality and availability of transportation affect each of our education,Yes,1.0
+2209,own,belong to@R@,this guy own the domain,the domain belong to this guy,Yes,1.0
+2213,adopt,be adopted by@R@,most people adopt the little ones,the little ones be adopted by most people,Yes,1.0
+2244,end up marry,want to marry@R@,Dad end up marry Mom,Mom want to marry Dad,Yes,1.0
+2281,be the source of,flow from@R@,God be the source of perfect love,perfect love flow from God,Yes,1.0
+2384,be fine with,be ok with@R@,things be fine with the lady,the lady be ok with things,Yes,0.7501
+2516,own,be sold to@R@,Microsoft own the desktop,the desktop be sold to Microsoft,No,1.0
+2517,affect the health of,be more susceptible to@R@,issues affect the health of the public,the public be more susceptible to issues,No,1.0
+2551,be to make,be to make@R@,The plan be to make flowers,flowers be to make The plan,No,1.0
+2567,portray,be televised live on@R@,the comparable properties portray the subject property,the subject property be televised live on the comparable properties,No,1.0
+2577,brush,want@R@,His lips brush her shoulder,her shoulder want His lips,No,1.0
+2622,be worth more than,be more valuable than@R@,the scope be worth more than the rifle,the rifle be more valuable than the scope,No,1.0
+2662,seem to occur to,have no interest in@R@,a thought seem to occur to him,him have no interest in a thought,No,1.0
+2667,have peace with,punish@R@,the believer have peace with God,God punish the believer,No,1.0
+2693,command,cry out to@R@,Jesus command the wind,the wind cry out to Jesus,No,1.0
+2726,fail to file,be filed by@R@,The claimant fail to file a motion,a motion be filed by The claimant,No,1.0
+2736,grow up with,be best for@R@,Leif grow up with his family,his family be best for Leif,No,1.0
+2744,pass to,pass to@R@,Bulgaria pass to Byzantine rule,Byzantine rule pass to Bulgaria,No,1.0
+2809,travel with,train@R@,The reader travel with Ben,Ben train The reader,No,1.0
+2832,agree with,disagree with@R@,Gibson agree with him,him disagree with Gibson,No,1.0
+2842,kick,co-stars@R@,Donna kick Julie,Julie co-stars Donna,No,1.0
+2956,have a field day with,be an attempt by@R@,Critics have a field day with this one,this one be an attempt by Critics,No,1.0
+2974,step in for,play behind@R@,Michelle Obama step in for her husband,her husband play behind Michelle Obama,No,1.0
+2986,deceive,deceive@R@,The historian deceive the reader,the reader deceive The historian,No,1.0
+3021,endorse,run against@R@,The New Yorker endorse Barack Obama,Barack Obama run against The New Yorker,No,1.0
+3025,be notified of,be mailed to@R@,The administration be notified of this problem,this problem be mailed to The administration,No,1.0
+3035,choose one of,guide@R@,The visitor choose one of the doors,the doors guide The visitor,No,1.0
+3064,have no access to,be in@R@,Africa have no access to electricity,electricity be in Africa,No,1.0
+3069,grant,be liable to@R@,The monarch grant a dissolution,a dissolution be liable to The monarch,No,1.0
+3109,be more important than,be more important than@R@,optimization be more important than design,design be more important than optimization,No,1.0
+3149,remain,be said for@R@,width remain the same,the same be said for width,No,1.0
+3179,pray to,have mercy on@R@,these people pray to our God,our God have mercy on these people,No,1.0
+3224,have several problem with,make little sense to@R@,Consumer have several problem with transmission,transmission make little sense to Consumer,No,1.0
+3241,hold talk with,shake hand with@R@,Blair hold talk with Mubarak,Mubarak shake hand with Blair,No,1.0
+3284,draw with,lose 1-0 to@R@,France draw with South Korea,South Korea lose 1-0 to France,No,1.0
+3308,work based on,work based on@R@,The laser work based on pulses,pulses work based on The laser,No,1.0
+3322,punch,whip@R@,Josiah punch him,him whip Josiah,No,1.0
+3376,cheat on,break up with@R@,My best friend cheat on his girlfriend,his girlfriend break up with My best friend,No,1.0
+3382,trick,be seduced by@R@,Odysseus trick him,him be seduced by Odysseus,No,1.0
+3398,send to,send@R@,"any form of electronic , verbal , or written communication send to the Licensor","the Licensor send any form of electronic , verbal , or written communication",No,1.0
+3419,warn,accuse@R@,the chief warn him,him accuse the chief,No,1.0
+3455,incapacitate,be cured of@R@,his drugs incapacitate him,him be cured of his drugs,No,1.0
+3459,lose the war on,be tolerated in@R@,America lose the war on terror,terror be tolerated in America,No,1.0
+3520,vote on,be approved by@R@,The House vote on the report,the report be approved by The House,No,1.0
+3568,be a country in,be a region of@R@,Zambia be a country in southern Africa,southern Africa be a region of Zambia,no,1.0
+3593,want to marry,agree to marry@R@,Chris want to marry May,May agree to marry Chris,No,1.0
+3628,be the accumulation of,prevent the formation of@R@,His only goal be the accumulation of power,power prevent the formation of His only goal,No,1.0
+3678,dwell among,pray to@R@,God dwell among men,men pray to God,No,1.0
+3705,get word to,cover up for@R@,Jr. get word to Washington,Washington cover up for Jr.,No,1.0
+3718,be cheered by,gather to watch@R@,Investors be cheered by the banking sector,the banking sector gather to watch Investors,No,1.0
+3836,drop off,be necessary to@R@,residents drop off recyclable materials,recyclable materials be necessary to residents,No,1.0
+3840,stretch between,tie a knot in@R@,the membrane stretch between the fingers,the fingers tie a knot in the membrane,No,1.0
+3985,be new to,be the place for@R@,individuals be new to Linux,Linux be the place for individuals,No,1.0
+4017,do something about,make sense for@R@,Obama do something about health care costs,health care costs make sense for Obama,No,1.0
+4134,long to see,be everything to@R@,Yang long to see Lau,Lau be everything to Yang,No,1.0
+4223,have peace with,sign a peace treaty with@R@,the believer have peace with God,God sign a peace treaty with the believer,No,1.0
+4226,be imposed upon,be relieved of@R@,plague be imposed upon society,society be relieved of plague,No,1.0
+4256,join with,teach@R@,All our family join with him,him teach All our family,No,1.0
+4264,come with,save@R@,this one come with a disclaimer,a disclaimer save this one,No,1.0
+4315,spend lot of,run out for@R@,the members spend lot of time and efforts,time and efforts run out for the members,No,1.0
+4318,be distinguished from,be confused with@R@,Crew be distinguished from cast,cast be confused with Crew,No,1.0
+4377,have a special meaning to,guess the name of@R@,various things have a special meaning to him,him guess the name of various things,No,1.0
+4511,have an advantage over,have an edge over@R@,Video games have an advantage over classes,classes have an edge over Video games,No,1.0
+4517,be held hostage by,hide among@R@,Our lives be held hostage by Our failures,Our failures hide among Our lives,No,1.0
+4522,be related to,be more genuine than@R@,Hopelessness be related to depression,depression be more genuine than Hopelessness,No,1.0
+4561,await,bring@R@,Mumm-Ra await Drag-Ron,Drag-Ron bring Mumm-Ra,No,1.0
+4603,be the best part of,be the same without@R@,the results be the best part of the job,the job be the same without the results,No,1.0
+4625,be put off,mean many thing to@R@,farmers be put off the land,the land mean many thing to farmers,No,1.0
+4626,look over at,sit beside@R@,Lisa look over at Brad,Brad sit beside Lisa,No,1.0
+4641,search for,look for@R@,many people search for a physician,a physician look for many people,No,1.0
+4740,agree to notify,be liable to@R@,Owner agree to notify Marina,Marina be liable to Owner,No,1.0
+4752,fail to file,be signed by@R@,The claimant fail to file a motion,a motion be signed by The claimant,No,1.0
+4787,have many benefit for,do some form of@R@,the partnership have many benefit for both companies,both companies do some form of the partnership,No,1.0
+4791,be advised to review,be designed to assist@R@,Members be advised to review the rules,the rules be designed to assist Members,No,1.0
+4808,tease,restrain@R@,Caroline tease him,him restrain Caroline,No,1.0
+4907,smile upon,tempt@R@,the women smile upon him,him tempt the women,No,1.0
+4914,appear to,pray to@R@,God appear to Cornelius,Cornelius pray to God,No,1.0
+4970,help rescue,be aboard@R@,the social worker help rescue him,him be aboard the social worker,No,1.0
+5035,join,talk to@R@,Jane join her sister,her sister talk to Jane,No,1.0
+5104,permit,be remanded in@R@,The Supreme Court permit the defendant,the defendant be remanded in The Supreme Court,No,1.0
+5163,want to be free from,begin to overwhelm@R@,The colonists want to be free from England,England begin to overwhelm The colonists,No,1.0
+5219,have link to,list@R@,This Website have link to other sites,other sites list This Website,No,1.0
+5234,be fine with,believe@R@,things be fine with the lady,the lady believe things,No,1.0
+5316,feel safer with,be unpopular with@R@,America feel safer with the Patriot Act,the Patriot Act be unpopular with America,No,1.0
+5327,kill,kill@R@,the Jews kill him,him kill the Jews,No,1.0
+5358,depend on,have nothing to do with@R@,Thailand depend on exports,exports have nothing to do with Thailand,No,1.0
+5458,be comparable to,set@R@,Gothic 3 be comparable to Oblivion,Oblivion set Gothic 3,No,0.7109
+5463,be safe with,come get@R@,your life be safe with God,God come get your life,No,0.7099
+5524,do something about,be harder for@R@,Obama do something about health care costs,health care costs be harder for Obama,No,0.7028
+5555,purchase,be owned by@R@,those users purchase online,online be owned by those users,No,1.0
+5556,take on,take on@R@,NOT take on more debt,more debt take on NOT,No,1.0
+5563,be used by,diese@R@,formats be used by other systems,other systems diese formats,No,1.0
+5589,take a flight to,be the capital city of@R@,Clinton take a flight to the Middle East,the Middle East be the capital city of Clinton,No,1.0
+5599,strike,be hit by@R@,The clock strike nine,nine be hit by The clock,No,1.0
+5601,be blended into,fold in@R@,the hair be blended into your own hair,your own hair fold in the hair,No,1.0
+5642,tease,sell before@R@,The guys tease their fans,their fans sell before The guys,No,1.0
+5656,be though,be besides@R@,Drinks be though expensive,expensive be besides Drinks,No,1.0
+5675,be blended into,add a small amount of@R@,the hair be blended into your own hair,your own hair add a small amount of the hair,No,1.0
+5681,be out in,have bathroom with@R@,your kids be out in the sun,the sun have bathroom with your kids,No,1.0
+5703,kill over,be killed in@R@,fish kill over the winter,the winter be killed in fish,No,1.0
+5754,gain from,be a small city in@R@,methods gain from experience,experience be a small city in methods,No,1.0
+5758,urge,create for@R@,Japan urge S Korea,S Korea create for Japan,No,1.0
+5777,be separate from,have bathroom with@R@,these two energies be separate from each other,each other have bathroom with these two energies,No,1.0
+5783,be achieved without,be a precondition for@R@,Nothing great be achieved without enthusiasm,enthusiasm be a precondition for Nothing great,No,1.0
+5786,contain embedded,embed in@R@,COMMENT contain embedded spaces,spaces embed in COMMENT,No,1.0
+5789,be generous of,have none of@R@,Some of them be generous of their time,their time have none of Some of them,No,1.0
+5858,start to push,be pushed by@R@,Lets start to push this body,this body be pushed by Lets,No,1.0
+5864,be spent in,find your hotel in@R@,His formative years be spent in London,London find your hotel in His formative years,No,1.0
+5926,be in on,be good to see@R@,The characters be in on the joke,the joke be good to see The characters,No,1.0
+5934,have mercy on,give thanks to@R@,may god have mercy on your souls,your souls give thanks to may god,No,1.0
+5947,be safe for,saute with@R@,This post be safe for Work,Work saute with This post,No,1.0
+5989,be a play on,spell@R@,Google be a play on the word googol,the word googol spell Google,No,1.0
+6038,chat to,take pity on@R@,the birds chat to one another,one another take pity on the birds,No,1.0
+6075,be much for,do for@R@,Reality be much for our minds,our minds do for Reality,No,1.0
+6104,be the home of,see@R@,Gleneagles be the home of the Ryder Cup,the Ryder Cup see Gleneagles,No,1.0
+6145,s for,ed@R@,That` s for jack,jack ed That`,No,1.0
+6195,want to let go of,wash over@R@,NOT want to let go of control,control wash over NOT,No,1.0
+6209,come from,take a 1-0 lead in@R@,the Truth come from a book,a book take a 1-0 lead in the Truth,No,1.0
+6211,be identical to,be the same as@R@,A set be identical to itself,itself be the same as A set,No,1.0
+6236,be taken of,enjoy take@R@,This picture be taken of the building,the building enjoy take This picture,No,1.0
+6247,be imposed upon,impose@R@,plague be imposed upon society,society impose plague,No,1.0
+6249,sign a letter of,be reached between@R@,Abraham sign a letter of intention,intention be reached between Abraham,No,1.0
+6270,become possible for,accomplish@R@,other countries become possible for the first time,the first time accomplish other countries,No,1.0
+6316,provide further information on,be discussed within@R@,him provide further information on Muhammad 's life,Muhammad 's life be discussed within him,No,1.0
+6329,have no name for,depict the life of@R@,the local Indians have no name for the mountain,the mountain depict the life of the local Indians,No,1.0
+6375,go like,take some of@R@,My heart go like a train,a train take some of My heart,No,1.0
+6398,surround,be attacked by@R@,The open space surround the buildings,the buildings be attacked by The open space,No,1.0
+6402,sentence,be sentenced in@R@,Her father sentence him,him be sentenced in Her father,No,1.0
+6458,defeat,take a 1-0 lead in@R@,Brazil defeat poverty,poverty take a 1-0 lead in Brazil,No,1.0
+6485,shout for,lean over to@R@,the animals shout for joy,joy lean over to the animals,No,1.0
+6506,recommend,talk to@R@,Use recommend lotion,lotion talk to Use,No,1.0
+6508,provide something for,have the right to live in@R@,the menu provide something for all tastes,all tastes have the right to live in the menu,No,1.0
+6517,welcome,please feel free to contact@R@,Directors welcome the authorities ' intentions,the authorities ' intentions please feel free to contact Directors,No,1.0
