@@ -16,3 +16,14 @@ daganlevy_tidy = pd.concat(
     [text, hypothesis, daganlevy.annotation],
     axis=1)
 daganlevy_tidy.to_csv('.\\working-datasets\\daganlevy-tidy.csv')
+
+annoToVal = {
+    'y': True,
+    'n': False
+}
+
+daganlevy_analysis = daganlevy.copy()
+daganlevy_analysis.text = [text.split(', ') for text in daganlevy.text]
+daganlevy_analysis.hypothesis = [text.split(', ') for text in daganlevy.hypothesis]
+daganlevy_analysis.annotation = [annoToVal[annotation] for annotation in daganlevy.annotation]
+daganlevy_analysis.to_csv('.\\working-datasets\\daganlevy.csv')
