@@ -39,7 +39,7 @@ annotation = pd.DataFrame(
 daganlevy_tidy = pd.concat(
     [text, hypothesis, annotation],
     axis=1)
-daganlevy_tidy.to_csv('.\\working-datasets\\daganlevy-tidy.csv')
+daganlevy_tidy.to_csv('.\\datasets\\daganlevy-tidy.csv')
 
 
 # Create analysis dataset
@@ -47,7 +47,7 @@ daganlevy_analysis = daganlevy.copy()
 daganlevy_analysis.text = [text.split(', ') for text in daganlevy.text]
 daganlevy_analysis.hypothesis = [text.split(', ') for text in daganlevy.hypothesis]
 daganlevy_analysis.entailment = [annoToVal[annotation] for annotation in daganlevy.entailment]
-daganlevy_analysis.to_json('.\\working-datasets\\daganlevy.json')
+daganlevy_analysis.to_json('.\\datasets\\daganlevy.json')
 
 
 
@@ -85,8 +85,8 @@ nans = zeichner_tidy.hypothesis_x == 'NaN'
 zeichner_dirty = zeichner_tidy[nans]
 zeichner_tidy = zeichner_tidy[valid]
 
-zeichner_tidy.to_csv('.\\working-datasets\\zeichner-tidy.csv')
-zeichner_dirty.to_csv('.\\working-datasets\\zeichner-dirty.csv')
+zeichner_tidy.to_csv('.\\datasets\\zeichner-tidy.csv')
+zeichner_dirty.to_csv('.\\datasets\\zeichner-dirty.csv')
 
 # Create analysis dataset
 text = zip(zeichner_tidy.text_x, zeichner_tidy.text_predicate, zeichner_tidy.text_y)
@@ -98,4 +98,4 @@ zeichner_analysis = pd.concat(
 zeichner_analysis.columns = COLUMN_NAMES
 zeichner_analysis.text = [[x, pred, y] for x, pred, y in text]
 zeichner_analysis.hypothesis = [[x, pred, y] for x, pred, y in hypothesis]
-zeichner_analysis.to_json('.\\working-datasets\\zeichner.json')
+zeichner_analysis.to_json('.\\datasets\\zeichner.json')

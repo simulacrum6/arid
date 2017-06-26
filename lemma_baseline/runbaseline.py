@@ -21,7 +21,7 @@ lemma = Baseline()
 
 ### Dagan & Levy run
 
-daganlevy = pd.read_json('..\\resources\\working-datasets\\daganlevy.json').reindex(columns=headers).reset_index(drop=True)
+daganlevy = pd.read_json('..\\resources\\datasets\\daganlevy.json').reindex(columns=headers).reset_index(drop=True)
 
 prediction = lemma.run(daganlevy.values)
 evaluation = (evaluate(gold, prediction) for gold, prediction in zip(daganlevy.entailment, prediction))
@@ -39,7 +39,7 @@ precision = confusion['TP'] / (confusion['TP'] + confusion['FP'])
 
 ### Zeichner run
 
-zeichner = pd.read_json('..\\resources\\working-datasets\\zeichner.json').reindex(columns=headers).reset_index(drop=True)
+zeichner = pd.read_json('..\\resources\\datasets\\zeichner.json').reindex(columns=headers).reset_index(drop=True)
 
 prediction = lemma.run(zeichner.values)
 evaluation = (evaluate(gold, prediction) for gold, prediction in zip(zeichner.entailment, prediction))
