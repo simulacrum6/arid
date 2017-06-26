@@ -1,0 +1,189 @@
+,text_x,text_predicate,text_y,hypothesis_x,hypothesis_predicate,hypothesis_y,entailment
+40,Students,be new to,the school,NaN,be new to@R@,NaN,True
+78,Autistic children,be puzzled by,faces,NaN,perplex@R@,NaN,True
+101,COMMENT,contain embedded,spaces,NaN,be embedded within@R@,NaN,True
+122,The EPA,regulate,tap water,NaN,be regulated under@R@,NaN,True
+174,your account,be sold to,a third party,NaN,take over@R@,NaN,True
+195,The House,vote on,the report,NaN,be introduced in@R@,NaN,True
+245,The Supreme Court,permit,the defendant,NaN,be allowed in@R@,NaN,True
+362,David,worship,Allah,NaN,be worshipped by@R@,NaN,True
+392,our education,be all affected by,the quality and availability of transportation,NaN,continue to affect@R@,NaN,True
+498,Cheney,order,the leak,NaN,be ordered by@R@,NaN,True
+628,Gothic 3,be comparable to,Oblivion,NaN,be comparable to@R@,NaN,True
+711,Cum,shoot all over,his chest,NaN,be slick with@R@,NaN,True
+722,The artist,be the creator of,beautiful things,NaN,be the creation of@R@,NaN,True
+774,harmful greenhouse gas emissions,blame for,global warming,NaN,be linked to@R@,NaN,True
+785,her hair,cover,her face,NaN,be covered by@R@,NaN,True
+798,A 2.0,be equivalent to,a C average,NaN,be equivalent to@R@,NaN,True
+815,The republic,be hijacked by,Forces,NaN,try to take over@R@,NaN,True
+822,your life,be safe with,God,NaN,be dedicated to protect@R@,NaN,True
+825,Many people,be attracted to,Florida,NaN,attract@R@,NaN,True
+844,Torture,be the polar opposite of,freedom,NaN,be the opposite of@R@,NaN,True
+863,the Trial Court,dismiss,his cause of action,NaN,be brought before@R@,NaN,True
+877,San Angelo,be home to,Angelo State University,NaN,make their home in@R@,NaN,True
+953,NEC,govern,equipment,NaN,be regulated by@R@,NaN,True
+1000,Microsoft,own,the desktop,NaN,be owned by@R@,NaN,True
+1008,These clips,be all included in,the video,NaN,inclusive of@R@,NaN,True
+1057,Georgia,take control of,the SEC East,NaN,be taken over by@R@,NaN,True
+1060,fee,charge to,a borrower,NaN,incur@R@,NaN,True
+1079,Christians,be persecuted in,this country,NaN,persecute@R@,NaN,True
+1084,San Angelo,be home to,Angelo State University,NaN,locate in@R@,NaN,True
+1098,donations,qualify for,tax deductions,NaN,be available to@R@,NaN,True
+1134,Congress,pass,the Illegal Immigration Reform and Immigrant Responsibility Act,NaN,be passed by@R@,NaN,True
+1146,The book,contain,checklists,NaN,be present in@R@,NaN,True
+1206,Obama,sign,a stimulus package,NaN,be signed by@R@,NaN,True
+1316,a certificate,be awarded to,the winner,NaN,be awarded with@R@,NaN,True
+1332,Our business,depend on,your satisfaction,NaN,be best for@R@,NaN,True
+1337,student,be new to,computers,NaN,be new to@R@,NaN,True
+1399,the islands,be the cause of,many shipwrecks,NaN,be due to@R@,NaN,True
+1416,the parties,abandon,the transaction,NaN,be abandoned by@R@,NaN,True
+1419,Readers,appreciate,Holly,NaN,mean a lot to@R@,NaN,True
+1451,Customers,appreciate,the suggestion,NaN,mean a lot to@R@,NaN,True
+1480,The lounge,be open for,lunch and dinner,NaN,be served at@R@,NaN,True
+1541,the algae,provide food for,the coral,NaN,eat@R@,NaN,True
+1584,genetic counseling,be advised for,couples,NaN,be advised to take@R@,NaN,True
+1658,Students,answer,questions,NaN,be answered by@R@,NaN,True
+1707,The kennel,be connected to,the house,NaN,connect to@R@,NaN,True
+1722,islet cells,produce,insulin,NaN,be produced by@R@,NaN,True
+1724,the articles,present within,this page,NaN,contain all of@R@,NaN,True
+1728,the Greater Yellowstone Area,be impacted by,brucellosis,NaN,affect all of@R@,NaN,True
+1735,various things,have a special meaning to,him,NaN,be moved by@R@,NaN,True
+1808,God,be the author of,sin,NaN,be written by@R@,NaN,True
+1838,This game,develop,eye-hand coordination,NaN,be developed by@R@,NaN,True
+1847,the winds,spread,fires,NaN,be spread by@R@,NaN,True
+1882,the machine,be connected to,a local network,NaN,be attached to@R@,NaN,True
+1921,the religious right,demonize,homosexuals,NaN,be hated by@R@,NaN,True
+2035,His name,be engraved on,the village War Memorial,NaN,be engraved with@R@,NaN,True
+2203,our education,be all affected by,the quality and availability of transportation,NaN,affect each of@R@,NaN,True
+2209,this guy,own,the domain,NaN,belong to@R@,NaN,True
+2213,most people,adopt,the little ones,NaN,be adopted by@R@,NaN,True
+2244,Dad,end up marry,Mom,NaN,want to marry@R@,NaN,True
+2281,God,be the source of,perfect love,NaN,flow from@R@,NaN,True
+2384,things,be fine with,the lady,NaN,be ok with@R@,NaN,True
+2516,Microsoft,own,the desktop,NaN,be sold to@R@,NaN,False
+2517,issues,affect the health of,the public,NaN,be more susceptible to@R@,NaN,False
+2551,The plan,be to make,flowers,NaN,be to make@R@,NaN,False
+2567,the comparable properties,portray,the subject property,NaN,be televised live on@R@,NaN,False
+2577,His lips,brush,her shoulder,NaN,want@R@,NaN,False
+2622,the scope,be worth more than,the rifle,NaN,be more valuable than@R@,NaN,False
+2662,a thought,seem to occur to,him,NaN,have no interest in@R@,NaN,False
+2667,the believer,have peace with,God,NaN,punish@R@,NaN,False
+2693,Jesus,command,the wind,NaN,cry out to@R@,NaN,False
+2726,The claimant,fail to file,a motion,NaN,be filed by@R@,NaN,False
+2736,Leif,grow up with,his family,NaN,be best for@R@,NaN,False
+2744,Bulgaria,pass to,Byzantine rule,NaN,pass to@R@,NaN,False
+2809,The reader,travel with,Ben,NaN,train@R@,NaN,False
+2832,Gibson,agree with,him,NaN,disagree with@R@,NaN,False
+2842,Donna,kick,Julie,NaN,co-stars@R@,NaN,False
+2956,Critics,have a field day with,this one,NaN,be an attempt by@R@,NaN,False
+2974,Michelle Obama,step in for,her husband,NaN,play behind@R@,NaN,False
+2986,The historian,deceive,the reader,NaN,deceive@R@,NaN,False
+3021,The New Yorker,endorse,Barack Obama,NaN,run against@R@,NaN,False
+3025,The administration,be notified of,this problem,NaN,be mailed to@R@,NaN,False
+3035,The visitor,choose one of,the doors,NaN,guide@R@,NaN,False
+3064,Africa,have no access to,electricity,NaN,be in@R@,NaN,False
+3069,The monarch,grant,a dissolution,NaN,be liable to@R@,NaN,False
+3109,optimization,be more important than,design,NaN,be more important than@R@,NaN,False
+3149,width,remain,the same,NaN,be said for@R@,NaN,False
+3179,these people,pray to,our God,NaN,have mercy on@R@,NaN,False
+3224,Consumer,have several problem with,transmission,NaN,make little sense to@R@,NaN,False
+3241,Blair,hold talk with,Mubarak,NaN,shake hand with@R@,NaN,False
+3284,France,draw with,South Korea,NaN,lose 1-0 to@R@,NaN,False
+3308,The laser,work based on,pulses,NaN,work based on@R@,NaN,False
+3322,Josiah,punch,him,NaN,whip@R@,NaN,False
+3376,My best friend,cheat on,his girlfriend,NaN,break up with@R@,NaN,False
+3382,Odysseus,trick,him,NaN,be seduced by@R@,NaN,False
+3398,"any form of electronic , verbal , or written communication",send to,the Licensor,NaN,send@R@,NaN,False
+3419,the chief,warn,him,NaN,accuse@R@,NaN,False
+3455,his drugs,incapacitate,him,NaN,be cured of@R@,NaN,False
+3459,America,lose the war on,terror,NaN,be tolerated in@R@,NaN,False
+3520,The House,vote on,the report,NaN,be approved by@R@,NaN,False
+3568,Zambia,be a country in,southern Africa,NaN,be a region of@R@,NaN,False
+3593,Chris,want to marry,May,NaN,agree to marry@R@,NaN,False
+3628,His only goal,be the accumulation of,power,NaN,prevent the formation of@R@,NaN,False
+3678,God,dwell among,men,NaN,pray to@R@,NaN,False
+3705,Jr.,get word to,Washington,NaN,cover up for@R@,NaN,False
+3718,Investors,be cheered by,the banking sector,NaN,gather to watch@R@,NaN,False
+3836,residents,drop off,recyclable materials,NaN,be necessary to@R@,NaN,False
+3840,the membrane,stretch between,the fingers,NaN,tie a knot in@R@,NaN,False
+3985,individuals,be new to,Linux,NaN,be the place for@R@,NaN,False
+4017,Obama,do something about,health care costs,NaN,make sense for@R@,NaN,False
+4134,Yang,long to see,Lau,NaN,be everything to@R@,NaN,False
+4223,the believer,have peace with,God,NaN,sign a peace treaty with@R@,NaN,False
+4226,plague,be imposed upon,society,NaN,be relieved of@R@,NaN,False
+4256,All our family,join with,him,NaN,teach@R@,NaN,False
+4264,this one,come with,a disclaimer,NaN,save@R@,NaN,False
+4315,the members,spend lot of,time and efforts,NaN,run out for@R@,NaN,False
+4318,Crew,be distinguished from,cast,NaN,be confused with@R@,NaN,False
+4377,various things,have a special meaning to,him,NaN,guess the name of@R@,NaN,False
+4511,Video games,have an advantage over,classes,NaN,have an edge over@R@,NaN,False
+4517,Our lives,be held hostage by,Our failures,NaN,hide among@R@,NaN,False
+4522,Hopelessness,be related to,depression,NaN,be more genuine than@R@,NaN,False
+4561,Mumm-Ra,await,Drag-Ron,NaN,bring@R@,NaN,False
+4603,the results,be the best part of,the job,NaN,be the same without@R@,NaN,False
+4625,farmers,be put off,the land,NaN,mean many thing to@R@,NaN,False
+4626,Lisa,look over at,Brad,NaN,sit beside@R@,NaN,False
+4641,many people,search for,a physician,NaN,look for@R@,NaN,False
+4740,Owner,agree to notify,Marina,NaN,be liable to@R@,NaN,False
+4752,The claimant,fail to file,a motion,NaN,be signed by@R@,NaN,False
+4787,the partnership,have many benefit for,both companies,NaN,do some form of@R@,NaN,False
+4791,Members,be advised to review,the rules,NaN,be designed to assist@R@,NaN,False
+4808,Caroline,tease,him,NaN,restrain@R@,NaN,False
+4907,the women,smile upon,him,NaN,tempt@R@,NaN,False
+4914,God,appear to,Cornelius,NaN,pray to@R@,NaN,False
+4970,the social worker,help rescue,him,NaN,be aboard@R@,NaN,False
+5035,Jane,join,her sister,NaN,talk to@R@,NaN,False
+5104,The Supreme Court,permit,the defendant,NaN,be remanded in@R@,NaN,False
+5163,The colonists,want to be free from,England,NaN,begin to overwhelm@R@,NaN,False
+5219,This Website,have link to,other sites,NaN,list@R@,NaN,False
+5234,things,be fine with,the lady,NaN,believe@R@,NaN,False
+5316,America,feel safer with,the Patriot Act,NaN,be unpopular with@R@,NaN,False
+5327,the Jews,kill,him,NaN,kill@R@,NaN,False
+5358,Thailand,depend on,exports,NaN,have nothing to do with@R@,NaN,False
+5458,Gothic 3,be comparable to,Oblivion,NaN,set@R@,NaN,False
+5463,your life,be safe with,God,NaN,come get@R@,NaN,False
+5524,Obama,do something about,health care costs,NaN,be harder for@R@,NaN,False
+5555,those users,purchase,online,NaN,be owned by@R@,NaN,False
+5556,NOT,take on,more debt,NaN,take on@R@,NaN,False
+5563,formats,be used by,other systems,NaN,diese@R@,NaN,False
+5589,Clinton,take a flight to,the Middle East,NaN,be the capital city of@R@,NaN,False
+5599,The clock,strike,nine,NaN,be hit by@R@,NaN,False
+5601,the hair,be blended into,your own hair,NaN,fold in@R@,NaN,False
+5642,The guys,tease,their fans,NaN,sell before@R@,NaN,False
+5656,Drinks,be though,expensive,NaN,be besides@R@,NaN,False
+5675,the hair,be blended into,your own hair,NaN,add a small amount of@R@,NaN,False
+5681,your kids,be out in,the sun,NaN,have bathroom with@R@,NaN,False
+5703,fish,kill over,the winter,NaN,be killed in@R@,NaN,False
+5754,methods,gain from,experience,NaN,be a small city in@R@,NaN,False
+5758,Japan,urge,S Korea,NaN,create for@R@,NaN,False
+5777,these two energies,be separate from,each other,NaN,have bathroom with@R@,NaN,False
+5783,Nothing great,be achieved without,enthusiasm,NaN,be a precondition for@R@,NaN,False
+5786,COMMENT,contain embedded,spaces,NaN,embed in@R@,NaN,False
+5789,Some of them,be generous of,their time,NaN,have none of@R@,NaN,False
+5858,Lets,start to push,this body,NaN,be pushed by@R@,NaN,False
+5864,His formative years,be spent in,London,NaN,find your hotel in@R@,NaN,False
+5926,The characters,be in on,the joke,NaN,be good to see@R@,NaN,False
+5934,may god,have mercy on,your souls,NaN,give thanks to@R@,NaN,False
+5947,This post,be safe for,Work,NaN,saute with@R@,NaN,False
+5989,Google,be a play on,the word googol,NaN,spell@R@,NaN,False
+6038,the birds,chat to,one another,NaN,take pity on@R@,NaN,False
+6075,Reality,be much for,our minds,NaN,do for@R@,NaN,False
+6104,Gleneagles,be the home of,the Ryder Cup,NaN,see@R@,NaN,False
+6145,That`,s for,jack,NaN,ed@R@,NaN,False
+6195,NOT,want to let go of,control,NaN,wash over@R@,NaN,False
+6209,the Truth,come from,a book,NaN,take a 1-0 lead in@R@,NaN,False
+6211,A set,be identical to,itself,NaN,be the same as@R@,NaN,False
+6236,This picture,be taken of,the building,NaN,enjoy take@R@,NaN,False
+6247,plague,be imposed upon,society,NaN,impose@R@,NaN,False
+6249,Abraham,sign a letter of,intention,NaN,be reached between@R@,NaN,False
+6270,other countries,become possible for,the first time,NaN,accomplish@R@,NaN,False
+6316,him,provide further information on,Muhammad 's life,NaN,be discussed within@R@,NaN,False
+6329,the local Indians,have no name for,the mountain,NaN,depict the life of@R@,NaN,False
+6375,My heart,go like,a train,NaN,take some of@R@,NaN,False
+6398,The open space,surround,the buildings,NaN,be attacked by@R@,NaN,False
+6402,Her father,sentence,him,NaN,be sentenced in@R@,NaN,False
+6458,Brazil,defeat,poverty,NaN,take a 1-0 lead in@R@,NaN,False
+6485,the animals,shout for,joy,NaN,lean over to@R@,NaN,False
+6506,Use,recommend,lotion,NaN,talk to@R@,NaN,False
+6508,the menu,provide something for,all tastes,NaN,have the right to live in@R@,NaN,False
+6517,Directors,welcome,the authorities ' intentions,NaN,please feel free to contact@R@,NaN,False

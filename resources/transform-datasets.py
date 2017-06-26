@@ -78,15 +78,22 @@ annotation = pd.DataFrame(
 zeichner_tidy = pd.concat(
     [text, hypothesis, annotation],
     axis=1)
-zeichner_tidy.to_csv('.\\working-datasets\\zeichner-tidy.csv')
 
+valid = zeichner_tidy.hypothesis_x != 'NaN'
+nans = zeichner_tidy.hypothesis_x == 'NaN'
+
+zeichner_dirty = zeichner_tidy[nans]
+zeichner_tidy = zeichner_tidy[valid]
+
+zeichner_tidy.to_csv('.\\working-datasets\\zeichner-tidy.csv')
+zeichner_dirty.to_csv('.\\working-datasets\\zeichner-dirty.csv')
 
 # Create analysis dataset
 text = zip(zeichner_tidy.text_x, zeichner_tidy.text_predicate, zeichner_tidy.text_y)
 hypothesis = zip(zeichner_tidy.hypothesis_x, zeichner_tidy.hypothesis_predicate, zeichner_tidy.hypothesis_y)
 
 zeichner_analysis = pd.concat(
-    [zeichner.lhs, zeichner.rhs, zeichner_tidy.entailment],
+    [zeichner_tidy.text_predicate, zeichner_tidy.hypothesis_predicate, zeichner_tidy.entailment],
     axis=1)
 zeichner_analysis.columns = COLUMN_NAMES
 zeichner_analysis.text = [[x, pred, y] for x, pred, y in text]

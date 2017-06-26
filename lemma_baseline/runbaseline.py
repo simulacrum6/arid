@@ -1,7 +1,8 @@
-import baseline as bl
+from baseline import Baseline
 import pandas as pd
-import csv
-    
+
+# TODO: scale for multiple datasets
+
 def evaluate(goldstandard, prediction):
     result = ''
     if goldstandard == prediction:
@@ -14,29 +15,40 @@ def evaluate(goldstandard, prediction):
         result += 'N'
     return result
 
-annotationMap = {
-    'y': True,
-    'n': False
-}
+headers = ['text', 'hypothesis', 'entailment']
+result_headers = ['actual', 'prediction', 'evaluation']
+lemma = Baseline()
 
-data = pd.read_csv(
-    'daganlevy_dataset.txt',
-    sep='\t',
-    header=None,
-    names=['text', 'hypothesis', 'annotation'])
+### Dagan & Levy run
 
-for i in ['text', 'hypothesis']:
-    data[i] = [template.split(', ') for template in data[i]]
+daganlevy = pd.read_json('..\\resources\\working-datasets\\daganlevy.json').reindex(columns=headers).reset_index(drop=True)
 
-exp = bl.Baseline()
-baseline = exp.run(data.values)
+prediction = lemma.run(daganlevy.values)
+evaluation = (evaluate(gold, prediction) for gold, prediction in zip(daganlevy.entailment, prediction))
 
-data['value'] = [annotationMap[annotation] for annotation in data['annotation']]
-data['baseline_prediction'] = baseline
+result = pd.DataFrame(
+    list(zip(daganlevy.entailment, prediction, evaluation)),
+    columns=result_headers)
 
-data['evaluation'] = [evaluate(gold, prediction) for gold, prediction in zip(data['value'], data['baseline_prediction'])]
+confusion = result.evaluation.value_counts()
 
-confusion = data['evaluation'].value_counts()
+acc = (confusion['TP'] + confusion['TN']) / sum(confusion)
+recall = confusion['TP'] / (confusion['TP'] + confusion['FN'])
+precision = confusion['TP'] / (confusion['TP'] + confusion['FP'])
+
+
+### Zeichner run
+
+zeichner = pd.read_json('..\\resources\\working-datasets\\zeichner.json').reindex(columns=headers).reset_index(drop=True)
+
+prediction = lemma.run(zeichner.values)
+evaluation = (evaluate(gold, prediction) for gold, prediction in zip(zeichner.entailment, prediction))
+
+result = pd.DataFrame(
+    list(zip(zeichner.entailment, prediction, evaluation)),
+    columns=result_headers)
+
+confusion = result.evaluation.value_counts()
 
 acc = (confusion['TP'] + confusion['TN']) / sum(confusion)
 recall = confusion['TP'] / (confusion['TP'] + confusion['FN'])
