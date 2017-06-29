@@ -1,6 +1,7 @@
 from baseline import Baseline
 import pandas as pd
 
+# TODO: evaluate via sklearn.metrics
 def evaluate(gold, prediction):
     result = ''
     if gold == prediction:
@@ -13,12 +14,13 @@ def evaluate(gold, prediction):
         result += 'N'
     return result
 
+# TODO: abstract to MetricRunner class.
 def run_lemma_baseline (dataframes, names=[], output_path='..\\resources\\output\\'):
     result_headers = ['actual', 'prediction', 'evaluation']
     results = []
     metrics = []
     lemma = Baseline()
-     
+    
     for df, name in zip(dataframes, names):
         prediction = lemma.run(df.values)
         evaluation = evaluation = (evaluate(gold, prediction) for gold, prediction in zip(df.entailment, prediction))
@@ -47,8 +49,6 @@ def run_lemma_baseline (dataframes, names=[], output_path='..\\resources\\output
     
     return [results, metrics]
 
-
-# Only run, if called as script
 if __name__ == '__main__':
     headers = ['text', 'hypothesis', 'entailment']
     daganlevy = pd.read_json('..\\resources\\datasets\\daganlevy.json').reindex(columns=headers).reset_index(drop=True)
