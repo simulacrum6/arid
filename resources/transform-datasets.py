@@ -12,8 +12,8 @@ annoToVal = {
 }
 
 COLUMN_NAMES = ['text', 'hypothesis', 'entailment']
-TEXT_HEADERS = ['text_x', 'text_predicate', 'text_y']
-HYPOTHESIS_HEADERS = ['hypothesis_x', 'hypothesis_predicate', 'hypothesis_y']
+TEXT_HEADERS = ['tx', 'tpred', 'ty']
+HYPOTHESIS_HEADERS = ['hx', 'hpred', 'hy']
 
 
 
@@ -27,9 +27,13 @@ daganlevy = pd.read_csv(
 
 # Create tidy dataset
 text = pd.DataFrame(
+    daganlevy.text.replace(',', '', regex=True))
+text_split = pd.DataFrame(
     (text.split(', ') for text in daganlevy.text),
     columns=TEXT_HEADERS)
 hypothesis = pd.DataFrame(
+    daganlevy.hypothesis.replace(',', '', regex=True))
+hypothesis_split = pd.DataFrame(
     (text.split(', ') for text in daganlevy.hypothesis),
     columns=HYPOTHESIS_HEADERS)
 annotation = pd.DataFrame(
@@ -37,7 +41,7 @@ annotation = pd.DataFrame(
     columns=['entailment'])
 
 daganlevy_tidy = pd.concat(
-    [text, hypothesis, annotation],
+    [text, hypothesis, annotation, text_split, hypothesis_split],
     axis=1)
 daganlevy_tidy.to_csv('.\\datasets\\daganlevy-tidy.csv')
 
@@ -63,24 +67,30 @@ zeichner = pd.concat([zeichner_entailing, zeichner_nonEntailing]).reset_index(dr
 
 # Create tidy dataset
 # TODO: Fix broken entries
-t_x, t_y = zip(*(text.split(' ' + rule + ' ') if len(text.split(' ' + rule + ' ')) == 2 else ['NaN', 'NaN'] for text,rule in zip(zeichner.lhs, zeichner.rule_lhs)))
-h_x, h_y = zip(*(text.split(' ' + rule + ' ') if len(text.split(' ' + rule + ' ')) == 2 else ['NaN', 'NaN'] for text,rule in zip(zeichner.rhs, zeichner.rule_rhs)))
+tx, ty = zip(*(text.split(' ' + rule + ' ') if len(text.split(' ' + rule + ' ')) == 2 else ['NaN', 'NaN'] for text,rule in zip(zeichner.lhs, zeichner.rule_lhs)))
+hx, hy = zip(*(text.split(' ' + rule + ' ') if len(text.split(' ' + rule + ' ')) == 2 else ['NaN', 'NaN'] for text,rule in zip(zeichner.rhs, zeichner.rule_rhs)))
 
 text = pd.DataFrame(
-    list(zip(t_x, zeichner.rule_lhs, t_y)),
+    zeichner.lhs.values, 
+    columns=['text'])
+text_split = pd.DataFrame(
+    list(zip(tx, zeichner.rule_lhs, ty)),
     columns=TEXT_HEADERS)
 hypothesis = pd.DataFrame(
-    list(zip(h_x, zeichner.rule_rhs, h_y)),
+    zeichner.rhs.values,
+    columns=['hypothesis'])
+hypothesis_split = pd.DataFrame(
+    list(zip(hx, zeichner.rule_rhs, hy)),
     columns=HYPOTHESIS_HEADERS)
 annotation = pd.DataFrame(
     (annoToVal[annotation] for annotation in zeichner.judgment),
     columns=['entailment'])
 zeichner_tidy = pd.concat(
-    [text, hypothesis, annotation],
+    [text, hypothesis, annotation, text_split, hypothesis_split],
     axis=1)
 
-valid = zeichner_tidy.hypothesis_x != 'NaN'
-nans = zeichner_tidy.hypothesis_x == 'NaN'
+valid = zeichner_tidy.hx != 'NaN'
+nans = zeichner_tidy.hx == 'NaN'
 
 zeichner_dirty = zeichner_tidy[nans]
 zeichner_tidy = zeichner_tidy[valid]
@@ -89,11 +99,11 @@ zeichner_tidy.to_csv('.\\datasets\\zeichner-tidy.csv')
 zeichner_dirty.to_csv('.\\datasets\\zeichner-dirty.csv')
 
 # Create analysis dataset
-text = zip(zeichner_tidy.text_x, zeichner_tidy.text_predicate, zeichner_tidy.text_y)
-hypothesis = zip(zeichner_tidy.hypothesis_x, zeichner_tidy.hypothesis_predicate, zeichner_tidy.hypothesis_y)
+text = zip(zeichner_tidy.tx, zeichner_tidy.tpred, zeichner_tidy.ty)
+hypothesis = zip(zeichner_tidy.hx, zeichner_tidy.hpred, zeichner_tidy.hy)
 
 zeichner_analysis = pd.concat(
-    [zeichner_tidy.text_predicate, zeichner_tidy.hypothesis_predicate, zeichner_tidy.entailment],
+    [zeichner_tidy.tpred, zeichner_tidy.hpred, zeichner_tidy.entailment],
     axis=1)
 zeichner_analysis.columns = COLUMN_NAMES
 zeichner_analysis.text = [[x, pred, y] for x, pred, y in text]
