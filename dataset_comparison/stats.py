@@ -33,9 +33,12 @@ def ruleCoverage(datasetA, datasetB):
     rulesB = uniqueRules(datasetB)    
     return len(rulesA & rulesB) / len(rulesB)
 
-def jaccardIndex(list1, list2):
-    #FIXME: implement
-    return -1
+def jaccardIndex(listA, listB):
+    A = set(listA)
+    B = set(listB)
+    union = A.union(B)
+    intersection = A.intersection(B)
+    return len(intersection) / len(union)
 
 
 #TODO: return ordered dict
@@ -66,6 +69,10 @@ dfs = (daganlevy, zeichner)
 
 # export
 df = pd.DataFrame(
-	[dataset_stats(data) for data in dfs], 
+	[dataset_stats(dataset) for dataset in dfs], 
 	index=['daganlevy', 'zeichner'])
+df['ruleCoverage'] = [ruleCoverage(daganlevy, zeichner), ruleCoverage(zeichner, daganlevy)]
+df['predCoverage'] = [predCoverage(daganlevy, zeichner), predCoverage(zeichner, daganlevy)]
+df['jaccardPreds'] = [jaccardIndex(uniquePredicates(daganlevy), uniquePredicates(zeichner))] * 2
+df['jaccardRules'] = [jaccardIndex(uniqueRules(daganlevy), uniqueRules(zeichner))] * 2
 df.to_csv(OUTPUT_PATH + 'dataset-stats.csv')
