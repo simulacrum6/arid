@@ -56,23 +56,24 @@ def dataset_stats(dataset):
 		'attributes_per_predicate': len(uniqueAttributes(dataset)) / len(uniquePredicates(dataset))
 	})
 
-
-# TODO: Create utils.io for import/export
-# TODO: Move to separate file
-INPUT_PATH = '..\\resources\\datasets\\'
-OUTPUT_PATH = '..\\resources\\output\\'
-headers = ['text', 'hypothesis', 'entailment']
-
-daganlevy = pd.read_csv(INPUT_PATH + 'daganlevy-tidy.csv')
-zeichner = pd.read_csv(INPUT_PATH + 'zeichner-tidy.csv')
-dfs = (daganlevy, zeichner)
-
-# export
-df = pd.DataFrame(
-	[dataset_stats(dataset) for dataset in dfs], 
-	index=['daganlevy', 'zeichner'])
-df['ruleCoverage'] = [ruleCoverage(daganlevy, zeichner), ruleCoverage(zeichner, daganlevy)]
-df['predCoverage'] = [predCoverage(daganlevy, zeichner), predCoverage(zeichner, daganlevy)]
-df['jaccardPreds'] = [jaccardIndex(uniquePredicates(daganlevy), uniquePredicates(zeichner))] * 2
-df['jaccardRules'] = [jaccardIndex(uniqueRules(daganlevy), uniqueRules(zeichner))] * 2
-df.to_csv(OUTPUT_PATH + 'dataset-stats.csv')
+if __name__ == '__main__':
+    # TODO: Create utils.io for import/export
+    # TODO: Move to separate file
+    import os
+    INPUT_PATH = os.path.join('..', 'resources', 'datasets')
+    OUTPUT_PATH = os.path.join('..', 'resources', 'output')
+    headers = ['text', 'hypothesis', 'entailment']
+    
+    daganlevy = pd.read_csv(os.path.join(INPUT_PATH, 'daganlevy-tidy.csv'))
+    zeichner = pd.read_csv(os.path.join(INPUT_PATH, 'zeichner-tidy.csv'))
+    dfs = (daganlevy, zeichner)
+    
+    # export
+    df = pd.DataFrame(
+        [dataset_stats(dataset) for dataset in dfs], 
+        index=['daganlevy', 'zeichner'])
+    df['ruleCoverage'] = [ruleCoverage(daganlevy, zeichner), ruleCoverage(zeichner, daganlevy)]
+    df['predCoverage'] = [predCoverage(daganlevy, zeichner), predCoverage(zeichner, daganlevy)]
+    df['jaccardPreds'] = [jaccardIndex(uniquePredicates(daganlevy), uniquePredicates(zeichner))] * 2
+    df['jaccardRules'] = [jaccardIndex(uniqueRules(daganlevy), uniqueRules(zeichner))] * 2
+    df.to_csv(os.path.join(OUTPUT_PATH, 'dataset-stats.csv'))
