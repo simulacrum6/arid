@@ -2,7 +2,7 @@ from baseline import Baseline
 import pandas as pd
 import os.path as path
 
-# TODO: evaluate via sklearn.metrics
+#TODO: evaluate via sklearn.metrics
 def evaluate(gold, prediction):
     result = ''
     if gold == prediction:
