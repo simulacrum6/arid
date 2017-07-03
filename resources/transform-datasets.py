@@ -66,6 +66,7 @@ zeichner_nonEntailing = pd.read_csv(
     path.join(INPUT_PATH, 'zeichner_nonEntailingAnnotations.txt'), 
     sep='\t')
 zeichner = pd.concat([zeichner_entailing, zeichner_nonEntailing]).reset_index(drop=True)
+zeichner.to_csv(path.join(INPUT_PATH, 'zeichner.txt'))
 
 
 # Create tidy dataset
