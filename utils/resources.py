@@ -5,14 +5,14 @@ import os
 
 # Creates the path to the resources, independent of calling frame.
 # Don't even ask...
-def makeBasePath():
+def base_path():
     drive, filedir = os.path.splitdrive(__file__)
     parentdir = filedir.split(os.sep)[:-2]
-    parentdir[0] = '\\'
+    parentdir[0] = os.sep
     return os.path.join(drive, *parentdir)
     return os.path.join(*parentdir)
 
-basepath = makeBasePath()
+basepath = base_path()
 resources = os.path.join(basepath, 'resources')
 output = os.path.join(basepath, 'output')
 
@@ -34,9 +34,4 @@ def load(name, version):
         return pd.read_json(filepath).reindex(columns=['text', 'hypothesis', 'entailment']).reset_index(drop=True)
     
     raise ValueError('"' + version + '" is not a valid version name. Valid names: "original", "tidy", "analysis"')
-
-
-#import sys
-#sys.path.append('C:\\Users\\Nev\\Projects\\bachelor_thesis')
-#import utils.io
-#utils.io.load('daganlevy', 'tidy')
+    
