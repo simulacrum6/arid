@@ -17,7 +17,7 @@ resources = os.path.join(basepath, 'resources')
 output = os.path.join(basepath, 'output')
 
 #TODO: create /original-datasets/zeichner.txt
-def dataset(name, version):
+def load_dataset(name, version):
     if (name != 'daganlevy') and (name != 'zeichner'):
         raise ValueError('"' + name + '" is not a valid dataset name. Valid names: "daganlevy", "zeichner"')
     
@@ -31,11 +31,11 @@ def dataset(name, version):
     
     if version == 'analysis':
         filepath = os.path.join(resources, 'datasets', name + '.json')
-        return pd.read_json(filepath).reindex(columns=['text', 'hypothesis', 'entailment']).reset_index(drop=True).values
+        return pd.read_json(filepath).reindex(columns=['text', 'hypothesis', 'entailment']).reset_index(drop=True)[['text','hypothesis']].values
     
     raise ValueError('"' + version + '" is not a valid version name. Valid names: "original", "tidy", "analysis"')
 
-def load_res(module, res):
+def load_resource(module, res):
     if module not in ['entailment-graph']:
         raise ValueError('"' + module + '" is not a valid module name. Valid names: "entailment-graph"')
     

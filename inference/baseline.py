@@ -8,11 +8,12 @@ class Baseline:
 
     def __init__(self):
         self.negations = set(['no', 'not', 'never'])
-
+    
+    # removed v in q,a,v. might break
     def run(self, test):
-        lemma_intersection = np.array([self.lemma_intersection(q, a) for q, a, v in test])
-        matching_voice = np.array([self.matching_voice(q, a) for q, a, v in test])
-        same_negation = np.array([self.same_negation(q, a) for q, a, v in test])
+        lemma_intersection = np.array([self.lemma_intersection(q, a) for q, a in test])
+        matching_voice = np.array([self.matching_voice(q, a) for q, a in test])
+        same_negation = np.array([self.same_negation(q, a) for q, a in test])
         return lemma_intersection * matching_voice * same_negation
 
     @staticmethod
