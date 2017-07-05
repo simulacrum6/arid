@@ -3,4 +3,4 @@ class ClassificationEngine:
         return [self.run(cf, dataset) for cf in classifiers]
     
     def run(self, classifier, dataset):
-        return classifier.run(dataset.values)
+        return classifier.run(dataset)
