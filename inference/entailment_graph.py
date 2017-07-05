@@ -9,7 +9,7 @@ class EntailmentGraph:
     
     def run(self, dataset):
         self.type_attributes(dataset)
-        return np.array(self.evaluate(text, hypothesis) for text,hypothesis,entailment in dataset)
+        return np.array([self.evaluate(text, hypothesis) for text,hypothesis,entailment in dataset])
     
     def type_attributes(self, dataset):
         dataset[0] = np.array([self.type(x), pred, self.type(y)] for x,pred,y in dataset[0])
@@ -28,3 +28,23 @@ class EntailmentGraph:
         else:
             return False
 
+
+def main():
+    #temporary solution
+    import sys
+    import os
+    sys.path.append('C:\\Users\\Nev\\Projects')
+    
+    from ridsc.utils import resources as res
+    import pandas as pd
+
+    edgelist = res.load_res('entailment-graph', 'edgelist')
+    typemap = res.load_res('entailment-graph', 'typemap')
+    daganlevy = res.dataset('daganlevy', 'analysis')
+
+    eg = EntailmentGraph(edgelist=edgelist, typemap=typemap)
+    result = eg.run(daganlevy)
+    print(result)
+
+if __name__ == '__main__':
+    main()

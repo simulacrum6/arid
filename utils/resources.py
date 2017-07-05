@@ -17,7 +17,7 @@ resources = os.path.join(basepath, 'resources')
 output = os.path.join(basepath, 'output')
 
 #TODO: create /original-datasets/zeichner.txt
-def load(name, version):
+def dataset(name, version):
     if (name != 'daganlevy') and (name != 'zeichner'):
         raise ValueError('"' + name + '" is not a valid dataset name. Valid names: "daganlevy", "zeichner"')
     
@@ -31,7 +31,22 @@ def load(name, version):
     
     if version == 'analysis':
         filepath = os.path.join(resources, 'datasets', name + '.json')
-        return pd.read_json(filepath).reindex(columns=['text', 'hypothesis', 'entailment']).reset_index(drop=True)
+        return pd.read_json(filepath).reindex(columns=['text', 'hypothesis', 'entailment']).reset_index(drop=True).values
     
     raise ValueError('"' + version + '" is not a valid version name. Valid names: "original", "tidy", "analysis"')
+
+def load_res(module, res):
+    if module not in ['entailment-graph']:
+        raise ValueError('"' + module + '" is not a valid module name. Valid names: "entailment-graph"')
     
+    filepath = os.path.join(resources, module)
+    
+    if res == 'edgelist':
+        filepath = os.path.join(filepath,  'entailment-graph_tidy.csv')
+        return pd.read_csv(filepath).values
+    
+    if res == 'typemap':
+        filepath = os.path.join(filepath, 'class-instance-mapping.txt')
+        data = pd.read_csv(filepath, sep='\t').iloc[:,[1,0]].values
+        return {instance: type for instance, type in data}
+
