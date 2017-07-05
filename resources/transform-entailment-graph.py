@@ -8,7 +8,7 @@ orig_edgelist.columns = ['text', 'hypothesis']
 # analysis edgelist
 edgelist = orig_edgelist.copy()
 edgelist = edgelist[['text', 'hypothesis']].replace('[<>]*', '', regex=True)
-edgelist = edgelist[['text', 'hypothesis']].replace('[\.,]\s', ' ', regex=True)
+edgelist = edgelist[['text', 'hypothesis']].replace('[\.,:]\s', ' ', regex=True)
 for column in ['text', 'hypothesis']:
     edgelist[column] = edgelist[column].str.split('::')
     edgelist[column] = [[x,pred,y] for pred,x,y in edgelist[column].values]

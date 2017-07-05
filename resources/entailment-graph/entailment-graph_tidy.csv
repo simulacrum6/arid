@@ -9919,19 +9919,19 @@
 9917,treatment cause effect,treatment can cause effect,True,treatment,cause,effect,treatment,can cause,effect
 9918,treatment produce effect,treatment can lead to effect,True,treatment,produce,effect,treatment,can lead to,effect
 9919,herb use herb,herb be relate to herb,True,herb,use,herb,herb,be relate to,herb
-9920,herb : know as herb,herb be call herb,True,herb,: know as,herb,herb,be call,herb
+9920,herb  know as herb,herb be call herb,True,herb, know as,herb,herb,be call,herb
 9921,herb be know as herb,herb  know as herb,True,herb,be know as,herb,herb, know as,herb
-9922,herb : know as herb,herb : know as herb,True,herb,: know as,herb,herb,: know as,herb
+9922,herb  know as herb,herb  know as herb,True,herb, know as,herb,herb, know as,herb
 9923,herb taste like herb,herb taste like herb,True,herb,taste like,herb,herb,taste like,herb
-9924,herb : know as herb,herb be know as herb,True,herb,: know as,herb,herb,be know as,herb
+9924,herb  know as herb,herb be know as herb,True,herb, know as,herb,herb,be know as,herb
 9925,herb be call herb,herb be know as herb,True,herb,be call,herb,herb,be know as,herb
-9926,herb  know as herb,herb : know as herb,True,herb, know as,herb,herb,: know as,herb
+9926,herb  know as herb,herb  know as herb,True,herb, know as,herb,herb, know as,herb
 9927,herb  know as herb,herb be call herb,True,herb, know as,herb,herb,be call,herb
 9928,herb be know as herb,herb be call herb,True,herb,be know as,herb,herb,be call,herb
 9929,herb  know as herb,herb  know as herb,True,herb, know as,herb,herb, know as,herb
 9930,herb be confuse with herb,herb be confuse with herb,True,herb,be confuse with,herb,herb,be confuse with,herb
 9931,herb be know as herb,herb be call herb,True,herb,be know as,herb,herb,be call,herb
-9932,herb : know as herb,herb be know as herb,True,herb,: know as,herb,herb,be know as,herb
+9932,herb  know as herb,herb be know as herb,True,herb, know as,herb,herb,be know as,herb
 9933,herb be know as herb,herb  know as herb,True,herb,be know as,herb,herb, know as,herb
 9934,herb  know as herb,herb be know as herb,True,herb, know as,herb,herb,be know as,herb
 9935,herb use herb,herb be relate to herb,True,herb,use,herb,herb,be relate to,herb
@@ -9942,24 +9942,24 @@
 9940,herb combine well with herb,herb combine well with herb,True,herb,combine well with,herb,herb,combine well with,herb
 9941,herb chop herb,herb be relate to herb,True,herb,chop,herb,herb,be relate to,herb
 9942,herb  know as herb,herb be know as herb,True,herb, know as,herb,herb,be know as,herb
-9943,herb be call herb,herb : know as herb,True,herb,be call,herb,herb,: know as,herb
+9943,herb be call herb,herb  know as herb,True,herb,be call,herb,herb, know as,herb
 9944,herb be know as herb,herb be know as herb,True,herb,be know as,herb,herb,be know as,herb
 9945,herb blend well with herb,herb blend well with herb,True,herb,blend well with,herb,herb,blend well with,herb
 9946,herb should avoid herb,herb should avoid herb,True,herb,should avoid,herb,herb,should avoid,herb
-9947,herb : know as herb,herb be call herb,True,herb,: know as,herb,herb,be call,herb
-9948,herb be know as herb,herb : know as herb,True,herb,be know as,herb,herb,: know as,herb
+9947,herb  know as herb,herb be call herb,True,herb, know as,herb,herb,be call,herb
+9948,herb be know as herb,herb  know as herb,True,herb,be know as,herb,herb, know as,herb
 9949,herb be combine with herb,herb be combine with herb,True,herb,be combine with,herb,herb,be combine with,herb
-9950,herb be call herb,herb : know as herb,True,herb,be call,herb,herb,: know as,herb
+9950,herb be call herb,herb  know as herb,True,herb,be call,herb,herb, know as,herb
 9951,herb be call herb,herb be call herb,True,herb,be call,herb,herb,be call,herb
 9952,herb  know as herb,herb be call herb,True,herb, know as,herb,herb,be call,herb
 9953,herb be confuse with herb,herb be relate to herb,True,herb,be confuse with,herb,herb,be relate to,herb
 9954,herb chop herb,herb use herb,True,herb,chop,herb,herb,use,herb
 9955,herb chop herb,herb use herb,True,herb,chop,herb,herb,use,herb
-9956,herb : know as herb,herb  know as herb,True,herb,: know as,herb,herb, know as,herb
+9956,herb  know as herb,herb  know as herb,True,herb, know as,herb,herb, know as,herb
 9957,herb be confuse with herb,herb be relate to herb,True,herb,be confuse with,herb,herb,be relate to,herb
-9958,herb : know as herb,herb  know as herb,True,herb,: know as,herb,herb, know as,herb
-9959,herb  know as herb,herb : know as herb,True,herb, know as,herb,herb,: know as,herb
-9960,herb be know as herb,herb : know as herb,True,herb,be know as,herb,herb,: know as,herb
+9958,herb  know as herb,herb  know as herb,True,herb, know as,herb,herb, know as,herb
+9959,herb  know as herb,herb  know as herb,True,herb, know as,herb,herb, know as,herb
+9960,herb be know as herb,herb  know as herb,True,herb,be know as,herb,herb, know as,herb
 9961,herb be relate to herb,herb be relate to herb,True,herb,be relate to,herb,herb,be relate to,herb
 9962,disease be prevalent in place,disease occur in place,True,disease,be prevalent in,place,disease,occur in,place
 9963,disease originate in place,disease be endemic in place,True,disease,originate in,place,disease,be endemic in,place
@@ -29203,7 +29203,7 @@
 29201,disease lead to disease,disease be cause by disease,True,disease,lead to,disease,disease,be cause by,disease
 29202,disease be link with disease,disease be relate to disease,True,disease,be link with,disease,disease,be relate to,disease
 29203,disease be relate to disease,disease may be associate with disease,True,disease,be relate to,disease,disease,may be associate with,disease
-29204,disease : know as disease,disease call disease,True,disease,: know as,disease,disease,call,disease
+29204,disease  know as disease,disease call disease,True,disease, know as,disease,disease,call,disease
 29205,disease  follow by disease,disease may follow disease,True,disease, follow by,disease,disease,may follow,disease
 29206,disease can cause disease,disease be associate with disease,True,disease,can cause,disease,disease,be associate with,disease
 29207,disease may cause disease,disease lead to disease,True,disease,may cause,disease,disease,lead to,disease
@@ -29261,7 +29261,7 @@
 29259,disease can lead to disease,disease may cause disease,True,disease,can lead to,disease,disease,may cause,disease
 29260,disease be relate to disease,disease may lead to disease,True,disease,be relate to,disease,disease,may lead to,disease
 29261,disease may lead to disease,disease contribute to disease,True,disease,may lead to,disease,disease,contribute to,disease
-29262,disease : know as disease,disease be know as disease,True,disease,: know as,disease,disease,be know as,disease
+29262,disease  know as disease,disease be know as disease,True,disease, know as,disease,disease,be know as,disease
 29263,disease be short for disease,disease  short for disease,True,disease,be short for,disease,disease, short for,disease
 29264,disease can lead to disease,disease may lead to disease,True,disease,can lead to,disease,disease,may lead to,disease
 29265,disease may result in disease,disease may cause disease,True,disease,may result in,disease,disease,may cause,disease
@@ -29346,7 +29346,7 @@
 29344,disease be link to disease,disease may lead to disease,True,disease,be link to,disease,disease,may lead to,disease
 29345,disease can result in disease,disease can cause disease,True,disease,can result in,disease,disease,can cause,disease
 29346,disease lead to disease,disease may be associate with disease,True,disease,lead to,disease,disease,may be associate with,disease
-29347,disease : know as disease,disease  know as disease,True,disease,: know as,disease,disease, know as,disease
+29347,disease  know as disease,disease  know as disease,True,disease, know as,disease,disease, know as,disease
 29348,disease may result in disease,disease be cause of disease,True,disease,may result in,disease,disease,be cause of,disease
 29349,disease can be cause by disease,disease be cause of disease,True,disease,can be cause by,disease,disease,be cause of,disease
 29350,disease  short for disease,disease mean disease,True,disease, short for,disease,disease,mean,disease
@@ -29365,7 +29365,7 @@
 29363,disease be short for disease,disease stand for disease,True,disease,be short for,disease,disease,stand for,disease
 29364,disease cause by disease,disease be associate with disease,True,disease,cause by,disease,disease,be associate with,disease
 29365,disease can be cause by disease,disease be cause by disease,True,disease,can be cause by,disease,disease,be cause by,disease
-29366,disease : know as disease,disease  know as disease,True,disease,: know as,disease,disease, know as,disease
+29366,disease  know as disease,disease  know as disease,True,disease, know as,disease,disease, know as,disease
 29367,disease cause disease,disease contribute to disease,True,disease,cause,disease,disease,contribute to,disease
 29368,disease refer to disease,disease mean disease,True,disease,refer to,disease,disease,mean,disease
 29369,disease be associate with disease,disease  cause by disease,True,disease,be associate with,disease,disease, cause by,disease
@@ -29377,7 +29377,7 @@
 29375,disease can be confuse with disease,disease be misdiagnose as disease,True,disease,can be confuse with,disease,disease,be misdiagnose as,disease
 29376,disease be define as disease,disease call disease,True,disease,be define as,disease,disease,call,disease
 29377,disease  refer to as disease,disease  know as disease,True,disease, refer to as,disease,disease, know as,disease
-29378,disease : know as disease,disease be know as disease,True,disease,: know as,disease,disease,be know as,disease
+29378,disease  know as disease,disease be know as disease,True,disease, know as,disease,disease,be know as,disease
 29379,disease can lead to disease,disease be cause of disease,True,disease,can lead to,disease,disease,be cause of,disease
 29380,disease be the type of disease,disease be know as disease,True,disease,be the type of,disease,disease,be know as,disease
 29381,disease may result in disease,disease can cause disease,True,disease,may result in,disease,disease,can cause,disease
@@ -29420,7 +29420,7 @@
 29418,disease cause disease,disease lead to disease,True,disease,cause,disease,disease,lead to,disease
 29419,disease be another form of disease,disease  know as disease,True,disease,be another form of,disease,disease, know as,disease
 29420,disease can lead to disease,disease can cause disease,True,disease,can lead to,disease,disease,can cause,disease
-29421,disease : know as disease,disease be another form of disease,True,disease,: know as,disease,disease,be another form of,disease
+29421,disease  know as disease,disease be another form of disease,True,disease, know as,disease,disease,be another form of,disease
 29422,disease  short for disease,disease be short for disease,True,disease, short for,disease,disease,be short for,disease
 29423,disease cause by disease,disease be cause of disease,True,disease,cause by,disease,disease,be cause of,disease
 29424,disease be link to disease,disease be associate with disease,True,disease,be link to,disease,disease,be associate with,disease
@@ -29479,7 +29479,7 @@
 29477,disease can cause disease,disease be cause of disease,True,disease,can cause,disease,disease,be cause of,disease
 29478,disease can cause disease,disease  cause by disease,True,disease,can cause,disease,disease, cause by,disease
 29479,disease be link with disease,disease be link with disease,True,disease,be link with,disease,disease,be link with,disease
-29480,disease : know as disease,disease be type of disease,True,disease,: know as,disease,disease,be type of,disease
+29480,disease  know as disease,disease be type of disease,True,disease, know as,disease,disease,be type of,disease
 29481,disease be relate to disease,disease contribute to disease,True,disease,be relate to,disease,disease,contribute to,disease
 29482,disease be cause by disease,disease cause by disease,True,disease,be cause by,disease,disease,cause by,disease
 29483,disease be define as disease,disease be characterize by disease,True,disease,be define as,disease,disease,be characterize by,disease
@@ -29567,7 +29567,7 @@
 29565,disease may lead to disease,disease may be associate with disease,True,disease,may lead to,disease,disease,may be associate with,disease
 29566,disease refer to disease,disease include disease,True,disease,refer to,disease,disease,include,disease
 29567,disease mean disease,disease be short for disease,True,disease,mean,disease,disease,be short for,disease
-29568,disease : know as disease,disease be the form of disease,True,disease,: know as,disease,disease,be the form of,disease
+29568,disease  know as disease,disease be the form of disease,True,disease, know as,disease,disease,be the form of,disease
 29569,disease be the cause of disease,disease can lead to disease,True,disease,be the cause of,disease,disease,can lead to,disease
 29570,disease be link to disease,disease lead to disease,True,disease,be link to,disease,disease,lead to,disease
 29571,disease may cause disease,disease cause disease,True,disease,may cause,disease,disease,cause,disease
@@ -29581,7 +29581,7 @@
 29579,disease call disease,disease be know as disease,True,disease,call,disease,disease,be know as,disease
 29580,disease contribute to disease,disease cause by disease,True,disease,contribute to,disease,disease,cause by,disease
 29581,disease can cause disease,disease lead to disease,True,disease,can cause,disease,disease,lead to,disease
-29582,disease : know as disease,disease be call disease,True,disease,: know as,disease,disease,be call,disease
+29582,disease  know as disease,disease be call disease,True,disease, know as,disease,disease,be call,disease
 29583,disease may result in disease,disease contribute to disease,True,disease,may result in,disease,disease,contribute to,disease
 29584,disease be link with disease,disease contribute to disease,True,disease,be link with,disease,disease,contribute to,disease
 29585,disease contribute to disease,disease can be cause by disease,True,disease,contribute to,disease,disease,can be cause by,disease
@@ -29617,7 +29617,7 @@
 29615,disease resemble disease,disease resemble disease,True,disease,resemble,disease,disease,resemble,disease
 29616,disease be cause of disease,disease lead to disease,True,disease,be cause of,disease,disease,lead to,disease
 29617,disease cause by disease,disease can be cause by disease,True,disease,cause by,disease,disease,can be cause by,disease
-29618,disease : know as disease,disease be call disease,True,disease,: know as,disease,disease,be call,disease
+29618,disease  know as disease,disease be call disease,True,disease, know as,disease,disease,be call,disease
 29619,disease be link to disease,disease cause by disease,True,disease,be link to,disease,disease,cause by,disease
 29620,disease be short for disease,disease mean disease,True,disease,be short for,disease,disease,mean,disease
 29621,disease be the cause of disease,disease  cause by disease,True,disease,be the cause of,disease,disease, cause by,disease
@@ -29641,7 +29641,7 @@
 29639,disease follow disease,disease  follow by disease,True,disease,follow,disease,disease, follow by,disease
 29640,disease be cause of disease,disease may cause disease,True,disease,be cause of,disease,disease,may cause,disease
 29641,disease refer to disease,disease stand for disease,True,disease,refer to,disease,disease,stand for,disease
-29642,disease : know as disease,disease be form of disease,True,disease,: know as,disease,disease,be form of,disease
+29642,disease  know as disease,disease be form of disease,True,disease, know as,disease,disease,be form of,disease
 29643,disease can result in disease,disease cause disease,True,disease,can result in,disease,disease,cause,disease
 29644,disease be link to disease,disease be link to disease,True,disease,be link to,disease,disease,be link to,disease
 29645,disease be another form of disease,disease be form of disease,True,disease,be another form of,disease,disease,be form of,disease
@@ -29663,7 +29663,7 @@
 29661,disease refer to disease,disease  short for disease,True,disease,refer to,disease,disease, short for,disease
 29662,disease be associate with disease,disease cause by disease,True,disease,be associate with,disease,disease,cause by,disease
 29663,disease may cause disease,disease be cause of disease,True,disease,may cause,disease,disease,be cause of,disease
-29664,disease : know as disease,disease be the type of disease,True,disease,: know as,disease,disease,be the type of,disease
+29664,disease  know as disease,disease be the type of disease,True,disease, know as,disease,disease,be the type of,disease
 29665,disease contribute to disease,disease may be associate with disease,True,disease,contribute to,disease,disease,may be associate with,disease
 29666,disease can cause disease,disease may be associate with disease,True,disease,can cause,disease,disease,may be associate with,disease
 29667,disease be form of disease,disease  know as disease,True,disease,be form of,disease,disease, know as,disease
@@ -29727,6 +29727,6 @@
 29725,disease be link to disease,disease may lead to disease,True,disease,be link to,disease,disease,may lead to,disease
 29726,disease contribute to disease,disease  cause by disease,True,disease,contribute to,disease,disease, cause by,disease
 29727,disease contribute to disease,disease be cause of disease,True,disease,contribute to,disease,disease,be cause of,disease
-29728,disease : know as disease,disease call disease,True,disease,: know as,disease,disease,call,disease
+29728,disease  know as disease,disease call disease,True,disease, know as,disease,disease,call,disease
 29729,disease will develop disease,disease can get disease,True,disease,will develop,disease,disease,can get,disease
 29730,disease be define as disease,disease be know as disease,True,disease,be define as,disease,disease,be know as,disease
