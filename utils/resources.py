@@ -75,8 +75,8 @@ def load_resource(module, res):
     Raises:
         ValueError -- If incorrect module name was provided
     '''
-    if module not in ['entailment-graph']:
-        raise ValueError('"' + module + '" is not a valid module name. Valid names: "entailment-graph"')
+    if module not in ['entailment-graph', 'ppdb2']:
+        raise ValueError('"' + module + '" is not a valid module name. Valid names: "entailment-graph", "ppdb2"')
     
     filepath = os.path.join(resources, module)
     
@@ -89,3 +89,6 @@ def load_resource(module, res):
         data = pd.read_csv(filepath, sep='\t').iloc[:,[1,0]].values
         return {instance: type for instance, type in data}
     
+    if res == 'db':
+        filepath = os.path.join(filepath, 'ppdb2.sqlite')
+        return filepath

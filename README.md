@@ -1,1 +1,1 @@
-# bachelor-thesis
+# Analysis of Relation Inference Datasets (ARID)
