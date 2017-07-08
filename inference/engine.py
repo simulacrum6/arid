@@ -1,3 +1,5 @@
+import sklearn.metrics as skm
+
 class ClassificationEngine:
     '''Engine for running a set of relation inference classifiers over a dataset.
 
@@ -16,3 +18,20 @@ class ClassificationEngine:
     def run(self, classifiers, dataset):
         '''Run a list of classifiers over dataset. See help(ClassificationEngine) for details'''
         return [cf.run(dataset) for cf in classifiers]
+
+# A bit overkill, perhaps
+class Evaluator:
+    def __init__(self, predictions, gold):
+        self.predictions = predictions
+        self.maxPreds = self.aggregate(predictions, max)
+        self.minPreds = self.aggregate(predictions, min)
+
+    def aggregate(predictions, function):
+        """Aggregates each sublist of predictions, using the specified function"""
+        return np.array([function(sublist) for sublist in np.transpose(predictions)])
+
+    def precision_recall(self, gold=self.gold, prediction=self.maxPreds):
+        return skm.precision_recall_curve(gold, prediction)
+    
+    def auc(self, gold=self.gold, prediction=self.maxPreds):
+        return skm.average_precision_score(gold, prediction)
