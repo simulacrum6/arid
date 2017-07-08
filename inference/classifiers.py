@@ -1,6 +1,8 @@
 import numpy as np
 from nltk.corpus import wordnet as wn
 from qa_utils import get_lemmas_only_verbs, get_lemmas_no_stopwords, get_lemmas
+import sqlite3
+import pandas as pd
 
 class Classifier:
     def run(self, dataset):
@@ -88,6 +90,42 @@ class EntailmentGraph(Classifier):
             return True
         else:
             return False
+
+class PPDB2(Classifier):
+    def __init__(self, dbpath):
+        self.con = sqlite3.connect(dbpath)
+    
+    def run(self, dataset):
+        self.write_to_db(dataset)
+        self.clean_up()
+        return np.array(self.evaluate())
+    
+    def write_to_db(self, dataset):
+        df = pd.DataFrame(dataset, columns=['text', 'hypothesis'])
+        df['tx'], df['tpred'], df['ty'] = zip(*df.text)
+        df['hx'], df['hpred'], df['hy'] = zip(*df.hypothesis)
+        df.to_sql('data', self.con, if_exists='replace')
+    
+    def clean_up(self):
+        self.con.execute('DROP TABLE data')
+        self.con.close()
+    
+    def evaluate(self):     
+        result = pd.read_sql_query(
+            'SELECT paraphrases.entailment ' +
+            'FROM  paraphrases ' +
+            'JOIN data ' + 
+            'ON data.tpred = paraphrases.phrase ' + 
+            'AND data.hpred = paraphrases.paraphrase', con)
+        
+        def relabel(sqlresult):
+            if sqlresult:
+                return True
+            else:
+                return False
+        
+        return [relabel(entry) for entry in result.entailment]
+
 
 
 def main():
