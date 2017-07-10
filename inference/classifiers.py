@@ -71,25 +71,27 @@ class EntailmentGraph(Classifier):
         self.edgelist = np.transpose(edgelist)
 
     def run(self, dataset):
-        self.type_attributes(dataset)
+        dataset[0] = self.type_attributes(dataset[0])
+        dataset[1] = self.type_attributes(dataset[1])
         return np.array([self.evaluate(text, hypothesis) for text,hypothesis in dataset])
-
-    def type_attributes(self, dataset):
-        dataset[0] = np.array([self.type(x), pred, self.type(y)] for x,pred,y in dataset[0])
-        dataset[1] = np.array([self.type(x), pred, self.type(y)] for x,pred,y in dataset[1])
-
+    
+    def type_attributes(self, templates):
+        return np.array([self.type(x), pred, self.type(y)] for x,pred,y in templates)
+    
     def type(self, string):
         if self.typemap[string]:
             return self.typemap[string]
         else:
             return string
-
+    
     # exact matching
     def evaluate(self, text, hypothesis):
         if (text, hypothesis) in self.edgelist:
             return True
         else:
             return False
+    
+
 #TODO: Test
 class PPDB2(Classifier):
     def __init__(self, dbpath):
@@ -100,14 +102,14 @@ class PPDB2(Classifier):
         matches = self.find_paraphrases()
         self.clean_db()
         return np.array([self.evaluate(match) for match in matches])
-
+    
     def write_to_db(self, dataset):
         df = pd.DataFrame(dataset, columns=['text', 'hypothesis'])
         df['tx'], df['tpred'], df['ty'] = zip(*df.text)
         df['hx'], df['hpred'], df['hy'] = zip(*df.hypothesis)
         df.drop(['text', 'hypothesis'], axis=1, inplace=True)
         df.to_sql('data', self.con, if_exists='replace')
-
+    
     def clean_db(self):
         self.con.execute('DROP TABLE data')
         self.con.close()
@@ -127,17 +129,45 @@ class PPDB2(Classifier):
             + 'ON data.tpred = paraphrases.phrase ' 
             + 'AND data.hpred = paraphrases.paraphrase', 
             self.con).entailment.values
+    
+
 
 #TODO: Test
 def main():
     import sys
     sys.path.append('C:\\Users\\Nev\\Projects\\')
     import arid.utils.resources as res
-    import classifiers
-    db = res.load_resource('PPDB2', 'db')
+    import pandas as pd
+    import datetime as dt
+    
+    outpath = res.output
+    
+    baseline = Baseline()
+    graph = EntailmentGraph(
+        res.load_resource('EntailmentGraph', 'edgelist'),
+        res.load_resource('EntailmentGraph', 'typemap')
+        )
+    ppdb = PPDB2(res.load_resource('PPDB2', 'db'))
+    
     daganlevy = res.load_dataset('daganlevy', 'analysis')
-    ppdb2 = classifiers.PPDB2(db)
-    print(ppdb2.run(daganlevy))
-
+    zeichner = res.load_dataset('zeichner', 'analysis')
+    
+    datasets = {'daganlevy': daganlevy, 'zeichner': zeichner}
+    classifiers = [baseline, graph, ppdb]
+    
+    for name, dataset in datasets.items():
+        print('Start classification of ' + name)
+        result = [] 
+        
+        for classifier in classifiers:
+            print('Start Classification Task @' + dt.datetime.now().isoformat())
+            result.append(classifier.run(dataset))
+            print('Done @' + dt.datetime.now().isoformat())
+        
+        pd.DataFrame(
+            np.transpose(result),
+            columns=['baseline', 'entailment_graph', 'ppdb']
+            ).to_csv(name + '_result.csv')
+    
 if __name__ == '__main__':
     main()
