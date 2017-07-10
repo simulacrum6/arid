@@ -134,7 +134,7 @@ def main():
     sys.path.append('C:\\Users\\Nev\\Projects\\')
     import arid.utils.resources as res
     import classifiers
-    db = res.load_resource('ppdb2', 'db')
+    db = res.load_resource('PPDB2', 'db')
     daganlevy = res.load_dataset('daganlevy', 'analysis')
     ppdb2 = classifiers.PPDB2(db)
     print(ppdb2.run(daganlevy))

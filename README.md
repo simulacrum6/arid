@@ -1,1 +1,1 @@
-# Analysis of Relation Inference Datasets (ARID)
+# Analysis of Relation Inference Datasets
