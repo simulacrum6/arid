@@ -82,8 +82,8 @@ def load_resource(module, res):
     
     if module == 'EntailmentGraph':
         if res == 'edgelist':
-            filepath = os.path.join(filepath,  'entailment-graph_tidy.csv')
-            return pd.read_csv(filepath).values
+            filepath = os.path.join(filepath,  'entailment-graph.json')
+            return pd.read_json(filepath).reindex(columns=['text', 'hypothesis']).reset_index(drop=True)[['text','hypothesis']].values
         
         if res == 'typemap':
             filepath = os.path.join(filepath, 'class-instance-mapping.txt')

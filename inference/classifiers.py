@@ -3,6 +3,7 @@ from nltk.corpus import wordnet as wn
 from qa_utils import get_lemmas_only_verbs, get_lemmas_no_stopwords, get_lemmas
 import sqlite3
 import pandas as pd
+import networkx as nx
 
 class Classifier:
     def run(self, dataset):
@@ -68,36 +69,46 @@ class Baseline(Classifier):
 class EntailmentGraph(Classifier):
     def __init__(self, edgelist, typemap):
         self.typemap = typemap
-        self.edgelist = np.transpose(edgelist)
-
+        self.edgelist = [[' '.join(text), ' '.join(hypothesis)] for text,hypothesis in edgelist]
+        self.graph = nx.DiGraph()
+        self.graph.add_edges_from(self.edgelist)
+    
     def run(self, dataset):
-        dataset[0] = self.type_attributes(dataset[0])
-        dataset[1] = self.type_attributes(dataset[1])
-        return np.array([self.evaluate(text, hypothesis) for text,hypothesis in dataset])
+        data = self.type_attributes(dataset)
+        data = self.merge_templates(data)
+        return np.array([self.evaluate(text, hypothesis) for text,hypothesis in data])
     
-    def type_attributes(self, templates):
-        return np.array([self.type(x), pred, self.type(y)] for x,pred,y in templates)
-    
+    def type_attributes(self, dataset):
+        result = []
+        for rule in dataset:
+             result.append([[self.type(x), pred, self.type(y)] for x,pred,y in rule])
+
+        return result    
+            
+    def merge_templates(self, dataset):
+        return [[' '.join(text), ' '.join(hypothesis)] for text, hypothesis in dataset]
+
     def type(self, string):
-        if self.typemap[string]:
+        if string in self.typemap:
             return self.typemap[string]
         else:
             return string
     
-    # exact matching
     def evaluate(self, text, hypothesis):
-        if (text, hypothesis) in self.edgelist:
-            return True
+        if text in self.graph and hypothesis in self.graph:
+            return nx.has_path(self.graph, t, h)
         else:
-            return False
+            return False  
     
 
 #TODO: Test
 class PPDB2(Classifier):
     def __init__(self, dbpath):
+        self.db = dbpath
         self.con = sqlite3.connect(dbpath)
 
     def run(self, dataset):
+        self.con = sqlite3.connect(self.db)
         self.write_to_db(dataset)
         matches = self.find_paraphrases()
         self.clean_db()
@@ -152,7 +163,9 @@ def main():
     daganlevy = res.load_dataset('daganlevy', 'analysis')
     zeichner = res.load_dataset('zeichner', 'analysis')
     
-    datasets = {'daganlevy': daganlevy, 'zeichner': zeichner}
+    datasets = {
+        'daganlevy': daganlevy, 
+        'zeichner': zeichner}
     classifiers = [baseline, graph, ppdb]
     
     for name, dataset in datasets.items():
@@ -165,8 +178,8 @@ def main():
             print('Done @' + dt.datetime.now().isoformat())
         
         pd.DataFrame(
-            np.transpose(result),
-            columns=['baseline', 'entailment_graph', 'ppdb']
+            result
+            #columns=['baseline', 'entailment_graph', 'ppdb']
             ).to_csv(name + '_result.csv')
     
 if __name__ == '__main__':
