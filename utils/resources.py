@@ -94,4 +94,7 @@ def load_resource(module, res):
         if res == 'db':
             filepath = os.path.join(filepath, 'ppdb2.sqlite')
             return filepath
-    
+        
+        if res == 'db-mini':
+            filepath = os.path.join(filepath, 'ppdb.sqlite')
+            return filepath

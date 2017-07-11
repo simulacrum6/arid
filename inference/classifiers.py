@@ -158,7 +158,7 @@ def main():
         res.load_resource('EntailmentGraph', 'edgelist'),
         res.load_resource('EntailmentGraph', 'typemap')
         )
-    ppdb = PPDB2(res.load_resource('PPDB2', 'db'))
+    ppdb = PPDB2(res.load_resource('PPDB2', 'db-mini'))
     
     daganlevy = res.load_dataset('daganlevy', 'analysis')
     zeichner = res.load_dataset('zeichner', 'analysis')
@@ -178,7 +178,7 @@ def main():
             print('Done @' + dt.datetime.now().isoformat())
         
         pd.DataFrame(
-            result
+            np.transpose(result)
             #columns=['baseline', 'entailment_graph', 'ppdb']
             ).to_csv(name + '_result.csv')
     
