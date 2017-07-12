@@ -1,7 +1,8 @@
 import pandas as pd
+from collections import OrderedDict
 
 def size(dataset):
-	return dataset.size
+	return len(dataset)
 
 def positives(dataset):
 	return dataset[dataset['entailment'] == True]
@@ -43,7 +44,7 @@ def jaccardIndex(listA, listB):
 
 #TODO: return ordered dict
 def dataset_stats(dataset):
-	return pd.Series({
+	return pd.Series(OrderedDict({
 		'size': size(dataset),
 		'positives': len(positives(dataset)),
 		'negatives': len(negatives(dataset)),
@@ -54,7 +55,7 @@ def dataset_stats(dataset):
 		'uniqueAttributes': len(uniqueAttributes(dataset)),
         'uniqueAttributes%': len(uniqueAttributes(dataset)) / size(dataset),
 		'attributes_per_predicate': len(uniqueAttributes(dataset)) / len(uniquePredicates(dataset))
-	})
+	}))
 
 if __name__ == '__main__':
     # TODO: Create utils.io for import/export
