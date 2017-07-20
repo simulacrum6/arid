@@ -89,10 +89,7 @@ class EntailmentGraph(Classifier):
         return [[' '.join(text), ' '.join(hypothesis)] for text, hypothesis in dataset]
 
     def type(self, string):
-        if string in self.typemap:
-            return self.typemap[string]
-        else:
-            return string
+        return self.typemap.get(string, d=string)
     
     def evaluate(self, text, hypothesis):
         if text in self.graph and hypothesis in self.graph:
