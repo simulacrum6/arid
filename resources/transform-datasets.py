@@ -71,8 +71,8 @@ zeichner.to_csv(path.join(INPUT_PATH, 'zeichner.txt'))
 
 # Create tidy dataset
 # TODO: Fix broken entries
-tx, ty = zip(*(text.split(' ' + rule + ' ') if len(text.split(' ' + rule + ' ')) == 2 else ['NaN', 'NaN'] for text,rule in zip(zeichner.lhs, zeichner.rule_lhs)))
-hx, hy = zip(*(text.split(' ' + rule + ' ') if len(text.split(' ' + rule + ' ')) == 2 else ['NaN', 'NaN'] for text,rule in zip(zeichner.rhs, zeichner.rule_rhs)))
+tx, ty = zip(*(text.split(' ' + rule.replace('@R@', '') + ' ') for text,rule in zip(zeichner.lhs, zeichner.rule_lhs)))
+hx, hy = zip(*(text.split(' ' + rule.replace('@R@', '') + ' ') for text,rule in zip(zeichner.rhs, zeichner.rule_rhs)))
 
 text = pd.DataFrame(
     zeichner.lhs.values, 
