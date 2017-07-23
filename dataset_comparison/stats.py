@@ -60,6 +60,13 @@ def shared_templates(datasetA, datasetB):
     templatesB = unique_templates(datasetB)
     return templatesA & templatesB
 
+def shared_predicates_dataset(datasetA, datasetB):
+    templatesB = unique_predicates(datasetB)
+    shared_text = [text in templatesB for text in datasetA.tpred]
+    shared_hypothesis = [hypothesis in templatesB for hypothesis in datasetA.hpred]
+    shared_temps = [max(t,h) for t,h in zip(shared_text,shared_hypothesis)]
+    return datasetA[shared_temps]
+
 def shared_predicates(datasetA, datasetB):
     predicatesA = unique_predicates(datasetA)
     predicatesB = unique_predicates(datasetB)
@@ -113,6 +120,9 @@ def top10(series):
 
 #TODO: overlapping templates, attributes, predicates between datasets
 #TODO: relevance of templates, attributes, predicates shared by datasets (counts and stuff)
+#TODO: duplicates in hypothesis parts, daganlevy
+# poland was divided among russia 4690,4959
+# jupiter is big as the earth 1989, 13983, 14006
 
 if __name__ == '__main__':
     # TODO: Create utils.io for import/export
@@ -142,7 +152,16 @@ if __name__ == '__main__':
     df['jaccard_preds'] = [jaccard_index(unique_predicates(daganlevy), unique_predicates(zeichner))] * 2
     df['jaccard_templates'] = [jaccard_index(unique_templates(daganlevy), unique_templates(zeichner))] * 2
     df.T.to_csv(os.path.join(OUTPUT_PATH, 'dataset-stats.csv'))
-        
+    
+    #shared among datasets
+    daganlevy_shared = shared_predicates_dataset(daganlevy, zeichner)
+    top10(templates(daganlevy_shared)).to_csv(os.path.join(OUTPUT_PATH, 'daganlevy_top10_shared_predicates(templateview).csv'))
+    top10(predicates(daganlevy_shared)).to_csv(os.path.join(OUTPUT_PATH, 'daganlevy_top10_shared_predicates.csv'))
+    
+    zeichner_shared = shared_predicates_dataset(zeichner, daganlevy)
+    top10(templates(zeichner_shared)).to_csv(os.path.join(OUTPUT_PATH, 'zeichner_top10_shared_predicates(templateview).csv'))
+    top10(predicates(daganlevy_shared)).to_csv(os.path.join(OUTPUT_PATH, 'zeichner_top10_shared_predicates.csv'))
+    
     for name, dataset in datasets.items():
         outpath = os.path.join(OUTPUT_PATH, name)
         # Descriptives
