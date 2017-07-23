@@ -17,8 +17,14 @@ def uniques(dataset, columns):
         result.extend(dataset[name])
     return set(result)
 
-def uniquePredicates(dataset):
-	return set(dataset['tpred'].append(dataset['hpred']))
+def predicates(dataset):
+    return dataset.tpred.append(dataset.hpred).rename('predicates')
+
+def templates(dataset):
+    return dataset.text.append(dataset.hypothesis).rename('templates')
+
+def unique_predicates(dataset):
+	return set(predicates(dataset))
 
 # TODO: lexical difference in preds
 
@@ -31,12 +37,12 @@ def unique_attributes(dataset):
 		dataset['hy']]))
 
 def unique_templates(dataset):
-    return set(dataset['text'].append(dataset['hypothesis']))
+    return set(templates(dataset))
 
 #TODO: create abstracted coverage(A,B) method
 def pred_coverage(datasetA, datasetB):
-	predsA = uniquePredicates(datasetA)
-	predsB = uniquePredicates(datasetB)
+	predsA = unique_predicates(datasetA)
+	predsB = unique_predicates(datasetB)
 	return len(predsA & predsB) / len(predsB)
 
 def template_coverage(datasetA, datasetB):
@@ -44,12 +50,29 @@ def template_coverage(datasetA, datasetB):
     templatesB = unique_templates(datasetB)    
     return len(templatesA & templatesB) / len(templatesB)
 
+def shared(datasetA, datasetB, column):
+    A = set(datasetA[column])
+    B = set(datasetB[column])
+    return A & B
+
+def shared_templates(datasetA, datasetB):
+    templatesA = unique_templates(datasetA)
+    templatesB = unique_templates(datasetB)
+    return templatesA & templatesB
+
+def shared_predicates(datasetA, datasetB):
+    predicatesA = unique_predicates(datasetA)
+    predicatesB = unique_predicates(datasetB)
+    return predicatesA & predicatesB
+
 def jaccard_index(listA, listB):
     A = set(listA)
     B = set(listB)
     union = A.union(B)
     intersection = A.intersection(B)
     return len(intersection) / len(union)
+
+
 
 # FIXME: unique predicate / attribute / template percentages
 def dataset_stats(dataset):
@@ -62,28 +85,29 @@ def dataset_stats(dataset):
 		'unique_templates%': len(unique_templates(dataset)) / (size(dataset)*2),
         'unique_templates_T': dataset['text'].nunique(),
         'unique_templates_H': dataset['hypothesis'].nunique(),
-        'unique_predicates': len(uniquePredicates(dataset)),
-        'unique_predicates%': len(uniquePredicates(dataset)) / (size(dataset)*2),
+        'unique_predicates': len(unique_predicates(dataset)),
+        'unique_predicates%': len(unique_predicates(dataset)) / (size(dataset)*2),
         'unique_predicates_T': dataset['tpred'].nunique(),
         'unique_predicates_H': dataset['hpred'].nunique(), 
 		'unique_attributes': len(unique_attributes(dataset)),
         'unique_attributes%': len(unique_attributes(dataset)) / (size(dataset)*4),
-		'attribute_predicate_rate': len(unique_attributes(dataset)) / len(uniquePredicates(dataset))
+		'attribute_predicate_rate': len(unique_attributes(dataset)) / len(unique_predicates(dataset))
 	}))
 
 def descriptives(dataset):
-    templates = dataset.text.append(dataset.hypothesis).rename('templates')
-    predicates = dataset.tpred.append(dataset.hypothesis).rename('predicates')
+    temps = dataset.text.append(dataset.hypothesis).rename('templates')
+    preds = dataset.tpred.append(dataset.hypothesis).rename('predicates')
     return pd.DataFrame([
-        templates.value_counts().describe(),
+        temps.value_counts().describe(),
         dataset.text.value_counts().describe(),
         dataset.hypothesis.value_counts().describe(),
-        predicates.value_counts().describe(),
+        preds.value_counts().describe(),
         dataset.tpred.value_counts().describe(),
         dataset.hpred.value_counts().describe()
         ])
 
-
+def top10(series):
+    return pd.DataFrame(series.value_counts()[:10])
 
 #TODO: relevance of templates unique to dataset per dataset
 
@@ -106,19 +130,28 @@ if __name__ == '__main__':
     ###
     # Export
     ###
-
+    
     # Comparison Stats
     df = pd.DataFrame(
         [dataset_stats(dataset) for dataset in dfs], 
         index=datasets)
+    df['shared_preds'] = [len(shared_predicates(daganlevy, zeichner))] * 2
+    df['shared_templates'] = [len(shared_templates(daganlevy, zeichner))] * 2
     df['template_coverage'] = [template_coverage(daganlevy, zeichner), template_coverage(zeichner, daganlevy)]
     df['pred_coverage'] = [pred_coverage(daganlevy, zeichner), pred_coverage(zeichner, daganlevy)]
-    df['jaccard_preds'] = [jaccard_index(uniquePredicates(daganlevy), uniquePredicates(zeichner))] * 2
+    df['jaccard_preds'] = [jaccard_index(unique_predicates(daganlevy), unique_predicates(zeichner))] * 2
     df['jaccard_templates'] = [jaccard_index(unique_templates(daganlevy), unique_templates(zeichner))] * 2
     df.T.to_csv(os.path.join(OUTPUT_PATH, 'dataset-stats.csv'))
-    
-    # Descriptives
+        
     for name, dataset in datasets.items():
         outpath = os.path.join(OUTPUT_PATH, name)
+        # Descriptives
         descriptives(dataset).to_csv(outpath + '_descriptives.csv')
-
+        # Top10s
+        top10(templates(dataset)).to_csv(outpath + '_top10_templates.csv')
+        top10(dataset.text).to_csv(outpath + '_top10_texts.csv')
+        top10(dataset.hypothesis).to_csv(outpath + '_top10_hypothesis.csv')
+        top10(predicates(dataset)).to_csv(outpath + '_top10_predicates.csv')
+        top10(dataset.tpred).to_csv(outpath + '_top10_tpreds.csv')
+        top10(dataset.hpred).to_csv(outpath + '_top10_hpreds.csv')
+    
