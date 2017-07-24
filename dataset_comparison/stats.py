@@ -119,7 +119,9 @@ def descriptives(dataset):
         preds.value_counts().describe(),
         dataset.tpred.value_counts().describe(),
         dataset.hpred.value_counts().describe(),
-        attrs.value_counts().describe()
+        attrs.value_counts().describe(),
+        dataset.tx.append(dataset.ty).rename('attributes_text').value_counts().describe(),
+        dataset.hx.append(dataset.hy).rename('attributes_hypothesis').value_counts().describe()
         ])
     
 
@@ -139,15 +141,15 @@ if __name__ == '__main__':
     import os
     INPUT_PATH = os.path.join('..', 'resources', 'datasets')
     OUTPUT_PATH = os.path.join('..', 'resources', 'output')
-    headers = ['text', 'hypothesis', 'entailment']
     
+    # Prepare inputs
     daganlevy = pd.read_csv(os.path.join(INPUT_PATH, 'daganlevy-tidy.csv'))
     zeichner = pd.read_csv(os.path.join(INPUT_PATH, 'zeichner-tidy.csv'))
     dfs = (daganlevy, zeichner)
     datasets = {'daganlevy': daganlevy, 'zeichner': zeichner}
     
     ###
-    # Export
+    # Comparison and export
     ###
     
     # Comparison Stats
@@ -166,10 +168,12 @@ if __name__ == '__main__':
     daganlevy_shared = shared_predicates_dataset(daganlevy, zeichner)
     top10(templates(daganlevy_shared)).to_csv(os.path.join(OUTPUT_PATH, 'daganlevy_top10_shared_predicates(templateview).csv'))
     top10(predicates(daganlevy_shared)).to_csv(os.path.join(OUTPUT_PATH, 'daganlevy_top10_shared_predicates.csv'))
+    top10(attributes(daganlevy_shared)).to_csv(os.path.join(OUTPUT_PATH, 'daganlevy_top10_shared_attributes.csv'))
     
     zeichner_shared = shared_predicates_dataset(zeichner, daganlevy)
     top10(templates(zeichner_shared)).to_csv(os.path.join(OUTPUT_PATH, 'zeichner_top10_shared_predicates(templateview).csv'))
     top10(predicates(zeichner_shared)).to_csv(os.path.join(OUTPUT_PATH, 'zeichner_top10_shared_predicates.csv'))
+    top10(attributes(zeichner_shared)).to_csv(os.path.join(OUTPUT_PATH, 'zeichner_top10_shared_attributes.csv'))
     
     for name, dataset in datasets.items():
         outpath = os.path.join(OUTPUT_PATH, name)
@@ -184,4 +188,6 @@ if __name__ == '__main__':
         top10(dataset.tpred).to_csv(outpath + '_top10_tpreds.csv')
         top10(dataset.hpred).to_csv(outpath + '_top10_hpreds.csv')
         top10(attributes(dataset)).to_csv(outpath + '_top10_attributes.csv')
+        top10(dataset.tx.append(dataset.ty).rename('attributes_text')).to_csv(outpath + '_top10_attributes_t.csv')
+        top10(dataset.hx.append(dataset.hy).rename('attributes_hypothesis')).to_csv(outpath + '_top10_attributes_h.csv')
     
