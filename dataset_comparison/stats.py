@@ -146,7 +146,20 @@ def descriptives(dataset):
     
 
 def top10(series):
-    return pd.DataFrame(series.value_counts()[:10])
+    top = series.value_counts().head(10)
+    df = pd.DataFrame(
+        list(zip(top.index, top.values)),
+        columns = [top.name, 'frequency'])
+    df.reset_index(drop = True, inplace = True)
+    return df
+
+def top10s(dataset):
+    return pd.concat([
+        top10(templates(dataset)),
+        top10(predicates(dataset)),
+        top10(attributes(dataset))
+        ], 
+        axis = 1)
 
 #TODO: Optional relevance of templates unique to dataset per dataset
 #TODO: Optional relevance of templates, attributes, predicates shared by datasets (counts and stuff)
@@ -161,17 +174,17 @@ if __name__ == '__main__':
     import os
     INPUT_PATH = os.path.join('..', 'resources', 'datasets')
     OUTPUT_PATH = os.path.join('..', 'resources', 'output')
-
+    
     # Prepare inputs
     daganlevy = pd.read_csv(os.path.join(INPUT_PATH, 'daganlevy-tidy.csv'))
     zeichner = pd.read_csv(os.path.join(INPUT_PATH, 'zeichner-tidy.csv'))
     dfs = (daganlevy, zeichner)
     datasets = {'daganlevy': daganlevy, 'zeichner': zeichner}
-
+    
     ###
     # Comparison and export
     ###
-
+    
     # Comparison Stats
     stats_ds = pd.DataFrame(
         [dataset_stats(dataset) for dataset in dfs], 
@@ -183,17 +196,12 @@ if __name__ == '__main__':
     
     # top10 shared among datasets
     daganlevy_shared = shared_predicates_only(daganlevy, zeichner)
-    top10(templates(daganlevy_shared)).to_csv(os.path.join(OUTPUT_PATH, 'daganlevy_top10_shared_predicates(templateview).csv'))
-    top10(predicates(daganlevy_shared)).to_csv(os.path.join(OUTPUT_PATH, 'daganlevy_top10_shared_predicates.csv'))
-    top10(attributes(daganlevy_shared)).to_csv(os.path.join(OUTPUT_PATH, 'daganlevy_top10_shared_attributes.csv'))
-    
     zeichner_shared = shared_predicates_only(zeichner, daganlevy)
-    top10(templates(zeichner_shared)).to_csv(os.path.join(OUTPUT_PATH, 'zeichner_top10_shared_predicates(templateview).csv'))
-    top10(predicates(zeichner_shared)).to_csv(os.path.join(OUTPUT_PATH, 'zeichner_top10_shared_predicates.csv'))
-    top10(attributes(zeichner_shared)).to_csv(os.path.join(OUTPUT_PATH, 'zeichner_top10_shared_attributes.csv'))
+    all_shared_preds = shared_predicates_sorted(daganlevy, zeichner)
     
-    all_shared = shared_predicates_sorted(daganlevy, zeichner)
-    all_shared.head(10).to_csv(os.path.join(OUTPUT_PATH, 'top10_shared_predicates.csv'))
+    top10s(daganlevy_shared).to_csv(os.path.join(OUTPUT_PATH, 'daganlevy_shared_top10.csv'))
+    top10s(zeichner_shared).to_csv(os.path.join(OUTPUT_PATH, 'zeichner_shared_top10.csv'))
+    all_shared_preds.head(10).to_csv(os.path.join(OUTPUT_PATH, 'top10_shared_predicates.csv'))
     
     for name, dataset in datasets.items():
         outpath = os.path.join(OUTPUT_PATH, name)
