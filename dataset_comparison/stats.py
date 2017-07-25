@@ -67,12 +67,25 @@ def shared_templates(datasetA, datasetB):
     templatesB = unique_templates(datasetB)
     return templatesA.intersection(templatesB)
 
-def shared_predicates_dataset(datasetA, datasetB):
+def shared_predicates_in(datasetA, datasetB):
     templatesB = unique_predicates(datasetB)
     shared_text = [text in templatesB for text in datasetA.tpred]
     shared_hypothesis = [hypothesis in templatesB for hypothesis in datasetA.hpred]
     shared_temps = [max(t,h) for t,h in zip(shared_text,shared_hypothesis)]
     return datasetA[shared_temps]
+
+def shared_predicates_sorted(datasetA, datasetB):
+    predsA = predicates(datasetA).value_counts().to_frame()
+    predsA['rank'] = range(1, predsA.size + 1)
+    predsB = predicates(datasetB).value_counts().to_frame()
+    predsB['rank'] = range(1, predsB.size + 1)
+    C = predsA.join(predsB, lsuffix = 'A', rsuffix = 'B')
+    C.dropna(inplace = True)
+    C['avgrank'] = (C['rankA'] + C['rankB']) /  2
+    C['freq'] = C['predicatesA'] + C['predicatesB']
+    C.sort_values('avgrank', inplace = True)
+    return C[['avgrank', 'freq']]
+
 
 def shared_predicates(datasetA, datasetB):
     predicatesA = unique_predicates(datasetA)
@@ -165,15 +178,18 @@ if __name__ == '__main__':
     df.T.to_csv(os.path.join(OUTPUT_PATH, 'dataset-stats.csv'))
     
     # top10 shared among datasets
-    daganlevy_shared = shared_predicates_dataset(daganlevy, zeichner)
+    daganlevy_shared = shared_predicates_in(daganlevy, zeichner)
     top10(templates(daganlevy_shared)).to_csv(os.path.join(OUTPUT_PATH, 'daganlevy_top10_shared_predicates(templateview).csv'))
     top10(predicates(daganlevy_shared)).to_csv(os.path.join(OUTPUT_PATH, 'daganlevy_top10_shared_predicates.csv'))
     top10(attributes(daganlevy_shared)).to_csv(os.path.join(OUTPUT_PATH, 'daganlevy_top10_shared_attributes.csv'))
     
-    zeichner_shared = shared_predicates_dataset(zeichner, daganlevy)
+    zeichner_shared = shared_predicates_in(zeichner, daganlevy)
     top10(templates(zeichner_shared)).to_csv(os.path.join(OUTPUT_PATH, 'zeichner_top10_shared_predicates(templateview).csv'))
     top10(predicates(zeichner_shared)).to_csv(os.path.join(OUTPUT_PATH, 'zeichner_top10_shared_predicates.csv'))
     top10(attributes(zeichner_shared)).to_csv(os.path.join(OUTPUT_PATH, 'zeichner_top10_shared_attributes.csv'))
+    
+    all_shared = shared_predicates_sorted(daganlevy, zeichner)
+    all_shared.head(10).to_csv(os.path.join(OUTPUT_PATH, 'top10_shared_predicates.csv'))
     
     for name, dataset in datasets.items():
         outpath = os.path.join(OUTPUT_PATH, name)
