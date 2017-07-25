@@ -2,6 +2,9 @@ import pandas as pd
 from collections import OrderedDict
 import matplotlib.pyplot as plt
 
+# TODO: lexical difference in preds
+# TODO: lemmatised daganlevy
+
 def size(dataset):
 	return len(dataset)
 
@@ -11,17 +14,11 @@ def positives(dataset):
 def negatives(dataset):
 	return dataset[dataset['entailment'] == False]
 
-def uniques(dataset, columns):
-    result = []
-    for name in columns:
-        result.extend(dataset[name])
-    return set(result)
+def templates(dataset):
+    return dataset.text.append(dataset.hypothesis).rename('templates')
 
 def predicates(dataset):
     return dataset.tpred.append(dataset.hpred).rename('predicates')
-
-def templates(dataset):
-    return dataset.text.append(dataset.hypothesis).rename('templates')
 
 def attributes(dataset):
     return dataset.tx.append([
@@ -30,44 +27,26 @@ def attributes(dataset):
         dataset.hy,
     ]).rename('attributes')
 
-def unique_predicates(dataset):
-	return set(predicates(dataset))
-
-# TODO: lexical difference in preds
-
-# TODO: lemmatised daganlevy
-
-def unique_attributes(dataset):
-	return set(dataset['ty'].append([
-		dataset['tx'], 
-		dataset['hx'], 
-		dataset['hy']]))
-
 def unique_templates(dataset):
     return set(templates(dataset))
 
-#TODO: create abstracted coverage(A,B) method
-def pred_coverage(datasetA, datasetB):
-	predsA = unique_predicates(datasetA)
-	predsB = unique_predicates(datasetB)
-	return len(predsA & predsB) / len(predsB)
+def unique_predicates(dataset):
+	return set(predicates(dataset))
 
-def template_coverage(datasetA, datasetB):
-    templatesA = unique_templates(datasetA)
-    templatesB = unique_templates(datasetB)    
-    return len(templatesA & templatesB) / len(templatesB)
-
-def shared(datasetA, datasetB, column):
-    A = set(datasetA[column])
-    B = set(datasetB[column])
-    return A.intersection(B)
+def unique_attributes(dataset):
+	return set(attributes(dataset))
 
 def shared_templates(datasetA, datasetB):
     templatesA = unique_templates(datasetA)
     templatesB = unique_templates(datasetB)
     return templatesA.intersection(templatesB)
 
-def shared_predicates_in(datasetA, datasetB):
+def shared_predicates(datasetA, datasetB):
+    predicatesA = unique_predicates(datasetA)
+    predicatesB = unique_predicates(datasetB)
+    return predicatesA.intersection(predicatesB)
+
+def shared_predicates_only(datasetA, datasetB):
     templatesB = unique_predicates(datasetB)
     shared_text = [text in templatesB for text in datasetA.tpred]
     shared_hypothesis = [hypothesis in templatesB for hypothesis in datasetA.hpred]
@@ -76,8 +55,8 @@ def shared_predicates_in(datasetA, datasetB):
 
 def shared_predicates_sorted(datasetA, datasetB):
     predsA = predicates(datasetA).value_counts().to_frame()
-    predsA['rank'] = range(1, predsA.size + 1)
     predsB = predicates(datasetB).value_counts().to_frame()
+    predsA['rank'] = range(1, predsA.size + 1)
     predsB['rank'] = range(1, predsB.size + 1)
     C = predsA.join(predsB, lsuffix = 'A', rsuffix = 'B')
     C.dropna(inplace = True)
@@ -86,11 +65,26 @@ def shared_predicates_sorted(datasetA, datasetB):
     C.sort_values('avgrank', inplace = True)
     return C[['avgrank', 'freq']]
 
+def shared_attributes(datasetA, datasetB):
+    attributesA = unique_attributes(datasetA)
+    attributesB = unique_attributes(datasetB)
+    return attributesA.intersection(attributesB)
 
-def shared_predicates(datasetA, datasetB):
-    predicatesA = unique_predicates(datasetA)
-    predicatesB = unique_predicates(datasetB)
-    return predicatesA.intersection(predicatesB)
+#TODO: create abstracted coverage(A,B) method
+def coverage_templates(datasetA, datasetB):
+    templatesA = unique_templates(datasetA)
+    templatesB = unique_templates(datasetB)    
+    return len(templatesA & templatesB) / len(templatesB)
+
+def coverage_predicates(datasetA, datasetB):
+	predsA = unique_predicates(datasetA)
+	predsB = unique_predicates(datasetB)
+	return len(predsA & predsB) / len(predsB)
+
+def coverage_attributes(datasetA, datasetB):
+	attsA = unique_attributes(datasetA)
+	attsB = unique_attributes(datasetB)
+	return len(attsA & attsB) / len(attsB)
 
 def jaccard_index(listA, listB):
     A = set(listA)
@@ -98,8 +92,6 @@ def jaccard_index(listA, listB):
     union = A.union(B)
     intersection = A.intersection(B)
     return len(intersection) / len(union)
-
-
 
 # FIXME: unique predicate / attribute / template percentages
 def dataset_stats(dataset):
@@ -120,6 +112,21 @@ def dataset_stats(dataset):
         'unique_attributes%': len(unique_attributes(dataset)) / (size(dataset)*4),
 		'attribute_predicate_rate': len(unique_attributes(dataset)) / len(unique_predicates(dataset))
 	}))
+
+
+def comparison_stats(datasetA, datasetB):
+    return pd.Series(OrderedDict({
+        'shared_templates': len(shared_templates(datasetA, datasetB)),
+        'shared_predicates': len(shared_predicates(datasetA, datasetB)),
+        'shared_attributes': len(shared_attributes(datasetA, datasetB)),
+        'coverage_templates': coverage_templates(datasetA, datasetB),
+        'coverage_predicates': coverage_predicates(datasetA, datasetB),
+        'coverage_attributes': coverage_attributes(datasetA, datasetB),
+        'jaccard_templates': jaccard_index(unique_templates(datasetA), unique_templates(datasetB)),
+        'jaccard_predicates': jaccard_index(unique_predicates(datasetA), unique_predicates(datasetB)),
+        'jaccard_attributes': jaccard_index(unique_attributes(datasetA), unique_attributes(datasetB))
+    }))
+
 
 def descriptives(dataset):
     temps = templates(dataset)
@@ -154,36 +161,33 @@ if __name__ == '__main__':
     import os
     INPUT_PATH = os.path.join('..', 'resources', 'datasets')
     OUTPUT_PATH = os.path.join('..', 'resources', 'output')
-    
+
     # Prepare inputs
     daganlevy = pd.read_csv(os.path.join(INPUT_PATH, 'daganlevy-tidy.csv'))
     zeichner = pd.read_csv(os.path.join(INPUT_PATH, 'zeichner-tidy.csv'))
     dfs = (daganlevy, zeichner)
     datasets = {'daganlevy': daganlevy, 'zeichner': zeichner}
-    
+
     ###
     # Comparison and export
     ###
-    
+
     # Comparison Stats
-    df = pd.DataFrame(
+    stats_ds = pd.DataFrame(
         [dataset_stats(dataset) for dataset in dfs], 
         index=['daganlevy', 'zeichner'])
-    df['shared_preds'] = [len(shared_predicates(daganlevy, zeichner))] * 2
-    df['shared_templates'] = [len(shared_templates(daganlevy, zeichner))] * 2
-    df['template_coverage'] = [template_coverage(daganlevy, zeichner), template_coverage(zeichner, daganlevy)]
-    df['pred_coverage'] = [pred_coverage(daganlevy, zeichner), pred_coverage(zeichner, daganlevy)]
-    df['jaccard_preds'] = [jaccard_index(unique_predicates(daganlevy), unique_predicates(zeichner))] * 2
-    df['jaccard_templates'] = [jaccard_index(unique_templates(daganlevy), unique_templates(zeichner))] * 2
-    df.T.to_csv(os.path.join(OUTPUT_PATH, 'dataset-stats.csv'))
+    stats_cmp = pd.DataFrame(
+        [comparison_stats(daganlevy, zeichner), comparison_stats(zeichner, daganlevy)],
+        index = ['daganlevy', 'zeichner'])
+    pd.concat([stats_ds, stats_cmp], axis = 1).T.to_csv(os.path.join(OUTPUT_PATH, 'dataset-stats.csv'))
     
     # top10 shared among datasets
-    daganlevy_shared = shared_predicates_in(daganlevy, zeichner)
+    daganlevy_shared = shared_predicates_only(daganlevy, zeichner)
     top10(templates(daganlevy_shared)).to_csv(os.path.join(OUTPUT_PATH, 'daganlevy_top10_shared_predicates(templateview).csv'))
     top10(predicates(daganlevy_shared)).to_csv(os.path.join(OUTPUT_PATH, 'daganlevy_top10_shared_predicates.csv'))
     top10(attributes(daganlevy_shared)).to_csv(os.path.join(OUTPUT_PATH, 'daganlevy_top10_shared_attributes.csv'))
     
-    zeichner_shared = shared_predicates_in(zeichner, daganlevy)
+    zeichner_shared = shared_predicates_only(zeichner, daganlevy)
     top10(templates(zeichner_shared)).to_csv(os.path.join(OUTPUT_PATH, 'zeichner_top10_shared_predicates(templateview).csv'))
     top10(predicates(zeichner_shared)).to_csv(os.path.join(OUTPUT_PATH, 'zeichner_top10_shared_predicates.csv'))
     top10(attributes(zeichner_shared)).to_csv(os.path.join(OUTPUT_PATH, 'zeichner_top10_shared_attributes.csv'))
