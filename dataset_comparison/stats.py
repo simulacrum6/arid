@@ -205,17 +205,5 @@ if __name__ == '__main__':
     
     for name, dataset in datasets.items():
         outpath = os.path.join(OUTPUT_PATH, name)
-        # Descriptives
         descriptives(dataset).to_csv(outpath + '_descriptives.csv')
-        # Top10s
-        outpath = os.path.join(OUTPUT_PATH, 'top10s', name)
-        top10(templates(dataset)).to_csv(outpath + '_top10_templates.csv')
-        top10(dataset.text).to_csv(outpath + '_top10_texts.csv')
-        top10(dataset.hypothesis).to_csv(outpath + '_top10_hypothesis.csv')
-        top10(predicates(dataset)).to_csv(outpath + '_top10_predicates.csv')
-        top10(dataset.tpred).to_csv(outpath + '_top10_tpreds.csv')
-        top10(dataset.hpred).to_csv(outpath + '_top10_hpreds.csv')
-        top10(attributes(dataset)).to_csv(outpath + '_top10_attributes.csv')
-        top10(dataset.tx.append(dataset.ty).rename('attributes_text')).to_csv(outpath + '_top10_attributes_t.csv')
-        top10(dataset.hx.append(dataset.hy).rename('attributes_hypothesis')).to_csv(outpath + '_top10_attributes_h.csv')
-    
+        top10s(dataset).to_csv(outpath + '_top10.csv')
