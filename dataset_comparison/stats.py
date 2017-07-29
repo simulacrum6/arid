@@ -1,10 +1,12 @@
 import pandas as pd
 from collections import OrderedDict
 import matplotlib.pyplot as plt
-import os
+import os, sys
+# Temporary solution
+sys.path.append('C:\\Users\\Nev\\Projects\\')
+import arid.utils.resources as res
 
-INPUT_PATH = os.path.join('..', 'resources', 'datasets')
-OUTPUT_PATH = os.path.join('..', 'resources', 'output')
+OUTPUT_PATH = res.output
 
 # TODO: overlap lemmatised/not lemmatised -> examples
 # TODO: lexical difference in preds
@@ -192,9 +194,9 @@ def compare_datasets(datasetA, datasetB, names = ['A', 'B']):
     shared_preds.to_csv(os.path.join(OUTPUT_PATH, 'shared_predicates-' + suffix))
 
 if __name__ == '__main__':
-    daganlevy = pd.read_csv(os.path.join(INPUT_PATH, 'daganlevy-tidy.csv'))
-    daganlevy_lemmatised = pd.read_csv(os.path.join(INPUT_PATH, 'daganlevy-tidy_lemmatised.csv'))
-    zeichner = pd.read_csv(os.path.join(INPUT_PATH, 'zeichner-tidy.csv'))
+    daganlevy = res.load_dataset('daganlevy', 'tidy')
+    daganlevy_lemmatised = res.load_dataset('daganlevy', 'lemmatised')
+    zeichner = res.load_dataset('zeichner', 'tidy')
     
     compare_datasets(daganlevy, zeichner, names = ['daganlevy', 'zeichner'])
     compare_datasets(daganlevy_lemmatised, zeichner, names = ['daganlevy_lemmatised', 'zeichner'])

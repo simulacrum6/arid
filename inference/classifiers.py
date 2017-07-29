@@ -142,6 +142,7 @@ class PPDB2(Classifier):
 
 #TODO: Test
 def main():
+    import os
     import sys
     sys.path.append('C:\\Users\\Nev\\Projects\\')
     import arid.utils.resources as res
@@ -177,7 +178,7 @@ def main():
         pd.DataFrame(
             np.transpose(result)
             #columns=['baseline', 'entailment_graph', 'ppdb']
-            ).to_csv(name + '_result.csv')
+            ).to_csv(os.path.join(outpath, name + '_result.csv'))
     
 if __name__ == '__main__':
     main()

@@ -1,7 +1,11 @@
 import pandas as pd
 import numpy as np
 import os.path as path
-import qa_utils
+import sys
+# Temporary solution
+sys.path.append('C:\\Users\\Nev\\Projects\\')
+import arid.utils.resources as res
+import arid.utils.qa_utils as qa_utils
 
 # map annotation Strings to boolean
 annoToVal = {
@@ -16,8 +20,8 @@ annoToVal = {
 COLUMN_NAMES = ['text', 'hypothesis', 'entailment']
 TEXT_HEADERS = ['tx', 'tpred', 'ty']
 HYPOTHESIS_HEADERS = ['hx', 'hpred', 'hy']
-INPUT_PATH = path.join('.', 'original-datasets')
-OUTPUT_PATH = path.join('.', 'datasets')
+INPUT_PATH = path.join(res.resources, 'original-datasets')
+OUTPUT_PATH = path.join(res.resources, 'datasets')
 
 
 ###
