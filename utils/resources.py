@@ -17,7 +17,6 @@ _basepath = _base_path()
 resources = os.path.join(_basepath, 'resources')
 output = os.path.join(_basepath, 'output')
 
-#TODO: create /original-datasets/zeichner.txt
 def load_dataset(name, version):
     """Return specified dataset, ready to be used with package modules.
 
@@ -34,13 +33,21 @@ def load_dataset(name, version):
             'original' -- Original dataset as pandas.core.frame.DataFrame
             'tidy' -- Dataset for comparison as pandas.core.frame.DataFrame
             'analysis' -- Dataset for inference classifier as numpy.ndarray (2,3)
+            'lemmatised' -- Dataset for comparison as pandas.core.frame.DataFrame. Only available for 'daganlevy'!
     
     Returns:
-        any ,'original'/'tidy' -- pandas.core.frame.DataFrame
+        any ,'original'/'tidy'/'lemmatised' -- pandas.core.frame.DataFrame
         any ,'analysis' -- numpy.ndarray (2,3)
     """
-    if name not in ['daganlevy', 'zeichner']:
-        raise ValueError('"' + name + '" is not a valid dataset name. Valid names: "daganlevy", "zeichner"')
+    version = version.replace('lemmatized', 'lemmatised')
+    datasets = ['daganlevy', 'zeichner']
+    versions = ['original', 'tidy', 'analysis', 'lemmatised']
+    
+    if name not in datasets:
+        raise ValueError('"' + name + '" is not a valid dataset name. Valid names: ' + ', '.join(datasets))
+    
+    if version not in versions:
+        raise ValueError('"' + version + '" is not a valid version name. Valid names: ' + ', '.join(versions))
     
     if version == 'original':
         filepath = os.path.join(resources, 'original-datasets', name + '.txt')
@@ -54,7 +61,10 @@ def load_dataset(name, version):
         filepath = os.path.join(resources, 'datasets', name + '.json')
         return pd.read_json(filepath).reindex(columns=['text', 'hypothesis', 'entailment']).reset_index(drop=True)[['text','hypothesis']].values
     
-    raise ValueError('"' + version + '" is not a valid version name. Valid names: "original", "tidy", "analysis"')
+    if version == 'lemmatised':
+        filepath = os.path.join(resources, 'datasets', 'daganlevy' + '-tidy_lemmatised.csv')
+        return pd.read_csv(filepath) 
+    
 
 def load_resource(module, res):
     """Return specified resource.
