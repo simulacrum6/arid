@@ -171,8 +171,7 @@ def top10s(dataset):
         ],
         axis = 1)
 
-# TODO: Finish
-def compare_datasets(datasetA, datasetB, names = ['A', 'B'], stats_filename = 'dataset_stats'):
+def compare_datasets(datasetA, datasetB, names = ['A', 'B']):
     datasets = [datasetA, datasetB]
     stats = pd.DataFrame(
             [
@@ -183,18 +182,16 @@ def compare_datasets(datasetA, datasetB, names = ['A', 'B'], stats_filename = 'd
     shared_preds = shared_predicates_sorted(datasetA, datasetB)
         
     for i, name in enumerate(names):
-        print('Processing dataset #' + str(i) + ': ' + name)
         outpath = os.path.join(OUTPUT_PATH, name)
         descriptives(datasets[i]).to_csv(outpath + '_descriptives.csv')
         top10s(datasets[i]).to_csv(outpath + '_top10.csv')
         top10s(shared_predicates_only(datasets[i], datasets[i-1])).to_csv(outpath + '_top10-shared.csv')
     
     suffix = '_'.join(names) + '.csv' 
-    stats.to_csv(os.path.join(OUTPUT_PATH, 'dataset_stats-' + suffix))
+    stats.T.to_csv(os.path.join(OUTPUT_PATH, 'dataset_stats-' + suffix))
     shared_preds.to_csv(os.path.join(OUTPUT_PATH, 'shared_predicates-' + suffix))
 
 if __name__ == '__main__':
-    # Prepare inputs
     daganlevy = pd.read_csv(os.path.join(INPUT_PATH, 'daganlevy-tidy.csv'))
     zeichner = pd.read_csv(os.path.join(INPUT_PATH, 'zeichner-tidy.csv'))
     compare_datasets(daganlevy, zeichner, names = ['daganlevy', 'zeichner'])
