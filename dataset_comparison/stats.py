@@ -1,9 +1,16 @@
 import pandas as pd
 from collections import OrderedDict
 import matplotlib.pyplot as plt
+import os
 
+INPUT_PATH = os.path.join('..', 'resources', 'datasets')
+OUTPUT_PATH = os.path.join('..', 'resources', 'output')
+
+# TODO: overlap lemmatised/not lemmatised -> examples
 # TODO: lexical difference in preds
-# TODO: lemmatised daganlevy
+# TODO: duplicates in hypothesis parts, daganlevy
+# poland was divided among russia 4690,4959
+# jupiter is big as the earth 1989, 13983, 14006
 
 def size(dataset):
     return len(dataset)
@@ -164,62 +171,31 @@ def top10s(dataset):
         ],
         axis = 1)
 
-def main(datasetA, datasetB, names = ['A', 'B']):
+# TODO: Finish
+def compare_datasets(datasetA, datasetB, names = ['A', 'B'], stats_filename = 'dataset_stats'):
     datasets = [datasetA, datasetB]
-    stats = pd.concat(
-        axis=1,
-        pd.DataFrame(
+    stats = pd.DataFrame(
             [
-                dataset_stats(datasets[0]),
-                dataset_stats(datasets[1])
+                dataset_stats(datasetA).append(comparison_stats(datasetA, datasetB)),
+                dataset_stats(datasetB).append(comparison_stats(datasetB, datasetA))
             ], 
-            index=names),
-        pd.DataFrame(
-            [
-                comparison_stats(datasets[0], datasets[1]),
-                comparison_stats(datasets[1], datasets[0])
-            ],
-            index=names))
-
-#TODO: duplicates in hypothesis parts, daganlevy
-# poland was divided among russia 4690,4959
-# jupiter is big as the earth 1989, 13983, 14006
+            index=names)
+    shared_preds = shared_predicates_sorted(datasetA, datasetB)
+        
+    for i, name in enumerate(names):
+        print('Processing dataset #' + str(i) + ': ' + name)
+        outpath = os.path.join(OUTPUT_PATH, name)
+        descriptives(datasets[i]).to_csv(outpath + '_descriptives.csv')
+        top10s(datasets[i]).to_csv(outpath + '_top10.csv')
+        top10s(shared_predicates_only(datasets[i], datasets[i-1])).to_csv(outpath + '_top10-shared.csv')
+    
+    suffix = '_'.join(names) + '.csv' 
+    stats.to_csv(os.path.join(OUTPUT_PATH, 'dataset_stats-' + suffix))
+    shared_preds.to_csv(os.path.join(OUTPUT_PATH, 'shared_predicates-' + suffix))
 
 if __name__ == '__main__':
-    # TODO: Move to separate file
-    import os
-    INPUT_PATH = os.path.join('..', 'resources', 'datasets')
-    OUTPUT_PATH = os.path.join('..', 'resources', 'output')
-
     # Prepare inputs
     daganlevy = pd.read_csv(os.path.join(INPUT_PATH, 'daganlevy-tidy.csv'))
     zeichner = pd.read_csv(os.path.join(INPUT_PATH, 'zeichner-tidy.csv'))
-    dfs = (daganlevy, zeichner)
-    datasets = {'daganlevy': daganlevy, 'zeichner': zeichner}
-
-    ###
-    # Comparison and export
-    ###
-
-    # Comparison Stats
-    stats_ds = pd.DataFrame(
-        [dataset_stats(dataset) for dataset in dfs],
-        index=['daganlevy', 'zeichner'])
-    stats_cmp = pd.DataFrame(
-        [comparison_stats(daganlevy, zeichner), comparison_stats(zeichner, daganlevy)],
-        index = ['daganlevy', 'zeichner'])
-    pd.concat([stats_ds, stats_cmp], axis = 1).T.to_csv(os.path.join(OUTPUT_PATH, 'dataset-stats.csv'))
-
-    # top10 shared among datasets
-    daganlevy_shared = shared_predicates_only(daganlevy, zeichner)
-    zeichner_shared = shared_predicates_only(zeichner, daganlevy)
-    all_shared_preds = shared_predicates_sorted(daganlevy, zeichner)
-
-    top10s(daganlevy_shared).to_csv(os.path.join(OUTPUT_PATH, 'daganlevy_shared_top10.csv'))
-    top10s(zeichner_shared).to_csv(os.path.join(OUTPUT_PATH, 'zeichner_shared_top10.csv'))
-    all_shared_preds.head(10).to_csv(os.path.join(OUTPUT_PATH, 'top10_shared_predicates.csv'))
-
-    for name, dataset in datasets.items():
-        outpath = os.path.join(OUTPUT_PATH, name)
-        descriptives(dataset).to_csv(outpath + '_descriptives.csv')
-        top10s(dataset).to_csv(outpath + '_top10.csv')
+    compare_datasets(daganlevy, zeichner, names = ['daganlevy', 'zeichner'])
+    
