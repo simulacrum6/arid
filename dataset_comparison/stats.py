@@ -193,6 +193,8 @@ def compare_datasets(datasetA, datasetB, names = ['A', 'B']):
 
 if __name__ == '__main__':
     daganlevy = pd.read_csv(os.path.join(INPUT_PATH, 'daganlevy-tidy.csv'))
+    daganlevy_lemmatised = pd.read_csv(os.path.join(INPUT_PATH, 'daganlevy-tidy_lemmatised.csv'))
     zeichner = pd.read_csv(os.path.join(INPUT_PATH, 'zeichner-tidy.csv'))
-    compare_datasets(daganlevy, zeichner, names = ['daganlevy', 'zeichner'])
     
+    compare_datasets(daganlevy, zeichner, names = ['daganlevy', 'zeichner'])
+    compare_datasets(daganlevy_lemmatised, zeichner, names = ['daganlevy_lemmatised', 'zeichner'])
