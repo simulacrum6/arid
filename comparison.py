@@ -1,10 +1,8 @@
 import pandas as pd
 from collections import OrderedDict
 import matplotlib.pyplot as plt
-import os, sys
-# Temporary solution
-sys.path.append('C:\\Users\\Nev\\Projects\\')
-import arid.utils.resources as res
+import os
+import utils.resources as res
 
 OUTPUT_PATH = res.output
 
