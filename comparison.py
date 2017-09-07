@@ -106,21 +106,20 @@ def jaccard_index(listA, listB):
 
 def dataset_stats(dataset):
     return pd.Series(OrderedDict({
-     'size': size(dataset),
-     'positives': len(positives(dataset)),
-     'negatives': len(negatives(dataset)),
-     'pn_rate': len(positives(dataset)) / len(negatives(dataset)),
-           'unique_templates': len(unique_templates(dataset)),
-     'unique_templates%': len(unique_templates(dataset)) / (size(dataset)*2),
-           'unique_templates_T': dataset['text'].nunique(),
-           'unique_templates_H': dataset['hypothesis'].nunique(),
-           'unique_predicates': len(unique_predicates(dataset)),
-           'unique_predicates%': len(unique_predicates(dataset)) / (size(dataset)*2),
-           'unique_predicates_T': dataset['tpred'].nunique(),
-           'unique_predicates_H': dataset['hpred'].nunique(),
-     'unique_attributes': len(unique_attributes(dataset)),
-           'unique_attributes%': len(unique_attributes(dataset)) / (size(dataset)*4),
-     'attribute_predicate_rate': len(unique_attributes(dataset)) / len(unique_predicates(dataset))
+        'size': size(dataset),
+        'positives': len(positives(dataset)),
+        'negatives': len(negatives(dataset)),
+        'pn_rate': len(positives(dataset)) / len(negatives(dataset)),
+        'unique_templates': len(unique_templates(dataset)),
+        'unique_templates_T': dataset['text'].nunique(),
+        'unique_templates_H': dataset['hypothesis'].nunique(),
+        'unique_predicates': len(unique_predicates(dataset)),
+        'unique_predicates_T': dataset['tpred'].nunique(),
+        'unique_predicates_H': dataset['hpred'].nunique(),
+        'unique_attributes': len(unique_attributes(dataset)),
+        'unique_attributes_T': dataset['tx'].append(dataset['ty']).nunique(),
+        'unique_attributes_H': dataset['hx'].append(dataset['hy']).nunique(),
+        'attribute_predicate_rate': len(unique_attributes(dataset)) / len(unique_predicates(dataset))
     }))
 
 
