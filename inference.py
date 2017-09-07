@@ -1,10 +1,15 @@
 import numpy as np
+from nltk.corpus import stopwords
+from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.corpus import wordnet as wn
 from utils.qa_utils import get_lemmas_only_verbs, get_lemmas_no_stopwords, get_lemmas
 import sqlite3
 import pandas as pd
 import networkx as nx
 import sklearn.metrics as skm
+
+LEMMATIZER = WordNetLemmatizer()
+STOPWORDS = stopwords.words('english')
 
 class Classifier:
     def run(self, dataset):
@@ -94,10 +99,46 @@ class EntailmentGraph(Classifier):
     
     def evaluate(self, text, hypothesis):
         if text in self.graph and hypothesis in self.graph:
-            return nx.has_path(self.graph, t, h)
+            return nx.has_path(self.graph, text, hypothesis)
         else:
             return False  
     
+
+class EntailmentGraph2(Classifier):
+    def __init__(self, edgelist, typemap):
+        self.typemap = typemap
+        self.edgelist = [[text[1], hypothesis[1]] for text, hypothesis in edgelist]
+        self.graph = nx.DiGraph()
+        self.graph.add_edges_from(self.edgelist)
+    
+    def run(self, dataset):
+        data = self.type_attributes(dataset)
+        data = self.merge_templates(data)
+        return np.array([self.evaluate(text, hypothesis) for text,hypothesis in data])
+    
+    def type_attributes(self, dataset):
+        result = []
+        for rule in dataset:
+             result.append([[self.type(x), pred, self.type(y)] for x,pred,y in rule])
+        return result
+    
+    @staticmethod
+    def lemmatize(phrase):
+        return ' '.join([LEMMATIZER.lemmatize(word) for word in phrase])
+    
+    def merge_templates(self, dataset):
+        return [[self.lemmatize(text[1]), self.lemmatize(hypothesis[1])] for text, hypothesis in dataset]
+    
+    def type(self, string):
+        nostop = ' '.join([word for word in string.split() if word not in STOPWORDS])
+        return self.typemap.get(nostop, nostop)
+        
+    def evaluate(self, text, hypothesis):
+        if (text in self.graph) and (hypothesis in self.graph):
+            return nx.has_path(self.graph, text, hypothesis)
+        else:
+            return False 
+            
 
 class PPDB2(Classifier):
     def __init__(self, dbpath):
@@ -163,6 +204,15 @@ class ClassificationEngine:
         return [cf.run(dataset) for cf in self.classifiers]
 
 
+class Inclusion(Classifier):  
+    def evaluate(self, text, hypothesis):
+        t_pred = text[1].split()
+        h_pred = hypothesis[1].split()
+        return all(word in t_pred for word in h_pred)
+    
+    def run(self, dataset):
+        return [self.evaluate(text, hypothesis) for text, hypothesis in dataset]
+    
 
 class Evaluator:
     def aggregate(self, predictions, function):
@@ -205,19 +255,27 @@ def test_classifiers():
     outpath = res.output
     
     baseline = Baseline()
-    graph = EntailmentGraph(
+    graph = EntailmentGraph2(
         res.load_resource('EntailmentGraph', 'edgelist'),
         res.load_resource('EntailmentGraph', 'typemap')
         )
     ppdb = PPDB2(res.load_resource('PPDB2', 'db-mini'))
+    inc = Inclusion()
     
     daganlevy = res.load_dataset('daganlevy', 'analysis')
     zeichner = res.load_dataset('zeichner', 'analysis')
     
     datasets = {
         'daganlevy': daganlevy, 
-        'zeichner': zeichner}
-    classifiers = [baseline, graph, ppdb]
+        'zeichner': zeichner
+        }
+       
+    gold_annotation = {
+        'daganlevy': res.load_dataset('daganlevy', 'tidy').entailment.values,
+        'zeichner': res.load_dataset('zeichner', 'tidy').entailment.values,
+    }
+    classifiers = [baseline, inc, graph, ppdb]
+    evaluator = Evaluator()
     
     for name, dataset in datasets.items():
         print('Start classification of ' + name)
@@ -232,6 +290,9 @@ def test_classifiers():
             np.transpose(result)
             #columns=['baseline', 'entailment_graph', 'ppdb']
             ).to_csv(os.path.join(outpath, name + '_result.csv'))
+        
+        auc = evaluator.auc(gold_annotation[name], result)
+        print('Auc({0}): {1}'.format(name, auc))
 
 
 if __name__ == '__main__':
