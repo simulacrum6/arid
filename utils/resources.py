@@ -1,5 +1,6 @@
 # TODO: Use pckg_resources to load files, when distributed as package
 import pandas as pd
+import numpy as np
 import os
 
 def _base_path():
@@ -55,11 +56,11 @@ def load_dataset(name, version):
     
     if version == 'tidy':
         filepath = os.path.join(resources, 'datasets', name + '-tidy.csv')
-        return pd.read_csv(filepath) 
+        return pd.read_csv(filepath, index_col=0)
     
     if version == 'analysis':
-        filepath = os.path.join(resources, 'datasets', name + '.json')
-        return pd.read_json(filepath).reindex(columns=['text', 'hypothesis', 'entailment']).reset_index(drop=True)[['text','hypothesis']].values
+        filepath = os.path.join(resources, 'datasets', name + '.npy')
+        return np.load(filepath)
     
     if version == 'lemmatised':
         filepath = os.path.join(resources, 'datasets', 'daganlevy' + '-tidy_lemmatised.csv')

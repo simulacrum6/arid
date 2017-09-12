@@ -54,10 +54,9 @@ daganlevy_tidy = pd.concat(
     axis=1)
 
 # Create analysis dataset
-daganlevy_analysis = daganlevy.copy()
-daganlevy_analysis.text = [text.split(', ') for text in daganlevy.text]
-daganlevy_analysis.hypothesis = [text.split(', ') for text in daganlevy.hypothesis]
-daganlevy_analysis.entailment = [annoToVal[annotation] for annotation in daganlevy.entailment]
+text = [text.split(', ') for text in daganlevy.text]
+hypothesis = [text.split(', ') for text in daganlevy.hypothesis]
+daganlevy_analysis = np.array(list(zip(text,hypothesis)))
 
 
 # Create lemmatised dataset
@@ -84,7 +83,7 @@ daganlevy_lemmatised.hypothesis = [
 # Write to file
 daganlevy_tidy.to_csv(path.join(OUTPUT_PATH, 'daganlevy-tidy.csv'))
 daganlevy_lemmatised.to_csv(path.join(OUTPUT_PATH, 'daganlevy-tidy_lemmatised.csv'))
-daganlevy_analysis.to_json(path.join(OUTPUT_PATH, 'daganlevy.json'))
+np.save(path.join(OUTPUT_PATH, 'daganlevy.npy'), daganlevy_analysis)
 
 ###
 # Create Zeichner Datasets
@@ -132,18 +131,13 @@ zeichner_dirty = zeichner_tidy[nans]
 zeichner_tidy = zeichner_tidy[valid]
 
 # Create analysis dataset
-text = zip(zeichner_tidy.tx, zeichner_tidy.tpred, zeichner_tidy.ty)
-hypothesis = zip(zeichner_tidy.hx, zeichner_tidy.hpred, zeichner_tidy.hy)
+text = list(zip(zeichner_tidy.tx, zeichner_tidy.tpred, zeichner_tidy.ty))
+hypothesis = list(zip(zeichner_tidy.hx, zeichner_tidy.hpred, zeichner_tidy.hy))
 
-zeichner_analysis = pd.concat(
-    [zeichner_tidy.tpred, zeichner_tidy.hpred, zeichner_tidy.entailment],
-    axis=1)
-zeichner_analysis.columns = COLUMN_NAMES
-zeichner_analysis.text = [[x, pred, y] for x, pred, y in text]
-zeichner_analysis.hypothesis = [[x, pred, y] for x, pred, y in hypothesis]
+zeichner_analysis = np.array(list(zip(text,hypothesis)))
 
 # Write to file
 zeichner.to_csv(path.join(INPUT_PATH, 'zeichner.txt'))
 zeichner_tidy.to_csv(path.join(OUTPUT_PATH, 'zeichner-tidy.csv'))
 zeichner_dirty.to_csv(path.join(OUTPUT_PATH, 'zeichner-dirty.csv'))
-zeichner_analysis.to_json(path.join(OUTPUT_PATH, 'zeichner.json'))
+np.save(path.join(OUTPUT_PATH, 'zeichner.npy'), zeichner_analysis)
