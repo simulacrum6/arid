@@ -3,6 +3,7 @@ from nltk.corpus import stopwords
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.corpus import wordnet as wn
 from utils.qa_utils import get_lemmas_only_verbs, get_lemmas_no_stopwords, get_lemmas
+from utils.representations.embedding import Embedding
 import sqlite3
 import pandas as pd
 import networkx as nx
@@ -72,7 +73,7 @@ class Baseline(Classifier):
         return len(set(words).intersection(self.negations)) > 0
 
 
-# TODO: allow non exact matching mode by matching substrings in x, pred, y
+# TODO: allow fuzzy matching in categories
 class EntailmentGraph(Classifier):
     def __init__(self, edgelist, typemap):
         self.typemap = typemap
@@ -104,7 +105,7 @@ class EntailmentGraph(Classifier):
         else:
             return False  
     
-
+# Context insensitive version
 class EntailmentGraph2(Classifier):
     def __init__(self, edgelist, typemap):
         self.typemap = typemap
@@ -181,6 +182,25 @@ class PPDB2(Classifier):
             self.con).entailment.values
     
 
+class SimilarityClassifier(Classifier):
+    def __init__(self, embeddingpath):
+        self.embedding = Embedding(embeddingpath)
+    
+    def run(self, dataset):
+        return [self.evaluate(t[1],h[1]) for t,h in dataset]
+    
+    def evaluate(self, word, anotherWord):
+        return self.embedding.similarity(word, anotherWord)
+
+class Inclusion(Classifier):  
+    def evaluate(self, text, hypothesis):
+        t_pred = text[1].split()
+        h_pred = hypothesis[1].split()
+        return all(word in t_pred for word in h_pred)
+    
+    def run(self, dataset):
+        return [self.evaluate(text, hypothesis) for text, hypothesis in dataset]
+    
 
 class ClassificationEngine:
     """Engine for running a set of relation inference classifiers over a dataset.
@@ -204,15 +224,6 @@ class ClassificationEngine:
         """Run a list of classifiers over dataset. See help(ClassificationEngine) for details"""
         return [cf.run(dataset) for cf in self.classifiers]
 
-
-class Inclusion(Classifier):  
-    def evaluate(self, text, hypothesis):
-        t_pred = text[1].split()
-        h_pred = hypothesis[1].split()
-        return all(word in t_pred for word in h_pred)
-    
-    def run(self, dataset):
-        return [self.evaluate(text, hypothesis) for text, hypothesis in dataset]
     
 
 class Evaluator:
@@ -263,20 +274,27 @@ def test_classifiers():
         )
     ppdb = PPDB2(res.load_resource('PPDB2', 'db-mini'))
     inc = Inclusion()
-    
+    similarity = SimilarityClassifier('embeddings/words')
     daganlevy = res.load_dataset('daganlevy', 'analysis')
+    dl = [(entry[1],entry[0]) for entry in daganlevy]
     zeichner = res.load_dataset('zeichner', 'analysis')
-    
+    #changed!
     datasets = {
         'daganlevy': daganlevy, 
         'zeichner': zeichner
         }
-       
+
     gold_annotation = {
         'daganlevy': res.load_dataset('daganlevy', 'tidy').entailment.values,
         'zeichner': res.load_dataset('zeichner', 'tidy').entailment.values,
     }
-    classifiers = [baseline, inc, graph, ppdb]
+    classifiers = [
+        baseline, 
+        inc, 
+        graph, 
+        #ppdb,
+        similarity
+        ]
     evaluator = Evaluator()
     
     for name, dataset in datasets.items():
@@ -288,12 +306,13 @@ def test_classifiers():
             ).to_csv(os.path.join(outpath, name + '_result.csv'))
          
         auc = evaluator.auc(gold_annotation[name], result)
-        avp = skm.average_precision_score([gold_annotation[name] for _ in range(len(result))], result)
-        print(avp)
+        #avp = skm.average_precision_score([gold_annotation[name] for _ in range(len(result))], result)
+        print(auc)
         print('Auc({0}): {1}'.format(name, auc))
-        prec, rec, thresh = evaluator.precision_recall(gold_annotation[name], result)
+        rec, prec, thresh = evaluator.precision_recall(gold_annotation[name], result)
         print(prec,rec,thresh)
-        plt.plot(rec, prec)
+        print(len(thresh))
+        plt.plot(rec[1:-1], prec[1:-1])
         plt.xlabel('Recall')
         plt.ylabel('Precision')
         plt.xlim([0,1.05])
@@ -303,5 +322,5 @@ def test_classifiers():
 
 
 if __name__ == '__main__':
-    test_engine()
+    #test_engine()
     test_classifiers()
