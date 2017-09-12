@@ -28,6 +28,7 @@ def load_dataset(name, version):
     Arguments:
         name:
             'daganlevy' -- Dataset, created by Levy & Dagan (2016)
+            'daganlevy_lemmatised' -- Lemmatised version of Levy & Dagan
             'zeichner' -- Dataset, creted by Zeichnner et al. (2012)
         
         version:
@@ -37,10 +38,9 @@ def load_dataset(name, version):
             'lemmatised' -- Dataset for comparison as pandas.core.frame.DataFrame. Only available for 'daganlevy'!
     
     Returns:
-        any ,'original'/'tidy'/'lemmatised' -- pandas.core.frame.DataFrame
-        any ,'analysis' -- numpy.ndarray (2,3)
+        dataset ,'original'/'tidy' -- pandas.core.frame.DataFrame
+        dataset ,'analysis' -- numpy.ndarray (2,3)
     """
-    version = version.replace('lemmatized', 'lemmatised')
     datasets = ['daganlevy', 'zeichner']
     versions = ['original', 'tidy', 'analysis', 'lemmatised']
     
@@ -62,9 +62,6 @@ def load_dataset(name, version):
         filepath = os.path.join(resources, 'datasets', name + '.npy')
         return np.load(filepath)
     
-    if version == 'lemmatised':
-        filepath = os.path.join(resources, 'datasets', 'daganlevy' + '-tidy_lemmatised.csv')
-        return pd.read_csv(filepath) 
     
 
 def load_resource(module, res):

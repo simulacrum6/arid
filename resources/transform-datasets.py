@@ -58,7 +58,6 @@ text = [text.split(', ') for text in daganlevy.text]
 hypothesis = [text.split(', ') for text in daganlevy.hypothesis]
 daganlevy_analysis = np.array(list(zip(text,hypothesis)))
 
-
 # Create lemmatised dataset
 
 daganlevy_lemmatised = daganlevy_tidy.copy()
@@ -80,10 +79,22 @@ daganlevy_lemmatised.hypothesis = [
         daganlevy_tidy.hpred, 
         daganlevy_lemmatised.hpred)]
 
+#Create lemmatised analysis dataset
+text = list(zip(
+    daganlevy_lemmatised.tx, 
+    daganlevy_lemmatised.tpred,
+    daganlevy_lemmatised.ty))
+hypothesis = list(zip(
+    daganlevy_lemmatised.hx,
+    daganlevy_lemmatised.hpred,
+    daganlevy_lemmatised.hy))
+daganlevy_lemmatised_analysis = np.array(list(zip(text,hypothesis)))
+
 # Write to file
 daganlevy_tidy.to_csv(path.join(OUTPUT_PATH, 'daganlevy-tidy.csv'))
-daganlevy_lemmatised.to_csv(path.join(OUTPUT_PATH, 'daganlevy-tidy_lemmatised.csv'))
+daganlevy_lemmatised.to_csv(path.join(OUTPUT_PATH, 'daganlevy_lemmatised-tidy.csv'))
 np.save(path.join(OUTPUT_PATH, 'daganlevy.npy'), daganlevy_analysis)
+np.save(path.join(OUTPUT_PATH, 'daganlevy_lemmatised.npy'), daganlevy_lemmatised_analysis)
 
 ###
 # Create Zeichner Datasets
