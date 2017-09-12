@@ -8,6 +8,7 @@ import pandas as pd
 import networkx as nx
 import sklearn.metrics as skm
 
+
 LEMMATIZER = WordNetLemmatizer()
 STOPWORDS = stopwords.words('english')
 
@@ -251,6 +252,7 @@ def test_classifiers():
     import os
     import utils.resources as res
     import datetime as dt
+    import matplotlib.pyplot as plt
     
     outpath = res.output
     
@@ -279,20 +281,25 @@ def test_classifiers():
     
     for name, dataset in datasets.items():
         print('Start classification of ' + name)
-        result = [] 
-        
-        for classifier in classifiers:
-            print('Start Classification Task @' + dt.datetime.now().isoformat())
-            result.append(classifier.run(dataset))
-            print('Done @' + dt.datetime.now().isoformat())
+        result = [classifier.run(dataset) for classifier in classifiers]
         
         pd.DataFrame(
             np.transpose(result)
-            #columns=['baseline', 'entailment_graph', 'ppdb']
             ).to_csv(os.path.join(outpath, name + '_result.csv'))
-        
+         
         auc = evaluator.auc(gold_annotation[name], result)
+        avp = skm.average_precision_score([gold_annotation[name] for _ in range(len(result))], result)
+        print(avp)
         print('Auc({0}): {1}'.format(name, auc))
+        prec, rec, thresh = evaluator.precision_recall(gold_annotation[name], result)
+        print(prec,rec,thresh)
+        plt.plot(rec, prec)
+        plt.xlabel('Recall')
+        plt.ylabel('Precision')
+        plt.xlim([0,1.05])
+        plt.ylim([0,1.05])
+        plt.show()
+    
 
 
 if __name__ == '__main__':
