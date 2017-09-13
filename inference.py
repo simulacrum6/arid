@@ -23,9 +23,9 @@ class Baseline(Classifier):
         self.negations = set(['no', 'not', 'never'])
     
     def run(self, test):
-        lemma_intersection = np.array([self.lemma_intersection(q, a) for q, a in test])
-        matching_voice = np.array([self.matching_voice(q, a) for q, a in test])
-        same_negation = np.array([self.same_negation(q, a) for q, a in test])
+        lemma_intersection = np.array([self.lemma_intersection(q, a) for a, q in test])
+        matching_voice = np.array([self.matching_voice(q, a) for a, q in test])
+        same_negation = np.array([self.same_negation(q, a) for a, q in test])
         return lemma_intersection * matching_voice * same_negation
     
     @staticmethod
@@ -106,7 +106,7 @@ class EntailmentGraph(Classifier):
             return False  
     
 # Context insensitive version
-class EntailmentGraph2(Classifier):
+class ContextFreeEntailmentGraph(Classifier):
     def __init__(self, edgelist, typemap):
         self.typemap = typemap
         self.edgelist = [[text[1], hypothesis[1]] for text, hypothesis in edgelist]
@@ -142,7 +142,7 @@ class EntailmentGraph2(Classifier):
             return False 
             
 
-class PPDB2(Classifier):
+class Sqlite(Classifier):
     def __init__(self, dbpath):
         self.db = dbpath
         self.con = sqlite3.connect(dbpath)
@@ -182,7 +182,7 @@ class PPDB2(Classifier):
             self.con).entailment.values
     
 
-class SimilarityClassifier(Classifier):
+class EmbeddingClassifier(Classifier):
     def __init__(self, embeddingpath):
         self.embedding = Embedding(embeddingpath)
     
@@ -200,6 +200,30 @@ class Inclusion(Classifier):
     
     def run(self, dataset):
         return [self.evaluate(text, hypothesis) for text, hypothesis in dataset]
+    
+
+class RuleMatcher(Classifier):
+    def __init__(self, rules, isContextSensitive = True):
+        self.rules = rules
+
+    def run(self, dataset):
+        if isContextSensitive:
+            return [self.evaluate(t,h) for t,h in dataset]
+        else:
+            return [self.evaluate(t[1],h[1]) for t,h in dataset]
+
+    def evaluate(self, text, hypothesis):
+        matchee = ' '.join(text,hypothesis)
+        return self.match(matchee)
+
+    def match(self, matchee):
+        for rule, entailment in self.rules:
+            if rule == matchee:
+                return entailment
+            else:
+                return False
+
+        
     
 
 class ClassificationEngine:
@@ -268,13 +292,13 @@ def test_classifiers():
     outpath = res.output
     
     baseline = Baseline()
-    graph = EntailmentGraph2(
+    graph = ContextFreeEntailmentGraph(
         res.load_resource('EntailmentGraph', 'edgelist'),
         res.load_resource('EntailmentGraph', 'typemap')
         )
-    ppdb = PPDB2(res.load_resource('PPDB2', 'db-mini'))
+    ppdb = Sqlite(res.load_resource('PPDB2', 'db-mini'))
     inc = Inclusion()
-    similarity = SimilarityClassifier('embeddings/words')
+    similarity = EmbeddingClassifier('embeddings/words')
     daganlevy = res.load_dataset('daganlevy', 'analysis')
     dl = [(entry[1],entry[0]) for entry in daganlevy]
     zeichner = res.load_dataset('zeichner', 'analysis')
@@ -312,12 +336,11 @@ def test_classifiers():
         rec, prec, thresh = evaluator.precision_recall(gold_annotation[name], result)
         print(prec,rec,thresh)
         print(len(thresh))
-        plt.plot(rec[1:-1], prec[1:-1])
+        plt.plot(rec, prec)
         plt.xlabel('Recall')
         plt.ylabel('Precision')
         plt.xlim([0,1.05])
         plt.ylim([0,1.05])
-        plt.show()
     
 
 
