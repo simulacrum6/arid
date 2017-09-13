@@ -41,7 +41,7 @@ def load_dataset(name, version):
         dataset ,'original'/'tidy' -- pandas.core.frame.DataFrame
         dataset ,'analysis' -- numpy.ndarray (2,3)
     """
-    datasets = ['daganlevy', 'zeichner']
+    datasets = ['daganlevy', 'daganlevy_lemmatised', 'zeichner']
     versions = ['original', 'tidy', 'analysis', 'lemmatised']
     
     if name not in datasets:
