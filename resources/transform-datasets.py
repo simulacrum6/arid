@@ -62,8 +62,8 @@ daganlevy_analysis = np.array(list(zip(text,hypothesis)))
 # Create lemmatised dataset
 
 daganlevy_lemmatised = daganlevy_tidy.copy()
-text_lemmatised = [' '.join(qa_utils.get_lemmas(entry)) for entry in daganlevy_tidy.tpred]
-hypothesis_lemmatised = [' '.join(qa_utils.get_lemmas(entry)) for entry in daganlevy_tidy.hpred]
+text_lemmatised = [' '.join(qa_utils.get_lemmas_vo(entry)) for entry in daganlevy_tidy.tpred]
+hypothesis_lemmatised = [' '.join(qa_utils.get_lemmas_vo(entry)) for entry in daganlevy_tidy.hpred]
 
 daganlevy_lemmatised.tpred = text_lemmatised
 daganlevy_lemmatised.hpred = hypothesis_lemmatised

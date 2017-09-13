@@ -10,6 +10,8 @@ STOPWORDS = stopwords.words('english')
 def get_lemmas(phrase, pos=wn.VERB):
     return [LEMMATIZER.lemmatize(w, pos) for w in phrase.split(' ')]
 
+def get_lemmas_vo(phrase, pos=wn.VERB):
+    return [LEMMATIZER.lemmatize(w, pos) if len(wn.synsets(w, pos)) > 0 else w for w in phrase.split(' ')]
 
 def get_lemmas_only_verbs(phrase, pos=wn.VERB):
     return set([w for w in get_lemmas(phrase, pos) if len(wn.synsets(w, pos)) > 0])
