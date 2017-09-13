@@ -23,14 +23,11 @@ edgelist_tidy['hx'], edgelist_tidy['hpred'], edgelist_tidy['hy'] = list(zip(*([x
 edgelist_tidy.text = edgelist_tidy['tx'] + ' ' + edgelist_tidy['tpred'] + ' ' + edgelist_tidy['ty']
 edgelist_tidy.hypothesis = edgelist_tidy['hx'] + ' ' + edgelist_tidy['hpred'] + ' ' + edgelist_tidy['hy']
 edgelist_tidy.to_csv('entailment-graph_tidy.csv')
+
 ##
 # Berant 2010
 ##
 
-# lambda = 0.05 
-orig_edgelist = pd.read_csv('reverb_global_clsf_all_htl_lambda0.05.txt', sep = '\t')
-orig_edgelist.columns = ['text', 'hypothesis']
-
 def align_args(predicate):
     if predicate.endswith('@R@'):
         s = predicate.replace('@R@', '')
@@ -38,23 +35,22 @@ def align_args(predicate):
     else:
         return 'x ' + predicate + ' y'
 
-orig_edgelist['t_args'] = [align_args(pred) for pred in orig_edgelist.text] 
-orig_edgelist['h_args'] = [align_args(pred) for pred in orig_edgelist.hypothesis]
+# lambda = 0.05 
 
-np.save('berant_2010-0.05.npy', orig_edgelist[['t_args', 'h_args']].values)
+orig_edgelist = pd.read_csv('reverb_global_clsf_all_tncf_lambda_0.05.csv', sep = '\t')
+orig_edgelist.columns = ['text', 'hypothesis']
+
+orig_edgelist['t'] = [pred.replace('@R@', '') for pred in orig_edgelist.text] 
+orig_edgelist['h'] = [pred.replace('@R@', '') for pred in orig_edgelist.hypothesis]
+
+np.save('berant_2010-0.05.npy', orig_edgelist[['t', 'h']].values)
 
 # lambda = 0.1
-orig_edgelist = pd.read_csv('reverb_global_clsf_all_tncf_lambda_0.1', sep = '\t')
+
+orig_edgelist = pd.read_csv('reverb_global_clsf_all_tncf_lambda_0.1.csv', sep = '\t')
 orig_edgelist.columns = ['text', 'hypothesis']
 
-def align_args(predicate):
-    if predicate.endswith('@R@'):
-        s = predicate.replace('@R@', '')
-        return 'y ' + s + ' x'
-    else:
-        return 'x ' + predicate + ' y'
+orig_edgelist['t'] = [pred.replace('@R@', '') for pred in orig_edgelist.text] 
+orig_edgelist['h'] = [pred.replace('@R@', '') for pred in orig_edgelist.hypothesis]
 
-orig_edgelist['t_args'] = [align_args(pred) for pred in orig_edgelist.text] 
-orig_edgelist['h_args'] = [align_args(pred) for pred in orig_edgelist.hypothesis]
-
-np.save('berant_2010-0.1.npy', orig_edgelist[['t_args', 'h_args']].values)
+np.save('berant_2010-0.1.npy', orig_edgelist[['t', 'h']].values)
