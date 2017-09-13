@@ -107,33 +107,13 @@ class EntailmentGraph(Classifier):
     
 # Context insensitive version
 class ContextFreeEntailmentGraph(Classifier):
-    def __init__(self, edgelist, typemap):
-        self.typemap = typemap
+    def __init__(self, edgelist):
         self.edgelist = [[text[1], hypothesis[1]] for text, hypothesis in edgelist]
         self.graph = nx.DiGraph()
         self.graph.add_edges_from(self.edgelist)
     
     def run(self, dataset):
-        data = self.type_attributes(dataset)
-        data = self.merge_templates(data)
-        return np.array([self.evaluate(text, hypothesis) for text,hypothesis in data])
-    
-    def type_attributes(self, dataset):
-        result = []
-        for rule in dataset:
-             result.append([[self.type(x), pred, self.type(y)] for x,pred,y in rule])
-        return result
-    
-    @staticmethod
-    def lemmatize(phrase):
-        return ' '.join([LEMMATIZER.lemmatize(word) for word in phrase])
-    
-    def merge_templates(self, dataset):
-        return [[self.lemmatize(text[1]), self.lemmatize(hypothesis[1])] for text, hypothesis in dataset]
-    
-    def type(self, string):
-        nostop = ' '.join([word for word in string.split() if word not in STOPWORDS])
-        return self.typemap.get(nostop, nostop)
+        return np.array([self.evaluate(text[1], hypothesis[1]) for text,hypothesis in dataset])
         
     def evaluate(self, text, hypothesis):
         if (text in self.graph) and (hypothesis in self.graph):
@@ -251,18 +231,24 @@ class ClassificationEngine:
     
 
 class Evaluator:
-    def aggregate(self, predictions, function):
+    @staticmethod
+    def aggregate(predictions, aggfunc):
         """Aggregates each sublist of predictions, using the specified function"""
-        return [function(sublist) for sublist in np.transpose(predictions)]
+        return [aggfunc(sublist) for sublist in np.transpose(predictions)]
     
-    def precision_recall(self, gold, prediction):
-        prediction = self.aggregate(prediction, max)
+    @staticmethod
+    def precision_recall_curve(gold, predictions):
+        prediction = Evaluator.aggregate(predictions, max)
         return skm.precision_recall_curve(gold, prediction)
     
-    def auc(self, gold, prediction):
-        precision, recall, _ = self.precision_recall(gold, prediction)
+    @staticmethod
+    def auc(gold, predictions):
+        precision, recall, _ = Evaluator.precision_recall_curve(gold, predictions)
         return skm.auc(recall, precision)
     
+    @staticmethod
+    def avp(gold, predictions):
+        return skm.average_precision_score(gold, Evaluator.aggregate(predictions, max))
 
 def test_engine():
     from random import random
@@ -272,9 +258,8 @@ def test_engine():
         [0.5, 0.3, 0.7, 0.38, 0.18, 0.8, 0.3, 0.1, 0.1, 0.6, 0.1, 0.4, 0.7, 0.3, 0.1, 0.01, 0.75, 0.21, 0.5, 0.67]]
     gold = [True, True, True, False, False, False, False, True, True, True, True, False, False, True, False, False, False, True, True, True]
     
-    evaluator = Evaluator()
-    prec, rec, _ = evaluator.precision_recall(gold, predictions)
-    auc = evaluator.auc(gold, predictions)
+    prec, rec, _ = Evaluator.precision_recall_curve(gold, predictions)
+    auc = Evaluator.auc(gold, predictions)
     plt.plot(rec, prec)
     plt.xlabel('Recall')
     plt.ylabel('Precision')
@@ -293,33 +278,33 @@ def test_classifiers():
     
     baseline = Baseline()
     graph = ContextFreeEntailmentGraph(
-        res.load_resource('EntailmentGraph', 'edgelist'),
-        res.load_resource('EntailmentGraph', 'typemap')
-        )
+        res.load_resource('EntailmentGraph', 'edgelist'))
     ppdb = Sqlite(res.load_resource('PPDB2', 'db-mini'))
     inc = Inclusion()
     similarity = EmbeddingClassifier('embeddings/words')
+    
     daganlevy = res.load_dataset('daganlevy', 'analysis')
-    dl = [(entry[1],entry[0]) for entry in daganlevy]
+    daganlevy_lemmatised = res.load_dataset('daganlevy_lemmatised', 'analysis')
     zeichner = res.load_dataset('zeichner', 'analysis')
-    #changed!
+
     datasets = {
         'daganlevy': daganlevy, 
-        'zeichner': zeichner
+        'daganlevy_lemmatised': daganlevy_lemmatised,
+        #'zeichner': zeichner
         }
 
     gold_annotation = {
         'daganlevy': res.load_dataset('daganlevy', 'tidy').entailment.values,
-        'zeichner': res.load_dataset('zeichner', 'tidy').entailment.values,
+        'daganlevy_lemmatised': res.load_dataset('daganlevy', 'tidy').entailment.values,
+        #'zeichner': res.load_dataset('zeichner', 'tidy').entailment.values,
     }
     classifiers = [
-        baseline, 
-        inc, 
+        #baseline, 
+        #inc, 
         graph, 
         #ppdb,
-        similarity
+        #similarity
         ]
-    evaluator = Evaluator()
     
     for name, dataset in datasets.items():
         print('Start classification of ' + name)
@@ -329,18 +314,17 @@ def test_classifiers():
             np.transpose(result)
             ).to_csv(os.path.join(outpath, name + '_result.csv'))
          
-        auc = evaluator.auc(gold_annotation[name], result)
-        #avp = skm.average_precision_score([gold_annotation[name] for _ in range(len(result))], result)
-        print(auc)
+        auc = Evaluator.auc(gold_annotation[name], result)
+        avp = Evaluator.avp(gold_annotation[name], result)
         print('Auc({0}): {1}'.format(name, auc))
-        rec, prec, thresh = evaluator.precision_recall(gold_annotation[name], result)
-        print(prec,rec,thresh)
-        print(len(thresh))
-        plt.plot(rec, prec)
+        rec, prec, thresh = Evaluator.precision_recall_curve(gold_annotation[name], result)
+        plt.step(rec, prec, where = 'post')
         plt.xlabel('Recall')
         plt.ylabel('Precision')
         plt.xlim([0,1.05])
         plt.ylim([0,1.05])
+    
+    plt.show()
     
 
 
