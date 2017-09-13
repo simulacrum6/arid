@@ -290,36 +290,32 @@ def test_classifiers():
     ppdb = Sqlite(res.load_resource('PPDB2', 'db-mini'))
     inc = Inclusion()
     similarity = EmbeddingClassifier('embeddings/words')
-    
-    daganlevy = res.load_dataset('daganlevy', 'analysis')
-    daganlevy_lemmatised = res.load_dataset('daganlevy_lemmatised', 'analysis')
-    zeichner = res.load_dataset('zeichner', 'analysis')
 
     datasets = {
-        'daganlevy': daganlevy, 
-        'daganlevy_lemmatised': daganlevy_lemmatised,
-        #'zeichner': zeichner
-        }
-
+        'daganlevy': res.load_dataset('daganlevy', 'analysis'), 
+        'daganlevy_lemmatised': res.load_dataset('daganlevy_lemmatised', 'analysis'),
+        'zeichner': res.load_dataset('zeichner', 'analysis')
+    }
     gold_annotation = {
         'daganlevy': res.load_dataset('daganlevy', 'tidy').entailment.values,
         'daganlevy_lemmatised': res.load_dataset('daganlevy', 'tidy').entailment.values,
-        #'zeichner': res.load_dataset('zeichner', 'tidy').entailment.values,
+        'zeichner': res.load_dataset('zeichner', 'tidy').entailment.values,
     }
-    classifiers = [
-        #baseline, 
-        #inc, 
-        graph, 
-        #ppdb,
-        #similarity
-        ]
+    classifiers = {
+        'Lemma Baseline': baseline, 
+        'Token Subset': inc, 
+        'Entailment Graph': graph, 
+        #'PPDB': ppdb,
+        'Relation Embeddings': similarity
+    }
     
     for name, dataset in datasets.items():
         print('Start classification of ' + name)
-        result = [classifier.run(dataset) for classifier in classifiers]
+        result = [classifier.run(dataset) for _,classifier in classifiers.items()]
         
         pd.DataFrame(
-            np.transpose(result)
+            np.transpose(result),
+            columns = list(classifiers.keys())
             ).to_csv(os.path.join(outpath, name + '_result.csv'))
          
         auc = Evaluator.auc(gold_annotation[name], result)

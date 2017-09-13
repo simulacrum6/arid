@@ -192,7 +192,7 @@ def compare_datasets(datasetA, datasetB, names = ['A', 'B']):
 
 if __name__ == '__main__':
     daganlevy = res.load_dataset('daganlevy', 'tidy')
-    daganlevy_lemmatised = res.load_dataset('daganlevy', 'lemmatised')
+    daganlevy_lemmatised = res.load_dataset('daganlevy_lemmatised', 'tidy')
     zeichner = res.load_dataset('zeichner', 'tidy')
     
     compare_datasets(daganlevy, zeichner, names = ['daganlevy', 'zeichner'])
