@@ -62,7 +62,14 @@ def load_dataset(name, version):
         filepath = os.path.join(resources, 'datasets', name + '.npy')
         return np.load(filepath)
     
+def load_result(dataset):
+    datasets = ['daganlevy', 'daganlevy_lemmatised', 'zeichner']
     
+    if dataset not in datasets:
+        raise ValueError('{0} is not a valid dataset name. Valid names: {1}'.format(dataset, datasets))
+    else:
+        filepath = os.path.join(output, dataset + '_result.csv')
+        return pd.read_csv(filepath, index_col=0)
 
 def load_resource(module, res):
     """Return specified resource.
