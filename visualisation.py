@@ -3,7 +3,7 @@ import numpy as np
 import utils.resources as res
 import matplotlib.pyplot as plt
 import os.path as path
-
+from inference import Evaluator
 
 # frequency by rank
 def count_by_rank(datasets, plotname = 'cbr.png'):
@@ -23,7 +23,7 @@ def count_by_rank(datasets, plotname = 'cbr.png'):
     plt.savefig(path.join(
             OUTPATH,
             plotname))
-    #plt.show()
+    plt.clf()
 
 def frequency_density_distribution(datasets, plotname = 'fdd.png'):
     frequency_density_distribution = plt.figure('fdd')
@@ -44,7 +44,7 @@ def frequency_density_distribution(datasets, plotname = 'fdd.png'):
     plt.savefig(path.join(
             OUTPATH,
             plotname))
-    #plt.show()
+    plt.clf()
 
 def grouped_barplot(datasets, plotname):
     fig = plt.figure('bar')
@@ -60,7 +60,8 @@ def grouped_barplot(datasets, plotname):
         values = [
             len(comp.unique_predicates(dataset)), 
             len(comp.unique_attributes(dataset)),
-            len(comp.unique_templates(dataset))]
+            len(comp.unique_templates(dataset))
+        ]
         bar = ax.bar(ind + width*i, values, width, label = name)
         bars.append(bar)
         i = i + 1
@@ -77,20 +78,53 @@ def grouped_barplot(datasets, plotname):
         OUTPATH,
         plotname
     ))
-    #plt.show()
+    plt.clf()
+
+def plot_prec_rec(results, plotname = 'rec-prec_dl-z.png', classifiers = ['Lemma Baseline', 'Entailment Graph', 'Relation Embeddings']):
+    fig = plt.figure('res')
+    ax = fig.add_subplot(111)
+    ax.set_title('Precision-Recall Curve')
+    ax.set_xlabel('Recall')
+    ax.set_ylabel('Precision')
+    
+    lines = []
+    for name, result in results.items():
+        predictions = result[classifiers].T.values
+        gold = result['Gold']
+        
+        auc = Evaluator.auc(gold, predictions)
+        rec, prec, thresh = Evaluator.precision_recall_curve(gold, predictions)
+        
+        line, = ax.step(rec[1:-2], prec[1:-2], where = 'post', label = '{0} ({1}). AUC:{2:.3f}'.format(name, 'Full', auc))
+        lines.append(line)
+            
+    ax.legend(handles = lines)
+    plt.figure('res')
+    plt.tight_layout()
+    plt.xlim([0,1.0])
+    plt.ylim([0,1.05])
+    plt.savefig(path.join(
+        OUTPATH,
+        plotname
+    ))
+    plt.clf()
 
 
 def make_plots():
     OUTPATH = path.join(res.output, 'figures')
-    
+
     datasets = {
         'Levy & Dagan': res.load_dataset('daganlevy', 'tidy'),
         'Zeichner et. al': res.load_dataset('zeichner', 'tidy')
-        }
+    }
+    results = {
+        'Levy & Dagan': res.load_result('daganlevy'),
+        'Zeichner et. al': res.load_result('zeichner')   
+    }
     count_by_rank(datasets, plotname = 'cbr_dl-z.png')
     frequency_density_distribution(datasets, plotname = 'fdd_dl-z.png')
     grouped_barplot(datasets, plotname = 'pa-freq_dl-z.png')
-
+    plot_prec_rec(results)
 
 if __name__ == '__main__':
     make_plots()
