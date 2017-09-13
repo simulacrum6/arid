@@ -18,6 +18,7 @@ annoToVal = {
 }
 
 COLUMN_NAMES = ['text', 'hypothesis', 'entailment']
+DL_COLS = ['hypothesis', 'text', 'entailment']
 TEXT_HEADERS = ['tx', 'tpred', 'ty']
 HYPOTHESIS_HEADERS = ['hx', 'hpred', 'hy']
 INPUT_PATH = path.join(res.resources, 'original-datasets')
@@ -31,7 +32,7 @@ daganlevy = pd.read_csv(
     path.join(INPUT_PATH, 'daganlevy.txt'), 
     sep='\t',
     header=None,
-    names=COLUMN_NAMES)
+    names=DL_COLS)
 
 
 # Create tidy dataset
