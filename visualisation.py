@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 import os.path as path
 from inference import Evaluator
 
+OUTPATH = path.join(res.output, 'figures')
+
 # frequency by rank
 def count_by_rank(datasets, plotname = 'cbr.png'):
     count_by_rank = plt.figure('cbr')
@@ -111,8 +113,6 @@ def plot_prec_rec(results, plotname = 'rec-prec_dl-z.png', classifiers = ['Lemma
 
 
 def make_plots():
-    OUTPATH = path.join(res.output, 'figures')
-
     datasets = {
         'Levy & Dagan': res.load_dataset('daganlevy', 'tidy'),
         'Zeichner et. al': res.load_dataset('zeichner', 'tidy')

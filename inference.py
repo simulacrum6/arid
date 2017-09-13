@@ -112,23 +112,24 @@ class TypedEntailmentGraph(Classifier):
         else:
             return False  
     
+
 # Context insensitive version
 class EntailmentGraph(Classifier):
     def __init__(self, edgelist):
-        self.edgelist = [[text[1], hypothesis[1]] for text, hypothesis in edgelist]
+        self.edgelist = edgelist
         self.graph = nx.DiGraph()
         self.graph.add_edges_from(self.edgelist)
     
     def run(self, dataset):
         dataset_lemmas = [[' '.join(get_lemmas_vo(t[1])), ' '.join(get_lemmas_vo(h[1]))] for t,h in dataset]
         return np.array([self.evaluate(text, hypothesis) for text,hypothesis in dataset_lemmas])
-        
+    
     def evaluate(self, text, hypothesis):
         if (text in self.graph) and (hypothesis in self.graph):
             return nx.has_path(self.graph, text, hypothesis)
         else:
-            return False 
-            
+            return False
+        
 
 class Sqlite(Classifier):
     def __init__(self, dbpath):
@@ -285,8 +286,7 @@ def test_classifiers():
     outpath = res.output
     
     baseline = Baseline()
-    graph = EntailmentGraph(
-        res.load_resource('EntailmentGraph', 'edgelist'))
+    graph = EntailmentGraph(res.load_resource('EntailmentGraph', 'lambda=0.1'))
     ppdb = Sqlite(res.load_resource('PPDB2', 'db-mini'))
     inc = Inclusion()
     similarity = EmbeddingClassifier('embeddings/words')
