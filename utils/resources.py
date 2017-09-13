@@ -119,8 +119,6 @@ def load_resource(module, res):
             filepath = os.path.join(filepath, 'class-instance-mapping.txt')
             data = pd.read_csv(filepath, sep='\t').iloc[:,[1,0]].values
             return {instance: type for instance, type in data}
-    
-    if module == 
 
     if module == 'PPDB2':    
         if res == 'db':
