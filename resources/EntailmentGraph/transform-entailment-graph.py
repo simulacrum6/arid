@@ -1,6 +1,8 @@
 import pandas as pd
 import numpy as np
+import re
 
+#levy 2014
 orig_edgelist = pd.read_csv('original-edgelist.txt', sep='\t-R?>\t')
 orig_edgelist.columns = ['text', 'hypothesis']
 
@@ -21,3 +23,38 @@ edgelist_tidy['hx'], edgelist_tidy['hpred'], edgelist_tidy['hy'] = list(zip(*([x
 edgelist_tidy.text = edgelist_tidy['tx'] + ' ' + edgelist_tidy['tpred'] + ' ' + edgelist_tidy['ty']
 edgelist_tidy.hypothesis = edgelist_tidy['hx'] + ' ' + edgelist_tidy['hpred'] + ' ' + edgelist_tidy['hy']
 edgelist_tidy.to_csv('entailment-graph_tidy.csv')
+##
+# Berant 2010
+##
+
+# lambda = 0.05 
+orig_edgelist = pd.read_csv('reverb_global_clsf_all_htl_lambda0.05.txt', sep = '\t')
+orig_edgelist.columns = ['text', 'hypothesis']
+
+def align_args(predicate):
+    if predicate.endswith('@R@'):
+        s = predicate.replace('@R@', '')
+        return 'y ' + s + ' x'
+    else:
+        return 'x ' + predicate + ' y'
+
+orig_edgelist['t_args'] = [align_args(pred) for pred in orig_edgelist.text] 
+orig_edgelist['h_args'] = [align_args(pred) for pred in orig_edgelist.hypothesis]
+
+np.save('berant_2010-0.05.npy', orig_edgelist[['t_args', 'h_args']].values)
+
+# lambda = 0.1
+orig_edgelist = pd.read_csv('reverb_global_clsf_all_tncf_lambda_0.1', sep = '\t')
+orig_edgelist.columns = ['text', 'hypothesis']
+
+def align_args(predicate):
+    if predicate.endswith('@R@'):
+        s = predicate.replace('@R@', '')
+        return 'y ' + s + ' x'
+    else:
+        return 'x ' + predicate + ' y'
+
+orig_edgelist['t_args'] = [align_args(pred) for pred in orig_edgelist.text] 
+orig_edgelist['h_args'] = [align_args(pred) for pred in orig_edgelist.hypothesis]
+
+np.save('berant_2010-0.1.npy', orig_edgelist[['t_args', 'h_args']].values)

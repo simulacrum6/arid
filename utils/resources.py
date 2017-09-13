@@ -79,13 +79,20 @@ def load_resource(module, res):
         res -- Name of the resource
     
     Arguments:
-        'entailment-graph':
-            'edgelist' -- Edgelist, specifying the graph as numpy.ndarray (2,)
+        'EntailmentGraph':
+            'edgelist' -- Edgelist of Levy (2014) Entailment Graph, specifying the graph as numpy.ndarray (2,)
             'typemap' -- Maping of argument instances (keys) to types (values) as dict
+            'lambda=0.1' -- Edgelist for Berant et al. (2010) Entailment Graph, as numpy.ndarray (2,)
+            'lambda=0.05' -- Edgelist for Berant et al. (2010) Entailment Graph, as numpy.ndarray (2,)
+
+        'PPDB2':
+            'db' -- Path to PPDB2.0 XXXXL sqlite file, for PPDB2 Classifier
+            'db-mini' -- Path to PPDB2.0 XS sqlite file, for PPDB2 Classifier
     
     Returns:
-        "entailment-graph", 'edgelist' -- numpy.ndarray (2,)
-        "entailment-graph", 'typemap' -- dict
+        "EntailmentGraph", ['edgelist', 'lambda=0.1', 'lambda=0.05'] -- numpy.ndarray (2,)
+        "EntailmentGraph", 'typemap' -- dict
+        "PPDB2", * -- string 
     
     Raises:
         ValueError -- If incorrect module name was provided
@@ -100,11 +107,21 @@ def load_resource(module, res):
             filepath = os.path.join(filepath,  'entailment-graph.json')
             return pd.read_json(filepath).reindex(columns=['text', 'hypothesis']).reset_index(drop=True)[['text','hypothesis']].values
         
+        if res == 'lambda=0.1':
+            filepath = os.path.join(filepath, 'berant_2010-0.1.npy')
+            return np.load(filepath)
+
+        if res == 'lambda=0.05':
+            filepath = os.path.join(filepath, 'berant_2010-0.05.npy')
+            return np.load(filepath)
+
         if res == 'typemap':
             filepath = os.path.join(filepath, 'class-instance-mapping.txt')
             data = pd.read_csv(filepath, sep='\t').iloc[:,[1,0]].values
             return {instance: type for instance, type in data}
     
+    if module == 
+
     if module == 'PPDB2':    
         if res == 'db':
             filepath = os.path.join(filepath, 'ppdb2.sqlite')
