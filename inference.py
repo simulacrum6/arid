@@ -2,7 +2,7 @@ import numpy as np
 from nltk.corpus import stopwords
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.corpus import wordnet as wn
-from utils.qa_utils import get_lemmas_only_verbs, get_lemmas_no_stopwords, get_lemmas
+from utils.qa_utils import get_lemmas_only_verbs, get_lemmas_no_stopwords, get_lemmas, get_lemmas_vo
 from utils.representations.embedding import Embedding
 import sqlite3
 import pandas as pd
@@ -74,7 +74,7 @@ class Baseline(Classifier):
 
 
 # TODO: allow fuzzy matching in categories
-class EntailmentGraph(Classifier):
+class TypedEntailmentGraph(Classifier):
     def __init__(self, edgelist, typemap):
         self.typemap = typemap
         self.edgelist = [[' '.join(text), ' '.join(hypothesis)] for text,hypothesis in edgelist]
@@ -83,21 +83,28 @@ class EntailmentGraph(Classifier):
     
     def run(self, dataset):
         data = self.type_attributes(dataset)
+        data = self.lemmatize_predicate(dataset)
         data = self.merge_templates(data)
+        print(data)
         return np.array([self.evaluate(text, hypothesis) for text,hypothesis in data])
     
     def type_attributes(self, dataset):
         result = []
-        for rule in dataset:
-             result.append([[self.type(x), pred, self.type(y)] for x,pred,y in rule])
-    
+        for entry in dataset:
+            t,h = entry[0], entry[1] 
+            t_typed = [self.type(t[0]), t[1], self.type(t[2])]
+            h_typed = [self.type(h[0]), h[1], self.type(h[2])]
+            result.append([t_typed, h_typed])
         return result    
-            
-    def merge_templates(self, dataset):
-        return [[' '.join(text), ' '.join(hypothesis)] for text, hypothesis in dataset]
-    
+
     def type(self, string):
         return self.typemap.get(string, string)
+
+    def lemmatize_predicate(self, dataset):
+        return [[[t[0], ' '.join(get_lemmas_vo(t[1])), t[2]], [h[0], ' '.join(get_lemmas_vo(h[1])), h[2]]] for t,h in dataset]
+    
+    def merge_templates(self, dataset):
+        return [[' '.join(text), ' '.join(hypothesis)] for text, hypothesis in dataset]
     
     def evaluate(self, text, hypothesis):
         if text in self.graph and hypothesis in self.graph:
@@ -106,14 +113,15 @@ class EntailmentGraph(Classifier):
             return False  
     
 # Context insensitive version
-class ContextFreeEntailmentGraph(Classifier):
+class EntailmentGraph(Classifier):
     def __init__(self, edgelist):
         self.edgelist = [[text[1], hypothesis[1]] for text, hypothesis in edgelist]
         self.graph = nx.DiGraph()
         self.graph.add_edges_from(self.edgelist)
     
     def run(self, dataset):
-        return np.array([self.evaluate(text[1], hypothesis[1]) for text,hypothesis in dataset])
+        dataset_lemmas = [[' '.join(get_lemmas_vo(t[1])), ' '.join(get_lemmas_vo(h[1]))] for t,h in dataset]
+        return np.array([self.evaluate(text, hypothesis) for text,hypothesis in dataset_lemmas])
         
     def evaluate(self, text, hypothesis):
         if (text in self.graph) and (hypothesis in self.graph):
@@ -167,7 +175,7 @@ class EmbeddingClassifier(Classifier):
         self.embedding = Embedding(embeddingpath)
     
     def run(self, dataset):
-        return [self.evaluate(t[1],h[1]) for t,h in dataset]
+        return np.array([self.evaluate(t[1],h[1]) for t,h in dataset])
     
     def evaluate(self, word, anotherWord):
         return self.embedding.similarity(word, anotherWord)
@@ -179,7 +187,7 @@ class Inclusion(Classifier):
         return all(word in t_pred for word in h_pred)
     
     def run(self, dataset):
-        return [self.evaluate(text, hypothesis) for text, hypothesis in dataset]
+        return np.array([self.evaluate(text, hypothesis) for text, hypothesis in dataset])
     
 
 class RuleMatcher(Classifier):
@@ -277,7 +285,7 @@ def test_classifiers():
     outpath = res.output
     
     baseline = Baseline()
-    graph = ContextFreeEntailmentGraph(
+    graph = EntailmentGraph(
         res.load_resource('EntailmentGraph', 'edgelist'))
     ppdb = Sqlite(res.load_resource('PPDB2', 'db-mini'))
     inc = Inclusion()
