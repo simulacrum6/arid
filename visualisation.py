@@ -25,7 +25,6 @@ def count_by_rank(datasets, plotname = 'cbr.png'):
     plt.savefig(path.join(
             OUTPATH,
             plotname))
-    plt.clf()
 
 def frequency_density_distribution(datasets, plotname = 'fdd.png'):
     frequency_density_distribution = plt.figure('fdd')
@@ -46,7 +45,6 @@ def frequency_density_distribution(datasets, plotname = 'fdd.png'):
     plt.savefig(path.join(
             OUTPATH,
             plotname))
-    plt.clf()
 
 def grouped_barplot(datasets, plotname):
     fig = plt.figure('bar')
@@ -80,51 +78,69 @@ def grouped_barplot(datasets, plotname):
         OUTPATH,
         plotname
     ))
-    plt.clf()
 
-def plot_prec_rec(results, plotname = 'rec-prec_dl-z.png', classifiers = ['Lemma Baseline', 'Entailment Graph', 'Relation Embeddings']):
+def plot_prec_rec(results, ensembles, plotname = 'rec-prec_dl-z.png'):
+    colors = {
+        'Levy & Dagan': 'C0',
+        'Zeichner et al.': 'C1'
+    }
     fig = plt.figure('res')
-    ax = fig.add_subplot(111)
-    ax.set_title('Precision-Recall Curve')
-    ax.set_xlabel('Recall')
-    ax.set_ylabel('Precision')
-    
-    lines = []
-    for name, result in results.items():
-        predictions = result[classifiers].T.values
-        gold = result['Gold']
-        
-        auc = Evaluator.auc(gold, predictions)
-        rec, prec, thresh = Evaluator.precision_recall_curve(gold, predictions)
-        
-        line, = ax.step(rec[1:-2], prec[1:-2], where = 'post', label = '{0} ({1}). AUC:{2:.3f}'.format(name, 'Full', auc))
-        lines.append(line)
+    n = len(ensembles.keys())*10
+    i = 101 + n
+    for ensemblename, classifiers in ensembles.items():
+        ax = fig.add_subplot(i)
+        ax.set_title('Precision-Recall Curve ' + ensemblename)
+        ax.set_xlabel('Recall')
+        ax.set_ylabel('Precision')
+        ax.set_ylim(0,1.0)
+        lines = []
+        for name, result in results.items():
+            predictions = result[classifiers].T.values
+            gold = result['Gold']
+            color = colors[name]
+            auc = Evaluator.auc(gold, predictions)
+            prec, rec, thresh = Evaluator.precision_recall_curve(gold, predictions)
             
-    ax.legend(handles = lines)
+            line, = ax.step(rec[1:-2], prec[1:-2], where = 'post', label = '{0} ({1}). AUC:{2:.3f}'.format(name, 'Full', auc), color=color)
+            lines.append(line)
+            ax.plot(rec[-2], prec[-2], marker = '*', color='black')
+            ax.text(rec[-2], prec[-2], '({0:.2f},{1:.2f})'.format(rec[-2], prec[-2]))
+                
+        ax.legend(handles = lines)
+        i = i + 1
     plt.figure('res')
-    plt.tight_layout()
-    plt.xlim([0,1.0])
-    plt.ylim([0,1.05])
-    plt.savefig(path.join(
-        OUTPATH,
-        plotname
-    ))
-    plt.clf()
+    plt.show()
+    #plt.savefig(path.join(
+    #    OUTPATH,
+    #    plotname
+    #))
+    #plt.clf()
 
 
 def make_plots():
     datasets = {
         'Levy & Dagan': res.load_dataset('daganlevy', 'tidy'),
-        'Zeichner et. al': res.load_dataset('zeichner', 'tidy')
+        'Zeichner et al.': res.load_dataset('zeichner', 'tidy')
     }
     results = {
         'Levy & Dagan': res.load_result('daganlevy'),
-        'Zeichner et. al': res.load_result('zeichner')   
+        'Zeichner et al.': res.load_result('zeichner')   
+    }
+    ensembles = {
+        'Full': ['Lemma Baseline', 'Entailment Graph', 'Relation Embeddings'],
+        'LE': ['Lemma Baseline', 'Relation Embeddings'],
+        'GE': ['Entailment Graph', 'Relation Embeddings']
+    }
+    points = {
+        'Lemma Baseline': ['Lemma Baseline'],
+        'Entailment Graph': ['Entailment Graph'],
+        'Token subset': ['Token Subset'], 
+        'All Rules': ['Lemma Baseline', 'Entailment Graph']
     }
     count_by_rank(datasets, plotname = 'cbr_dl-z.png')
     frequency_density_distribution(datasets, plotname = 'fdd_dl-z.png')
     grouped_barplot(datasets, plotname = 'pa-freq_dl-z.png')
-    plot_prec_rec(results)
+    plot_prec_rec(results, ensembles)
 
 if __name__ == '__main__':
     make_plots()

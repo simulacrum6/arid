@@ -289,7 +289,9 @@ def test_classifiers():
     graph = EntailmentGraph(res.load_resource('EntailmentGraph', 'lambda=0.1'))
     ppdb = Sqlite(res.load_resource('PPDB2', 'db-mini'))
     inc = Inclusion()
-    similarity = EmbeddingClassifier('embeddings/words')
+    similarity = EmbeddingClassifier('embeddings/relations/words')
+    # Inactive due to memory restriction
+    # wordsim = EmbeddingClassifier('embeddings/words/words')
 
     datasets = {
         'daganlevy': res.load_dataset('daganlevy', 'analysis'), 
