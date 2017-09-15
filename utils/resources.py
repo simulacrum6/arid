@@ -128,3 +128,7 @@ def load_resource(module, res):
         if res == 'db-mini':
             filepath = os.path.join(filepath, 'ppdb.sqlite')
             return filepath
+
+        if res == 'rules':
+            filepath = os.path.join(filepath, 'ppdb2.csv')
+            return pd.read_csv(filepath).values

@@ -192,21 +192,23 @@ class Inclusion(Classifier):
     
 
 class RuleMatcher(Classifier):
-    def __init__(self, rules, isContextSensitive = True, fuzzy = False):
+    def __init__(self, rules, isContextSensitive = False, fuzzy = False):
         self.rules = rules
+        self.isContextSensitive = isContextSensitive
+        self.fuzzy = fuzzy
 
     def run(self, dataset):
-        if isContextSensitive:
+        if self.isContextSensitive:
             return [self.evaluate(t,h) for t,h in dataset]
         else:
             return [self.evaluate(t[1],h[1]) for t,h in dataset]
 
     def evaluate(self, text, hypothesis):
-        if not self.fuzzy:
-            return self.match(text, hypothesis)
-        else:
+        if self.fuzzy:
             return self.fuzzy_match(text, hypothesis)
-
+        else:
+            return self.match(text, hypothesis)
+            
     def match(self, text, hypothesis):
         for t_rule,h_rule in self.rules:
             if (text == t_rule) and (hypothesis == h_rule):
@@ -216,19 +218,18 @@ class RuleMatcher(Classifier):
     
     def fuzzy_match(self, text, hypothesis):
         for t_rule, h_rule in self.rules:
-            if (contains(t_rule, text) and (contains(h_rule, hypothesis))):
+            text_match = self.contains(t_rule, text) or self.contains(text, t_rule)
+            hypothesis_match = self.contains(h_rule, hypothesis) or self.contains(h_rule, hypothesis)
+            if text_match and hypothesis_match:
                 return True
-            else:
-                return False
+        return False
     
-    @staticmethod
-    def contains(string, anotherString):
-        if string.find(anotherString) != -1:
-            return True
-        else:
+    def contains(self, string, anotherString):
+        if string.find(anotherString) == -1:
             return False
-        
-    
+        else:
+            return True
+
 
 class ClassificationEngine:
     """Engine for running a set of relation inference classifiers over a dataset.
@@ -313,11 +314,10 @@ def test_classifiers():
     classifiers = {
         'Lemma Baseline': Baseline(), 
         'Token Subset': inc, 
-        'Entailment Graph': EntailmentGraph(res.load_resource('EntailmentGraph', 'lambda=0.1'), 
+        'Entailment Graph': EntailmentGraph(res.load_resource('EntailmentGraph', 'lambda=0.1')), 
+        'Relation Embeddings': EmbeddingClassifier('embeddings/relations/words')
         #'PPDB': Sqlite(res.load_resource('PPDB2', 'db-mini'),
         #'Word Embeddings': EmbeddingClassifier('embeddings/words/words'),
-        'Relation Embeddings': EmbeddingClassifier('embeddings/relations/words'),
-
     }
     
     for name, dataset in datasets.items():
