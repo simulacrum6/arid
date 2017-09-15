@@ -192,7 +192,7 @@ class Inclusion(Classifier):
     
 
 class RuleMatcher(Classifier):
-    def __init__(self, rules, isContextSensitive = True):
+    def __init__(self, rules, isContextSensitive = True, fuzzy = False):
         self.rules = rules
 
     def run(self, dataset):
@@ -202,16 +202,31 @@ class RuleMatcher(Classifier):
             return [self.evaluate(t[1],h[1]) for t,h in dataset]
 
     def evaluate(self, text, hypothesis):
-        matchee = ' '.join(text,hypothesis)
-        return self.match(matchee)
+        if not self.fuzzy:
+            return self.match(text, hypothesis)
+        else:
+            return self.fuzzy_match(text, hypothesis)
 
-    def match(self, matchee):
-        for rule, entailment in self.rules:
-            if rule == matchee:
-                return entailment
+    def match(self, text, hypothesis):
+        for t_rule,h_rule in self.rules:
+            if (text == t_rule) and (hypothesis == h_rule):
+                return True
             else:
                 return False
-
+    
+    def fuzzy_match(self, text, hypothesis):
+        for t_rule, h_rule in self.rules:
+            if (contains(t_rule, text) and (contains(h_rule, hypothesis))):
+                return True
+            else:
+                return False
+    
+    @staticmethod
+    def contains(string, anotherString):
+        if string.find(anotherString) != -1:
+            return True
+        else:
+            return False
         
     
 
@@ -284,14 +299,6 @@ def test_classifiers():
     import matplotlib.pyplot as plt
     
     outpath = res.output
-    
-    baseline = Baseline()
-    graph = EntailmentGraph(res.load_resource('EntailmentGraph', 'lambda=0.1'))
-    ppdb = Sqlite(res.load_resource('PPDB2', 'db-mini'))
-    inc = Inclusion()
-    similarity = EmbeddingClassifier('embeddings/relations/words')
-    # Inactive due to memory restriction
-    # wordsim = EmbeddingClassifier('embeddings/words/words')
 
     datasets = {
         'daganlevy': res.load_dataset('daganlevy', 'analysis'), 
@@ -304,11 +311,13 @@ def test_classifiers():
         'zeichner': res.load_dataset('zeichner', 'tidy').entailment.values,
     }
     classifiers = {
-        'Lemma Baseline': baseline, 
+        'Lemma Baseline': Baseline(), 
         'Token Subset': inc, 
-        'Entailment Graph': graph, 
-        #'PPDB': ppdb,
-        'Relation Embeddings': similarity
+        'Entailment Graph': EntailmentGraph(res.load_resource('EntailmentGraph', 'lambda=0.1'), 
+        #'PPDB': Sqlite(res.load_resource('PPDB2', 'db-mini'),
+        #'Word Embeddings': EmbeddingClassifier('embeddings/words/words'),
+        'Relation Embeddings': EmbeddingClassifier('embeddings/relations/words'),
+
     }
     
     for name, dataset in datasets.items():
