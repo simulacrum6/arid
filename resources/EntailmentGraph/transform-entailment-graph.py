@@ -37,7 +37,7 @@ def align_args(predicate):
 
 # lambda = 0.05 
 
-orig_edgelist = pd.read_csv('reverb_global_clsf_all_tncf_lambda_0.05.csv', sep = '\t')
+orig_edgelist = pd.read_csv('reverb_global_clsf_all_htl_lambda_0.05.txt', sep = '\t')
 orig_edgelist.columns = ['text', 'hypothesis']
 
 orig_edgelist['t'] = [pred.replace('@R@', '') for pred in orig_edgelist.text] 
@@ -47,7 +47,7 @@ np.save('berant_2010-0.05.npy', orig_edgelist[['t', 'h']].values)
 
 # lambda = 0.1
 
-orig_edgelist = pd.read_csv('reverb_global_clsf_all_tncf_lambda_0.1.csv', sep = '\t')
+orig_edgelist = pd.read_csv('reverb_global_clsf_all_tncf_lambda_0.1.txt', sep = '\t')
 orig_edgelist.columns = ['text', 'hypothesis']
 
 orig_edgelist['t'] = [pred.replace('@R@', '') for pred in orig_edgelist.text] 
