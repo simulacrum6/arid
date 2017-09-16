@@ -8,6 +8,7 @@ import sqlite3
 import pandas as pd
 import networkx as nx
 import sklearn.metrics as skm
+from datetime import datetime
 
 
 LEMMATIZER = WordNetLemmatizer()
@@ -303,7 +304,7 @@ def test_classifiers():
 
     datasets = {
         'daganlevy': res.load_dataset('daganlevy', 'analysis'), 
-        'daganlevy_lemmatised': res.load_dataset('daganlevy_lemmatised', 'analysis'),
+        #'daganlevy_lemmatised': res.load_dataset('daganlevy_lemmatised', 'analysis'),
         'zeichner': res.load_dataset('zeichner', 'analysis')
     }
     gold_annotation = {
@@ -313,15 +314,15 @@ def test_classifiers():
     }
     classifiers = {
         'Lemma Baseline': Baseline(), 
-        'Token Subset': inc, 
+        'Token Subset': Inclusion(), 
         'Entailment Graph': EntailmentGraph(res.load_resource('EntailmentGraph', 'lambda=0.1')), 
-        'Relation Embeddings': EmbeddingClassifier('embeddings/relations/words')
-        #'PPDB': Sqlite(res.load_resource('PPDB2', 'db-mini'),
+        'Relation Embeddings': EmbeddingClassifier('embeddings/relations/words'),
         #'Word Embeddings': EmbeddingClassifier('embeddings/words/words'),
+        'PPDB': RuleMatcher(res.load_resource('PPDB2', 'rules'), fuzzy = True),
     }
     
     for name, dataset in datasets.items():
-        print('Start classification of ' + name)
+        print('Start classification of {0} @{1}'.format(name, str(datetime.now())))
         result = [classifier.run(dataset) for _,classifier in classifiers.items()]
         result.append(gold_annotation[name])
         
@@ -329,6 +330,7 @@ def test_classifiers():
             np.transpose(result),
             columns = list(classifiers.keys()) + ['Gold']
         ).to_csv(os.path.join(outpath, name + '_result.csv'))
+        print('Done! @{0}'.format(str(datetime.now())))
 
 if __name__ == '__main__':
     test_classifiers()
