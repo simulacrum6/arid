@@ -4,8 +4,15 @@ import utils.resources as res
 import matplotlib.pyplot as plt
 import os.path as path
 from inference import Evaluator
-
+import sklearn.metrics as skm
+import matplotlib.patches as mp
+import matplotlib.markers as mm
+import matplotlib.lines as ml
 OUTPATH = path.join(res.output, 'figures')
+colors = {
+    'Levy & Dagan': 'C0',
+    'Zeichner et al.': 'C1'
+}
 
 # frequency by rank
 def count_by_rank(datasets, plotname = 'cbr.png'):
@@ -14,7 +21,7 @@ def count_by_rank(datasets, plotname = 'cbr.png'):
     lines = []
     for name, dataset in datasets.items():
         xy_data = comp.predicates(dataset).value_counts().reset_index(drop=True)
-        line, = cbr.loglog(xy_data, label = name)
+        line, = cbr.loglog(xy_data, label = name, color=colors[name])
         lines.append(line)
     cbr.legend(handles = lines)
     cbr.set_title('Frequency count by Rank')
@@ -32,7 +39,7 @@ def frequency_density_distribution(datasets, plotname = 'fdd.png'):
     lines = []
     for name, dataset in datasets.items():
         xy_data = comp.predicates(dataset).value_counts().to_frame().iloc[:,0].value_counts().sort_index()
-        line, = fdd.step(xy_data.index, xy_data.values, label=name, where='post')
+        line, = fdd.step(xy_data.index, xy_data.values, label=name, where='post', color=colors[name])
         lines.append(line)
     fdd.legend(handles = lines)
     fdd.set_title('Predicate frequency distribtuion')
@@ -62,7 +69,7 @@ def grouped_barplot(datasets, plotname):
             len(comp.unique_attributes(dataset)),
             len(comp.unique_templates(dataset))
         ]
-        bar = ax.bar(ind + width*i, values, width, label = name)
+        bar = ax.bar(ind + width*i, values, width, label = name, color=colors[name])
         bars.append(bar)
         i = i + 1
     
@@ -80,42 +87,121 @@ def grouped_barplot(datasets, plotname):
     ))
 
 def plot_prec_rec(results, ensembles, plotname = 'rec-prec_dl-z.png'):
-    colors = {
-        'Levy & Dagan': 'C0',
-        'Zeichner et al.': 'C1'
-    }
+    
     fig = plt.figure('res')
     n = len(ensembles.keys())*10
     i = 101 + n
     for ensemblename, classifiers in ensembles.items():
         ax = fig.add_subplot(i)
-        ax.set_title('Precision-Recall Curve ' + ensemblename)
+        ax.set_title(ensemblename)
         ax.set_xlabel('Recall')
         ax.set_ylabel('Precision')
+        ax.set_ylim(0,1.05)
         ax.set_ylim(0,1.0)
         lines = []
         for name, result in results.items():
             predictions = result[classifiers].T.values
             gold = result['Gold']
-            color = colors[name]
             auc = Evaluator.auc(gold, predictions)
-            prec, rec, thresh = Evaluator.precision_recall_curve(gold, predictions)
+            prec, rec, _ = Evaluator.precision_recall_curve(gold, predictions)
             
-            line, = ax.step(rec[1:-2], prec[1:-2], where = 'post', label = '{0} ({1}). AUC:{2:.3f}'.format(name, 'Full', auc), color=color)
+            line, = ax.step(rec, prec, where = 'post', label = '{0} (AUC={1:.3f})'.format(name, auc), color=colors[name], alpha=0.8)
             lines.append(line)
-            ax.plot(rec[-2], prec[-2], marker = '*', color='black')
-            ax.text(rec[-2], prec[-2], '({0:.2f},{1:.2f})'.format(rec[-2], prec[-2]))
+            ax.fill_between(rec, prec, step='post', alpha=0.25, color=colors[name])
+            
+            if ensemblename == list(ensembles.keys())[0]:
+                ax.plot(rec[-2], prec[-2], marker = 'x', color='black')
+                ax.text(rec[-2], prec[-2], '({0:.2f},{1:.2f})'.format(rec[-2], prec[-2]))
                 
         ax.legend(handles = lines)
         i = i + 1
     plt.figure('res')
-    plt.show()
-    #plt.savefig(path.join(
-    #    OUTPATH,
-    #    plotname
-    #))
-    #plt.clf()
+    plt.tight_layout()
+    plt.savefig(path.join(
+        OUTPATH,
+        plotname
+    ))
 
+def plot_points(results, points, plotname='ind_dl-z.png'):
+    fig = plt.figure('ind')
+    ax = fig.add_subplot(111)
+    ax.set_title('Precision & Recall Values for individual Methods ')
+    ax.set_xlabel('Recall')
+    ax.set_ylabel('Precision')
+    ax.set_ylim(0,1.05)
+    ax.set_xlim(0,0.2)
+    legend = [ml.Line2D([0], [0], color='black', label=methodname, marker=marker, linestyle='None') for methodname,marker in points.items()]
+    for name, result in results.items():
+        legend.append(mp.Patch(label=name, color=colors[name]))
+        gold = result['Gold']
+        for method, marker in points.items():
+            predictions = result[method].values
+            precision = skm.accuracy_score(gold, predictions)
+            recall = skm.recall_score(gold, predictions)
+            point, = ax.plot(recall, precision, marker = marker, color=colors[name])
+            #ax.text(recall, precision, '({0:.2f},{1:.2f})'.format(recall, precision))
+    ax.legend(
+        handles=legend,
+        loc='lower right')
+    plt.figure('ind')
+    plt.tight_layout()
+    plt.savefig(path.join(
+        OUTPATH,
+        plotname
+    ))
+
+def daganlevy_reproduction(plotname='dlr.png'):
+    result = res.load_result('daganlevy')
+    gold = result['Gold'].values
+    fig = plt.figure('dlr')
+    ax = fig.add_subplot(111)
+    ax.set_xlabel('Recall')
+    ax.set_ylabel('Precision')
+    ax.set_ylim(0.5,1.0)
+    ax.set_xlim(0,0.5)
+    points = {
+        'Lemma': {
+            'values': ['Lemma Baseline'],
+            'marker': 'p',
+            'color': 'black'
+        },
+        'PPDB': {
+            'values': ['Lemma Baseline', 'PPDB'],
+            'marker': 'o',
+            'color': '#ff006e'
+        },
+        'Entailment Graph': {
+            'values': ['Lemma Baseline', 'Entailment Graph'],
+            'marker': 's',
+            'color': 'blue'
+        },
+        'All Rules': {
+            'values': ['Lemma Baseline', 'Entailment Graph', 'PPDB'],
+            'marker': '*',
+            'color': '#ff006e'
+        }
+    }
+    legend = []
+    for name, props in points.items():
+        predictions = result[props['values']].T.values
+        prediction = Evaluator.aggregate(predictions, max)
+        precision = skm.precision_score(gold, prediction)
+        recall = skm.recall_score(gold, prediction)
+        line, = ax.plot([recall], [precision], marker = props['marker'], markersize=10, color = props['color'], label=name, linestyle='None')
+        legend.append(line)
+    predictions = result[['Lemma Baseline', 'Relation Embeddings']].T.values
+    prediction = Evaluator.aggregate(predictions, max)
+    prec, rec, thresh = skm.precision_recall_curve(gold, prediction)
+    line, = ax.plot(rec[1:-1], prec[1:-1], color='green', linestyle='--', linewidth=1, label='Relation Embs')
+    legend.append(line)
+    plt.figure('dlr')
+    plt.legend(handles = legend)
+    plt.tight_layout()
+    plt.savefig(path.join(
+        OUTPATH,
+        plotname
+    ))
+    plt.show()
 
 def make_plots():
     datasets = {
@@ -127,20 +213,27 @@ def make_plots():
         'Zeichner et al.': res.load_result('zeichner')   
     }
     ensembles = {
-        'Full': ['Lemma Baseline', 'Entailment Graph', 'Relation Embeddings'],
-        'LE': ['Lemma Baseline', 'Relation Embeddings'],
-        'GE': ['Entailment Graph', 'Relation Embeddings']
+        'Combined Methods': [
+            'Lemma Baseline', 
+            'Entailment Graph', 
+            'Berant (2011)',
+            'PPDB', 
+            'Relation Embeddings'
+        ],
+        'Embeddings only': ['Relation Embeddings']
     }
     points = {
-        'Lemma Baseline': ['Lemma Baseline'],
-        'Entailment Graph': ['Entailment Graph'],
-        'Token subset': ['Token Subset'], 
-        'All Rules': ['Lemma Baseline', 'Entailment Graph']
+        'Lemma Baseline': 'x',
+        'Entailment Graph': '^',
+        'Berant (2011)': 'v',
+        'PPDB': 'o'
     }
     count_by_rank(datasets, plotname = 'cbr_dl-z.png')
     frequency_density_distribution(datasets, plotname = 'fdd_dl-z.png')
     grouped_barplot(datasets, plotname = 'pa-freq_dl-z.png')
     plot_prec_rec(results, ensembles)
+    plot_points(results, points)
+    plt.show()
 
 if __name__ == '__main__':
     make_plots()
