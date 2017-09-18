@@ -123,7 +123,7 @@ def load_resource(module, res):
             filepath = os.path.join(filepath, 'berant_2010-0.05.npy')
             return np.load(filepath)
 
-        if res == 'lambda=0.05_mapped':
+        if res == 'lambda=0.05,mapped':
             filepath = os.path.join(filepath, 'berant_2010-0.05_mapped.npy')
             return np.load(filepath)
 

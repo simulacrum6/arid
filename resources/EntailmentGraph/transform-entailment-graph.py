@@ -28,6 +28,22 @@ edgelist_tidy.to_csv('entailment-graph_tidy.csv')
 # Berant 2010
 ##
 
+def map_args(text, hypothesis):
+    result = 0
+    if text.endswith('@R@'):
+        text = text.replace('@R@', '')
+        result = result + 1
+    if hypothesis.endswith('@R@'):
+        hypothesis = hypothesis.replace('@R@', '')
+        result = result + 1
+    if result % 2 == 0:
+        t = ' '.join(['x', text, 'y'])
+        h = ' '.join(['x', hypothesis, 'y'])
+    else:
+        t = ' '.join(['x', text, 'y'])
+        h = ' '.join(['y', hypothesis, 'x'])
+    return [t,h]
+
 # lambda = 0.05 
 
 orig_edgelist = pd.read_csv('reverb_global_clsf_all_htl_lambda_0.05.txt', sep = '\t')
@@ -39,20 +55,6 @@ orig_edgelist['h'] = [pred.replace('@R@', '') for pred in orig_edgelist.hypothes
 np.save('berant_2010-0.05.npy', orig_edgelist[['t', 'h']].values)
 
 # lambda = 0.05 mapped
-
-def map_args(text, hypothesis):
-    result = 0
-    if text.endswith('@R@'):
-        result = result + 1
-    if hypothesis.endswith('@R@'):
-        result = result + 1
-    if result % 2 == 0:
-        text = ' '.join(['x', text, 'y'])
-        hypothesis = ' '.join(['x', hypothesis, 'y'])
-    else:
-        text = ' '.join(['x', text, 'y'])
-        hypothesis = ' '.join(['y', hypothesis, 'x'])
-    return [text,hypothesis]
 
 orig_edgelist = pd.read_csv('reverb_global_clsf_all_htl_lambda_0.05.txt', sep = '\t')
 orig_edgelist.columns = ['text', 'hypothesis']

@@ -129,7 +129,7 @@ def plot_points(results, points, plotname='ind_dl-z.png'):
     ax.set_xlabel('Recall')
     ax.set_ylabel('Precision')
     ax.set_ylim(0,1.05)
-    ax.set_xlim(0,0.2)
+    ax.set_xlim(0,0.25)
     legend = [ml.Line2D([0], [0], color='black', label=methodname, marker=marker, linestyle='None') for methodname,marker in points.items()]
     for name, result in results.items():
         legend.append(mp.Patch(label=name, color=colors[name]))
@@ -216,7 +216,7 @@ def make_plots():
         'Combined Methods': [
             'Lemma Baseline', 
             'Entailment Graph', 
-            'Berant (2011)',
+            #'Berant (2011)',
             'PPDB', 
             'Relation Embeddings'
         ],
@@ -225,7 +225,7 @@ def make_plots():
     points = {
         'Lemma Baseline': 'x',
         'Entailment Graph': '^',
-        'Berant (2011)': 'v',
+        #'Berant (2011)': 'v',
         'PPDB': 'o'
     }
     count_by_rank(datasets, plotname = 'cbr_dl-z.png')
