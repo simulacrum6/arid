@@ -129,6 +129,34 @@ class EntailmentGraph(Classifier):
             return nx.has_path(self.graph, text, hypothesis)
         else:
             return False
+
+class ContextEntailmentGraph(Classifier):
+    def __init__(self, edgelist):
+        self.edgelist = edgelist
+        self.graph = nx.DiGraph()
+        self.graph.add_edges_from(self.edgelist)
+    
+    def run(self, dataset):
+        ds = [[[t[0],' '.join(get_lemmas_vo(t[1])), t[2]], [t[0],' '.join(get_lemmas_vo(h[1])),t[2]]] for t,h in dataset]
+        ds = [self.map_arguments(t,h) for t,h in ds]
+        return np.array([self.evaluate(t,h) for t,h in ds])
+    
+    def evaluate(self, text, hypothesis):
+        if (text in self.graph) and (hypothesis in self.graph):
+            return nx.has_path(self.graph, text, hypothesis)
+        else:
+            return False
+    
+    def map_arguments(self, text, hypothesis):
+        if text[2] == hypothesis[2]:
+            t = ' '.join(['x', text[1], 'y'])
+            h = ' '.join(['x', hypothesis[1], 'y'])
+            return [t,h]
+        else: 
+            t = ' '.join(['x', text[1], 'y'])
+            h = ' '.join(['y', hypothesis[1], 'x'])
+            return [t,h]
+
         
 
 class Sqlite(Classifier):
@@ -274,6 +302,18 @@ class Evaluator:
     @staticmethod
     def avp(gold, predictions):
         return skm.average_precision_score(gold, Evaluator.aggregate(predictions, max))
+    
+    @staticmethod
+    def fp_fn(gold, predictions):
+        return [[self.fasle_positives(gold,p), false_negatives(gold,p)] for p in predictions]
+    
+    @staticmethod
+    def false_positives(gold, prediction):
+        return [(not bool(g) and bool(p)) for g,p in zip(gold, prediction)]
+    
+    @staticmethod
+    def false_negatives(gold, prediction):
+        return [(bool(g) and (not bool(p))) for g,p in zip(gold, prediction)]
 
 def test_engine():
     from random import random

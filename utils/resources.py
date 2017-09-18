@@ -115,8 +115,16 @@ def load_resource(module, res):
             filepath = os.path.join(filepath, 'berant_2010-0.1.npy')
             return np.load(filepath)
 
+        if res == 'lambda=0.1,mapped':
+            filepath = os.path.join(filepath, 'berant_2010-0.1_mapped.npy')
+            return np.load(filepath)
+
         if res == 'lambda=0.05':
             filepath = os.path.join(filepath, 'berant_2010-0.05.npy')
+            return np.load(filepath)
+
+        if res == 'lambda=0.05_mapped':
+            filepath = os.path.join(filepath, 'berant_2010-0.05_mapped.npy')
             return np.load(filepath)
 
         if res == 'typemap':
