@@ -106,6 +106,10 @@ def load_resource(module, res):
         if res == 'edgelist':
             filepath = os.path.join(filepath,  'entailment-graph.json')
             return pd.read_json(filepath).reindex(columns=['text', 'hypothesis']).reset_index(drop=True)[['text','hypothesis']].values
+
+        if res == 'edgelist-no-context':
+            filepath = os.path.join(filepath, 'entailment-graph_tidy.csv')
+            return pd.read_csv(filepath)[['tpred','hpred']].values
         
         if res == 'lambda=0.1':
             filepath = os.path.join(filepath, 'berant_2010-0.1.npy')

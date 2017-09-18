@@ -74,7 +74,6 @@ class Baseline(Classifier):
         return len(set(words).intersection(self.negations)) > 0
 
 
-# TODO: allow fuzzy matching in categories
 class TypedEntailmentGraph(Classifier):
     def __init__(self, edgelist, typemap):
         self.typemap = typemap
@@ -114,7 +113,7 @@ class TypedEntailmentGraph(Classifier):
             return False  
     
 
-# Context insensitive version
+
 class EntailmentGraph(Classifier):
     def __init__(self, edgelist):
         self.edgelist = edgelist
