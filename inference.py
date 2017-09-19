@@ -298,6 +298,13 @@ class Evaluator:
     def auc(gold, predictions):
         precision, recall, _ = Evaluator.precision_recall_curve(gold, predictions)
         return skm.auc(recall, precision)
+
+    @staticmethod
+    def delta_auc(gold, predictions):
+        prediction = Evaluator.aggregate(predictions,max)
+        auc_baseline = sum(gold)/len(gold)
+        auc_prediction = skm.average_precision_score(gold, prediction)
+        return auc_prediction - auc_baseline
     
     @staticmethod
     def avp(gold, predictions):

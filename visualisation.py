@@ -101,7 +101,7 @@ def plot_prec_rec(results, ensembles, plotname = 'rec-prec_dl-z.png'):
         lines = []
         for name, result in results.items():
             predictions = result[classifiers].T.values
-            gold = result['Gold']
+            gold = result['Gold'].values
             auc = Evaluator.auc(gold, predictions)
             prec, rec, _ = Evaluator.precision_recall_curve(gold, predictions)
             
@@ -116,7 +116,7 @@ def plot_prec_rec(results, ensembles, plotname = 'rec-prec_dl-z.png'):
         ax.legend(handles = lines)
         i = i + 1
     plt.figure('res')
-    plt.tight_layout()
+    #plt.tight_layout()
     plt.savefig(path.join(
         OUTPATH,
         plotname
@@ -129,7 +129,7 @@ def plot_points(results, points, plotname='ind_dl-z.png'):
     ax.set_xlabel('Recall')
     ax.set_ylabel('Precision')
     ax.set_ylim(0,1.05)
-    ax.set_xlim(0,0.25)
+    ax.set_xlim(0,0.2)
     legend = [ml.Line2D([0], [0], color='black', label=methodname, marker=marker, linestyle='None') for methodname,marker in points.items()]
     for name, result in results.items():
         legend.append(mp.Patch(label=name, color=colors[name]))
