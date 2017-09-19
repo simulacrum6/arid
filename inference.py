@@ -322,6 +322,17 @@ class Evaluator:
     def false_negatives(gold, prediction):
         return [(bool(g) and (not bool(p))) for g,p in zip(gold, prediction)]
 
+    @staticmethod
+    def base_stats(gold, prediction):
+        scores = [
+            skm.recall_score,
+            skm.precision_score,
+            skm.accuracy_score,
+            skm.f1_score,
+            skm.average_precision_score
+        ]
+        return [score(gold, prediction) for score in scores]
+
 def test_engine():
     from random import random
     import matplotlib.pyplot as plt

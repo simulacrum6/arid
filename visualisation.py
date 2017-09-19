@@ -14,7 +14,7 @@ colors = {
     'Zeichner et al.': 'C1'
 }
 
-# frequency by rank
+
 def count_by_rank(datasets, plotname = 'cbr.png'):
     count_by_rank = plt.figure('cbr')
     cbr = count_by_rank.add_subplot(111)
