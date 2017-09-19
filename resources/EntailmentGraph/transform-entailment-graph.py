@@ -2,30 +2,47 @@ import pandas as pd
 import numpy as np
 import re
 
-#levy 2014
-orig_edgelist = pd.read_csv('original-edgelist.txt', sep='\t-R?>\t')
-orig_edgelist.columns = ['text', 'hypothesis']
+###
+# Berant 2011
+###
+orig_edgelist = pd.read_csv('original-edgelist.txt', sep='\t')
+orig_edgelist.columns = ['text', 'edge', 'hypothesis']
 
-# analysis edgelist
+
 edgelist = orig_edgelist.copy()
 edgelist = edgelist[['text', 'hypothesis']].replace('[<>]*', '', regex=True)
 edgelist = edgelist[['text', 'hypothesis']].replace('[\.,:]\s', ' ', regex=True)
+edgelist['edge'] = orig_edgelist['edge']
 for column in ['text', 'hypothesis']:
     edgelist[column] = edgelist[column].str.split('::')
     edgelist[column] = [[x,pred,y] for pred,x,y in edgelist[column].values]
 
-edgelist['entailment'] = [True] * len(edgelist)
-edgelist.to_json('entailment-graph.json')
-
 edgelist_tidy = edgelist.copy()
+edgelist_tidy['entailment'] = [True] * len(edgelist_tidy)
 edgelist_tidy['tx'], edgelist_tidy['tpred'], edgelist_tidy['ty'] = list(zip(*([x,pred,y] for x,pred,y in edgelist.text)))
 edgelist_tidy['hx'], edgelist_tidy['hpred'], edgelist_tidy['hy'] = list(zip(*([x,pred,y] for x,pred,y in edgelist.hypothesis)))
 edgelist_tidy.text = edgelist_tidy['tx'] + ' ' + edgelist_tidy['tpred'] + ' ' + edgelist_tidy['ty']
 edgelist_tidy.hypothesis = edgelist_tidy['hx'] + ' ' + edgelist_tidy['hpred'] + ' ' + edgelist_tidy['hy']
-edgelist_tidy.to_csv('entailment-graph_tidy.csv')
+for _,row in edgelist_tidy.iterrows():
+    if row['edge'] == '-R>':
+        row['hx'], row['hy'] = row['hy'],row['hx']
+edgelist_tidy.to_csv('berant_2011_tidy.csv')
+
+edgelist_typed = edgelist_tidy[['text','hypothesis']].values
+np.save('berant_2011_typed.npy', edgelist_typed)
+
+edgelist_nc = []
+for i,row in edgelist_tidy.iterrows():
+    if row['edge'] == '-R>':
+        entry = [['x', row['tpred'], 'y'], ['y', row['hpred'], 'x']]
+    else:
+        entry = [['x', row['tpred'], 'y'], ['x', row['hpred'], 'y']]
+    edgelist_nc.append(entry)
+
+np.save('berant_2011_mapped.npy', edgelist_nc)
 
 ##
-# Berant 2010
+# Berant Phd
 ##
 
 def map_args(text, hypothesis):

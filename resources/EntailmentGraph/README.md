@@ -10,7 +10,7 @@ The JSON-Edgelist follows the `analysis` format for datasets of this project, th
 To use these resources, it is recommended to load them via the `arid.utils.resources` module. It will return the data in the correct format for the classifier.
 The following contains the original readme file, provided with the datasets:
 
-## Original readme Levy 2014
+## Original readme Berant 2011
 
 The following resource[`original-edgelist.txt`] contains 29,732 entailment rules between typed predicates. Rules were learned over ~10,000 typed predicates, where types are taken from a dictionary[`class-instance-mapping.txt`] that contains ~150 types. This is the same dataset that was used by Schoenmackers et al. in their paper: "Horn-clause inference rules learned by Sherlock". A mapping of 1.1 million instances to the 150 types is provided at the website:
 
