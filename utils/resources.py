@@ -80,7 +80,8 @@ def load_resource(module, res):
     
     Arguments:
         'EntailmentGraph':
-            'edgelist' -- Edgelist of Levy (2014) Entailment Graph, specifying the graph as numpy.ndarray (2,)
+            'berant_2011' -- Edgelist of Berant (2011) Entailment Graph, specifying the graph as numpy.ndarray (2,)
+            'berant_2011_no-context' -- Edgelist of Berant (2011) Entailment Graph, without context representation specifying the graph as numpy.ndarray (2,)
             'typemap' -- Maping of argument instances (keys) to types (values) as dict
             'lambda=0.1' -- Edgelist for Berant et al. (2010) Entailment Graph, as numpy.ndarray (2,)
             'lambda=0.05' -- Edgelist for Berant et al. (2010) Entailment Graph, as numpy.ndarray (2,)
@@ -97,8 +98,9 @@ def load_resource(module, res):
     Raises:
         ValueError -- If incorrect module name was provided
     """
-    if module not in ['EntailmentGraph', 'PPDB2']:
-        raise ValueError('"' + module + '" is not a valid module name. Valid names: "EntailmentGraph", "ppdb2"')
+    modules = ['EntailmentGraph', 'PPDB2']
+    if module not in modules:
+        raise ValueError('"' + module + '" is not a valid module name. Valid names:' + modules)
     
     filepath = os.path.join(resources, module)
     
@@ -107,9 +109,13 @@ def load_resource(module, res):
             filepath = os.path.join(filepath,  'entailment-graph.json')
             return pd.read_json(filepath).reindex(columns=['text', 'hypothesis']).reset_index(drop=True)[['text','hypothesis']].values
 
-        if res == 'edgelist-no-context':
-            filepath = os.path.join(filepath, 'entailment-graph_tidy.csv')
-            return pd.read_csv(filepath)[['tpred','hpred']].values
+        if res == 'berant_2011':
+            filepath = os.path.join(filepath, 'berant_2011_typed.npy')
+            return np.load(filepath)
+
+        if res == 'berant_2011_no-context':
+            filepath = os.path.join(filepath, 'berant_2011_mapped.npy')
+            return np.load(filepath)
         
         if res == 'lambda=0.1':
             filepath = os.path.join(filepath, 'berant_2010-0.1.npy')

@@ -3,11 +3,10 @@ import numpy as np
 import utils.resources as res
 import matplotlib.pyplot as plt
 import os.path as path
-from inference import Evaluator
+from utils.evaluation import Evaluator
 import sklearn.metrics as skm
 import matplotlib.patches as mp
-import matplotlib.markers as mm
-import matplotlib.lines as ml
+
 OUTPATH = path.join(res.output, 'figures')
 colors = {
     'Levy & Dagan': 'C0',
@@ -171,12 +170,12 @@ def daganlevy_reproduction(plotname='dlr.png'):
             'color': '#ff006e'
         },
         'Entailment Graph': {
-            'values': ['Lemma Baseline', 'Entailment Graph'],
+            'values': ['Lemma Baseline', 'Berant (2011)'],
             'marker': 's',
             'color': 'blue'
         },
         'All Rules': {
-            'values': ['Lemma Baseline', 'Entailment Graph', 'PPDB'],
+            'values': ['Lemma Baseline', 'Berant (2011)', 'PPDB'],
             'marker': '*',
             'color': '#ff006e'
         }

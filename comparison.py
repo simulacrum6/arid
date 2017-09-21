@@ -4,7 +4,9 @@ import matplotlib.pyplot as plt
 import os
 import utils.resources as res
 
-OUTPUT_PATH = res.output
+OUTPUT_PATH = os.path.join(
+    res.output,
+    'stats')
 
 # TODO: overlap lemmatised/not lemmatised -> examples
 # TODO: lexical difference in preds

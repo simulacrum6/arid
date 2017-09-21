@@ -110,9 +110,8 @@ class TypedEntailmentGraph(Classifier):
         if text in self.graph and hypothesis in self.graph:
             return nx.has_path(self.graph, text, hypothesis)
         else:
-            return False  
-    
-
+            return False
+        
 
 class EntailmentGraph(Classifier):
     def __init__(self, edgelist):
@@ -281,77 +280,8 @@ class ClassificationEngine:
         """Run a list of classifiers over dataset. See help(ClassificationEngine) for details"""
         return [cf.run(dataset) for cf in self.classifiers]
 
-    
 
-class Evaluator:
-    @staticmethod
-    def aggregate(predictions, aggfunc):
-        """Aggregates each sublist of predictions, using the specified function"""
-        return [aggfunc(sublist) for sublist in np.transpose(predictions)]
-    
-    @staticmethod
-    def precision_recall_curve(gold, predictions):
-        prediction = Evaluator.aggregate(predictions, max)
-        return skm.precision_recall_curve(gold, prediction)
-    
-    @staticmethod
-    def auc(gold, predictions):
-        precision, recall, _ = Evaluator.precision_recall_curve(gold, predictions)
-        return skm.auc(recall, precision)
-
-    @staticmethod
-    def delta_auc(gold, predictions):
-        prediction = Evaluator.aggregate(predictions,max)
-        auc_baseline = sum(gold)/len(gold)
-        auc_prediction = skm.average_precision_score(gold, prediction)
-        return auc_prediction - auc_baseline
-    
-    @staticmethod
-    def avp(gold, predictions):
-        return skm.average_precision_score(gold, Evaluator.aggregate(predictions, max))
-    
-    @staticmethod
-    def fp_fn(gold, predictions):
-        return [[self.fasle_positives(gold,p), false_negatives(gold,p)] for p in predictions]
-    
-    @staticmethod
-    def false_positives(gold, prediction):
-        return [(not bool(g) and bool(p)) for g,p in zip(gold, prediction)]
-    
-    @staticmethod
-    def false_negatives(gold, prediction):
-        return [(bool(g) and (not bool(p))) for g,p in zip(gold, prediction)]
-
-    @staticmethod
-    def base_stats(gold, prediction):
-        scores = [
-            skm.recall_score,
-            skm.precision_score,
-            skm.accuracy_score,
-            skm.f1_score,
-            skm.average_precision_score
-        ]
-        return [score(gold, prediction) for score in scores]
-
-def test_engine():
-    from random import random
-    import matplotlib.pyplot as plt
-    predictions = [
-        [True, False, False, False, True, False, False, True, False, False, False, True, True, True, False, True, False, False, False, True],
-        [0.5, 0.3, 0.7, 0.38, 0.18, 0.8, 0.3, 0.1, 0.1, 0.6, 0.1, 0.4, 0.7, 0.3, 0.1, 0.01, 0.75, 0.21, 0.5, 0.67]]
-    gold = [True, True, True, False, False, False, False, True, True, True, True, False, False, True, False, False, False, True, True, True]
-    
-    prec, rec, _ = Evaluator.precision_recall_curve(gold, predictions)
-    auc = Evaluator.auc(gold, predictions)
-    plt.plot(rec, prec)
-    plt.xlabel('Recall')
-    plt.ylabel('Precision')
-    plt.xlim([0,1.05])
-    plt.ylim([0,1.05])
-    
-    plt.show()
-
-def test_classifiers():
+def run_classification():
     import os
     import utils.resources as res
     import datetime as dt
@@ -390,4 +320,4 @@ def test_classifiers():
         print('Done! @{0}'.format(str(datetime.now())))
 
 if __name__ == '__main__':
-    test_classifiers()
+    run_classification()
