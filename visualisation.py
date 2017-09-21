@@ -3,7 +3,7 @@ import numpy as np
 import utils.resources as res
 import matplotlib.pyplot as plt
 import os.path as path
-from utils.evaluation import Evaluator
+from utils.evaluation import Evaluator, get_sample
 import sklearn.metrics as skm
 import matplotlib.patches as mp
 
@@ -87,7 +87,7 @@ def grouped_barplot(datasets, plotname):
 
 def plot_prec_rec(results, ensembles, plotname = 'rec-prec_dl-z.png'):
     
-    fig = plt.figure('res')
+    fig = plt.figure(plotname)
     n = len(ensembles.keys())*10
     i = 101 + n
     for ensemblename, classifiers in ensembles.items():
@@ -114,7 +114,7 @@ def plot_prec_rec(results, ensembles, plotname = 'rec-prec_dl-z.png'):
                 
         ax.legend(handles = lines)
         i = i + 1
-    plt.figure('res')
+    plt.figure(plotname)
     #plt.tight_layout()
     plt.savefig(path.join(
         OUTPATH,
@@ -211,6 +211,10 @@ def make_plots():
         'Levy & Dagan': res.load_result('daganlevy'),
         'Zeichner et al.': res.load_result('zeichner')   
     }
+    samples = {
+        'Levy & Dagan': res.load_result('daganlevy'),
+        'Zeichner et al.': res.load_result('zeichner')   
+    }
     ensembles = {
         'Combined Methods': [
             'Lemma Baseline', 
@@ -231,6 +235,7 @@ def make_plots():
     frequency_density_distribution(datasets, plotname = 'fdd_dl-z.png')
     grouped_barplot(datasets, plotname = 'pa-freq_dl-z.png')
     plot_prec_rec(results, ensembles)
+    plot_prec_rec(samples, ensembles, rec-prec_samples.png)
     plot_points(results, points)
     plt.show()
 

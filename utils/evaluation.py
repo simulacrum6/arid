@@ -1,6 +1,8 @@
 import sklearn.metrics as skm
 import resources as res
 import pandas as pd
+import numpy as np
+import random as rand
 
 class Evaluator:
     @staticmethod
@@ -51,6 +53,18 @@ class Evaluator:
             skm.average_precision_score
         ]
         return [score(gold, prediction) for score in scores]
+        
+
+def get_sample(result, samplesize=3000, positive_rate = 0.5):
+    positives = result[result['Gold'] == 1]
+    negatives = result[result['Gold'] == 0]
+    pos = rand.sample(list(positives.index), int(n*positive_rate))
+    neg = rand.sample(list(negatives.index), int(n*(1 - positive_rate)))
+    pos.extend(neg)
+    return result.iloc[pos]
+
+def get_samples(result, samplesize, positive_rate = 0.5, n=100):
+    return [get_sample(result, samplesize, positive_rate) for _ in range(iterations)]
 
 def calc_base_stats(results):
     classifiers = [
@@ -82,5 +96,3 @@ def add_prediction(datasets, results, classifiers):
             res.output,
             '{0}_result.csv'.format(name)
         ))
-
-
