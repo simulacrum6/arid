@@ -2,7 +2,7 @@ import numpy as np
 from nltk.corpus import stopwords
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.corpus import wordnet as wn
-from utils.qa_utils import get_lemmas_only_verbs, get_lemmas_no_stopwords, get_lemmas, get_lemmas_vo
+from utils.qa_utils import get_lemmas_only_verbs, get_lemmas_no_stopwords, get_lemmas, get_lemmas_vo, get_only_verbs
 from utils.representations.embedding import Embedding
 import sqlite3
 import pandas as pd
@@ -205,8 +205,20 @@ class EmbeddingClassifier(Classifier):
     def run(self, dataset):
         return np.array([self.evaluate(t[1],h[1]) for t,h in dataset])
     
-    def evaluate(self, word, anotherWord):
-        return self.embedding.similarity(word, anotherWord)
+    def evaluate(self, phrase, otherPhrase):
+        return self.embedding.similarity(phrase, otherPhrase)
+
+class WordEmbeddingClassifier(Classifier):
+    def __init__(self, embeddingpath):
+        self.embedding = Embedding(embeddingpath)
+    
+    def run(self, dataset):
+        return np.array([self.evaluate(t[1],h[1]) for t,h in dataset])
+    
+    def evaluate(self, phrase, otherPhrase):
+        verb = ' '.join(get_only_verbs(phrase))
+        otherVerb = ' '.join(get_only_verbs(otherPhrase))
+        return self.embedding.similarity(verb, other)
 
 class Inclusion(Classifier):  
     def evaluate(self, text, hypothesis):
@@ -216,7 +228,7 @@ class Inclusion(Classifier):
     
     def run(self, dataset):
         return np.array([self.evaluate(text, hypothesis) for text, hypothesis in dataset])
-    
+
 
 class RuleMatcher(Classifier):
     def __init__(self, rules, isContextSensitive = False, fuzzy = False):
@@ -294,18 +306,22 @@ def run_classification():
         #'daganlevy_lemmatised': res.load_dataset('daganlevy_lemmatised', 'analysis'),
         'zeichner': res.load_dataset('zeichner', 'analysis')
     }
+    
     gold_annotation = {
         'daganlevy': res.load_dataset('daganlevy', 'tidy').entailment.values,
         'daganlevy_lemmatised': res.load_dataset('daganlevy', 'tidy').entailment.values,
         'zeichner': res.load_dataset('zeichner', 'tidy').entailment.values,
     }
+
     classifiers = {
         'Lemma Baseline': Baseline(), 
         'Token Subset': Inclusion(), 
-        'Entailment Graph': EntailmentGraph(res.load_resource('EntailmentGraph', 'lambda=0.1')), 
+        'Entailment Graph': EntailmentGraph(res.load_resource('EntailmentGraph', 'lambda=0.05')), 
         'Relation Embeddings': EmbeddingClassifier('embeddings/relations/words'),
-        #'Word Embeddings': EmbeddingClassifier('embeddings/words/words'),
+        'Word Embeddings': EmbeddingClassifier('embeddings/words/words'),
         'PPDB': RuleMatcher(res.load_resource('PPDB2', 'rules'), fuzzy = True),
+        'Berant (2011)': EntailmentGraph(res.load_resource('EntailmentGraph', 'berant_2011_no-context')),
+        'GloVe Embeddings': EmbeddingClassifier('embeddings/glove/glove.840B.300d')
     }
     
     for name, dataset in datasets.items():

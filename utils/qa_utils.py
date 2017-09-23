@@ -16,6 +16,8 @@ def get_lemmas_vo(phrase, pos=wn.VERB):
 def get_lemmas_only_verbs(phrase, pos=wn.VERB):
     return set([w for w in get_lemmas(phrase, pos) if len(wn.synsets(w, pos)) > 0])
 
+def get_only_verbs(phrase, pos=wn.VERB):
+    return [w for w in phrase.split(' ') if len(wn.synsets(w, pos)) > 0]
 
 def get_lemmas_no_stopwords(phrase, pos=wn.VERB):
     return set([w for w in get_lemmas(phrase, pos) if w not in STOPWORDS])

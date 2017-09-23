@@ -3,6 +3,7 @@ import resources as res
 import pandas as pd
 import numpy as np
 import random as rand
+import os
 
 class Evaluator:
     @staticmethod
@@ -90,7 +91,7 @@ def add_prediction(datasets, results, classifiers):
         result = results[name]
         for method, classifier in classifiers.items():
             prediction = classifier.run(dataset)
-            prediction = [int(x) for x in prediction]
+            prediction = [float(x) for x in prediction]
             result[method] = prediction
         result.to_csv(os.path.join(
             res.output,
