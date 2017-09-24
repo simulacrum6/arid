@@ -59,8 +59,8 @@ class Evaluator:
 def get_sample(result, samplesize=3000, positive_rate = 0.5):
     positives = result[result['Gold'] == 1]
     negatives = result[result['Gold'] == 0]
-    pos = rand.sample(list(positives.index), int(n*positive_rate))
-    neg = rand.sample(list(negatives.index), int(n*(1 - positive_rate)))
+    pos = rand.sample(list(positives.index), int(samplesize*positive_rate))
+    neg = rand.sample(list(negatives.index), int(samplesize*(1 - positive_rate)))
     pos.extend(neg)
     return result.iloc[pos]
 
