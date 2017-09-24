@@ -1,4 +1,5 @@
 import comparison as comp
+import pandas as pd
 import numpy as np
 import utils.resources as res
 import matplotlib.pyplot as plt
@@ -149,6 +150,32 @@ def plot_points(results, points, plotname='ind_dl-z.png'):
         plotname
     ))
 
+def plot_mean_aucs(plotname='mean-aucs.png'):
+    aucs = pd.read_csv(path.join(res.output, 'mean_aucs.csv'))
+    daganlevy = aucs[aucs['Dataset'] == 'daganlevy']
+    daganlevy = daganlevy[daganlevy['Ensemble'] == 'Combined Methods'][['Positive Percentage', 'MAP']]
+    zeichner = aucs[aucs['Dataset'] == 'zeichner']
+    zeichner = zeichner[zeichner['Ensemble'] == 'Combined Methods'][['Positive Percentage', 'MAP']]
+    datasets = {'Levy & Dagan': daganlevy, 'Zeichner et al.': zeichner}
+    
+    fig = plt.figure(plotname)
+    ax = fig.add_subplot(111)
+    ax.set_title('Mean AUC Values for different Positive-Rates')
+    ax.set_xlabel('Positive Rate')
+    ax.set_ylabel('Mean AUC')
+    ax.set_ylim(0,1.05)
+    ax.set_xlim(0.15,0.85)
+    legend = []
+    
+    for name, dataset in datasets.items():
+        line, = ax.plot(dataset['Positive Percentage'], dataset['MAP'], label=name, color=colors[name], linestyle='None', marker='.')
+        legend.append(line)
+    
+    plt.figure(plotname)
+    plt.legend(handles=legend)
+    plt.tight_layout()
+    plt.savefig(path.join(OUTPATH,plotname))
+
 def daganlevy_reproduction(plotname='dlr.png'):
     result = res.load_result('daganlevy')
     gold = result['Gold'].values
@@ -170,12 +197,12 @@ def daganlevy_reproduction(plotname='dlr.png'):
             'color': '#ff006e'
         },
         'Entailment Graph': {
-            'values': ['Lemma Baseline', 'Berant (2011)'],
+            'values': ['Lemma Baseline', 'Entailment Graph'],
             'marker': 's',
             'color': 'blue'
         },
         'All Rules': {
-            'values': ['Lemma Baseline', 'Berant (2011)', 'PPDB'],
+            'values': ['Lemma Baseline', 'Entailment Graph', 'PPDB'],
             'marker': '*',
             'color': '#ff006e'
         }
@@ -201,6 +228,8 @@ def daganlevy_reproduction(plotname='dlr.png'):
         plotname
     ))
     plt.show()
+
+
 
 def make_plots():
     datasets = {
@@ -237,6 +266,7 @@ def make_plots():
     plot_prec_rec(results, ensembles)
     plot_prec_rec(samples, ensembles, rec-prec_samples.png)
     plot_points(results, points)
+    plot_mean_aucs()
     plt.show()
 
 if __name__ == '__main__':
