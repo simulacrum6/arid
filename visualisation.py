@@ -7,6 +7,7 @@ import os.path as path
 from utils.evaluation import Evaluator, get_sample
 import sklearn.metrics as skm
 import matplotlib.patches as mp
+import matplotlib.lines as ml
 
 OUTPATH = path.join(res.output, 'figures')
 colors = {
@@ -16,22 +17,29 @@ colors = {
 
 
 def count_by_rank(datasets, plotname = 'cbr.png'):
-    count_by_rank = plt.figure('cbr')
+    count_by_rank = plt.figure(plotname)
     cbr = count_by_rank.add_subplot(111)
-    lines = []
+    legend = [
+        ml.Line2D([-1], [-1], color='black', label='All', linestyle='-'),
+        ml.Line2D([-1], [-1], color='black', label='Text', linestyle=':'),
+        ml.Line2D([-1], [-1], color='black', label='Hypothesis', linestyle='--')
+    ]
     for name, dataset in datasets.items():
-        xy_data = comp.predicates(dataset).value_counts().reset_index(drop=True)
-        line, = cbr.loglog(xy_data, label = name, color=colors[name])
-        lines.append(line)
-    cbr.legend(handles = lines)
+        legend.append(mp.Patch(label=name, color=colors[name]))
+        all_preds = comp.predicates(dataset).value_counts().reset_index(drop=True)
+        t_preds = dataset.tpred.value_counts().reset_index(drop=True)
+        h_preds = dataset.hpred.value_counts().reset_index(drop=True)
+        cbr.loglog(all_preds, color=colors[name], linestyle='-', linewidth=2)
+        cbr.loglog(t_preds, color=colors[name], linestyle=':', alpha=0.75)
+        cbr.loglog(h_preds, color=colors[name], linestyle='--', alpha=0.75)
+    
+    cbr.legend(handles = legend)
     cbr.set_title('Frequency count by Rank')
     cbr.set_xlabel('Rank')
     cbr.set_ylabel('Frequency in Dataset')
-    plt.figure('cbr')
+    plt.figure(plotname)
     plt.tight_layout()
-    plt.savefig(path.join(
-            OUTPATH,
-            plotname))
+    plt.savefig(path.join(OUTPATH, plotname))
 
 def frequency_density_distribution(datasets, plotname = 'fdd.png'):
     frequency_density_distribution = plt.figure('fdd')
@@ -171,8 +179,8 @@ def plot_mean_aucs(plotname='mean-aucs.png'):
         line, = ax.plot(dataset['Positive Percentage'], dataset['MAP'], label=name, color=colors[name], linestyle='None', marker='.')
         legend.append(line)
     
+    ax.legend(handles=legend)
     plt.figure(plotname)
-    plt.legend(handles=legend)
     plt.tight_layout()
     plt.savefig(path.join(OUTPATH,plotname))
 
