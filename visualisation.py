@@ -172,11 +172,11 @@ def plot_mean_aucs(plotname='mean-aucs.png'):
     ax.set_xlabel('Positive Rate')
     ax.set_ylabel('Mean AUC')
     ax.set_ylim(0,1.05)
-    ax.set_xlim(0.15,0.85)
+    ax.set_xlim(0.0,1.0)
     legend = []
     
     for name, dataset in datasets.items():
-        line, = ax.plot(dataset['Positive Percentage'], dataset['MAP'], label=name, color=colors[name], linestyle='None', marker='.')
+        line, = ax.plot(dataset['Positive Percentage'], dataset['MAP'], label=name, color=colors[name], linestyle=':', marker='.')
         legend.append(line)
     
     ax.legend(handles=legend)
